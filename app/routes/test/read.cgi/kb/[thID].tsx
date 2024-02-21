@@ -62,17 +62,20 @@ export const POST = createRoute(async (c) => {
     // const IP = c.req.header('CF-Connecting-IP')//IP
 
     let newTh = false;
+    const thID2 = Number(thID);
+    const name2 = String(name);
+    const mail2:string|null = String(mail);
     const resIDold = await db.select()
         .from(post)
-        .where(eq(post.id, thID))
+        .where(eq(post.id, thID2))
         .orderBy(desc(post.res_id))
     const resID = resIDold[0].id + 1;
     const ex_id = Number(`${resID}${UnixTime}${Math.floor(Math.random() * 88) + 10}`);
     await db.insert(post).values({
         ex_id: ex_id,
-        id: thID,
+        id: thID2,
         res_id: resID,
-        name: name,
+        name: name2,
         mail: mail,
         message: HEmes,
         ip_addr: IP,

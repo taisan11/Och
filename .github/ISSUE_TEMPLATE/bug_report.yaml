@@ -1,0 +1,33 @@
+name: バグレポート
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 何が起きたの?
+      description: 何が起きたか詳しく教えてください
+      value: "内容"
+    validations:
+      required: true
+    - type: textarea
+    id: kankyo
+    attributes:
+      label: 環境を詳しく教えてください
+      value: "OS:\nnodejs:vXXX\npnpm:v\nwrangler:v"
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: client側の問題の場合どのブラウザで発生しましたか?
+      multiple: true
+      options:
+        - Firefox(Gecko)
+        - Chrome(クロミウム)
+        - Safari(Webkit)
+        - Microsoft Edge(クロミウム)
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ
+      description: なんかエラーメッセージが出たらそのログの内容を張り付けてください
+      render: shell
