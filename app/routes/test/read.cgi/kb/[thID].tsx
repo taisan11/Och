@@ -1,30 +1,13 @@
 import type { Context } from 'hono'
 import { createRoute } from 'honox/factory'
-import thTitle from '../../../../compornent/thTitle'
-import kakiko from '../../../../compornent/kakiko'
 import { drizzle } from "drizzle-orm/d1";
 import { desc, eq } from "drizzle-orm";
 import { MES } from './MSE';
 import { threads,post } from '../../../../../src/schema';
-
-type res = {
-    thNum: number
-    thNem: string
-    thMil: string
-    thTim: string
-    thIDD: string
-}
-const resTD: res = {
-    thNum: 1,
-    thNem: 'jonsdajand',
-    thMil: 'jonsdajand',
-    thTim: '2021/10/10(日) 10:10:10.10',
-    thIDD: '123456789'
-
-}
-export default function readCGI(c: Context) {
-    const id = c.req.param('thID')
-    
+export default async function readCGI(c: Context) {
+    const id = parseInt(c.req.param('thID'))    
+    const db = drizzle(c.env.DB);
+    const result = await db.select().from(post).where(eq(post.id, id));
     return (
         <>
         <div style="margin:0px;">
@@ -42,11 +25,16 @@ export default function readCGI(c: Context) {
         <hr style="background-color:#888;color:#888;border-width:0;height:1px;position:relative;top:-.4em;"></hr>
         <h1 style="color:#CC0000;font-size:larger;font-weight:normal;margin:-.5em 0 0;">jonsdajand</h1>
         <dl class="thread">
-        <dt>{resTD.thNum} ：<font color="seagreen"><b>{resTD.thNem}</b><b>{resTD.thMil}</b></font>：{resTD.thTim} ID:{resTD.thIDD}</dt>
-        <dd>kurowasan<br/>ki-makare-<br/>kusanoakiko</dd>
+        {result.map(result => (
+        <>
+            <dt id={result.id}>{result.id} ：<font color="seagreen"><b>{result.name}</b><b>{result.mail}</b></font>：{result.createdAt} ID:Test010101</dt>
+            <dd>{result.message}</dd>
+        </>
+        ))}
         </dl>
         <form method="post">
             <input type="hidden" name="bbs" value="testing"/>
+            <input type="hidden" name="thID" value={id}/>
             <button type="submit">書き込む</button>
             <label htmlFor="name">名前</label>
             <input type="text" id="name" name="name" />
@@ -60,43 +48,26 @@ export default function readCGI(c: Context) {
 
 export const POST = createRoute(async (c) => {
     const body = await c.req.formData();
-    const thTi = body.get('thTi');//スレッドタイトル(新規作成時)
-    const thID = body.get('thID');//スレッドID(かきこ時)
+    const thTi = body.get('thTi');//タイトル(新規作成時)
+    let thID:number|null = body.get('thID');//スレッドID(かきこ時)
     const name = body.get('name');//名前
-    const mail = body.get('mail');//メールなど
-    const MESSAGE = body.get('MESSAGE');//本文
-    const HEmes = MES(MESSAGE);//HTML用本文
+    const mail = body.get('mail');//メアドor色々
+    const MESSAGE = body.get('MESSAGE');//内容
+    const HEmes = MES(MESSAGE);//内容toHTML
     const bbs = body.get('bbs');//掲示板名
-    const IP = c.req.header('CF-Connecting-IP')//IP
-    const date = new Date();
-	const UnixTime = date.getTime()
-    const db = drizzle(c.env.DB);//DB接続用
-    
-    //スレッド作成
+    const date = new Date();//時間
+    const UnixTime = date.getTime()//UnixTime
+    const db = drizzle(c.env.DB);//データベース
+    const IP = '1.1.1.1'//テスト用
+    // const IP = c.req.header('CF-Connecting-IP')//IP
+
     let newTh = false;
-    if (thTi) {
-        await db.insert(threads).values({
-            id: UnixTime,
-            title: thTi,
-            createdAt: UnixTime,
-            ip_addr: IP,
-        });
-        const thID = UnixTime;
-        let resID = 1;//新規の場合は1
-        let newTh = true;
-    }
-    // ##書き込み##
-    //レス番号取得 新規じゃないなら代入できるよね
-    let resID = await db.query.post.findFirst({
-		where: (post, { eq }) => eq(post.id, thID),
-		orderBy: (post, { desc }) => [desc(post.res_id)],
-	});
-    // 新規スレッドではない場合+1する処理
-    if (newTh == false) {
-        resID = resID + 1;
-    }
-    //書き込み
-    const ex_id = Number(`${resID}${UnixTime}${Math.floor(Math.random() * 88) + 10}`,);
+    const resIDold = await db.select()
+        .from(post)
+        .where(eq(post.id, thID))
+        .orderBy(desc(post.res_id))
+    const resID = resIDold[0].id + 1;
+    const ex_id = Number(`${resID}${UnixTime}${Math.floor(Math.random() * 88) + 10}`);
     await db.insert(post).values({
         ex_id: ex_id,
         id: thID,
@@ -108,5 +79,5 @@ export const POST = createRoute(async (c) => {
         createdAt: UnixTime,
     });
    
-    return c.redirect("/top");
-  });
+    return c.redirect(`./kb/${thID}`);
+});
