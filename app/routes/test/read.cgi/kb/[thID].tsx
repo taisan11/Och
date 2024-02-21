@@ -3,6 +3,7 @@ import { createRoute } from 'honox/factory'
 import thTitle from '../../../../compornent/thTitle'
 import kakiko from '../../../../compornent/kakiko'
 import { drizzle } from "drizzle-orm/d1";
+import { desc, eq } from "drizzle-orm";
 import { MES } from './MSE';
 import { threads,post } from '../../../../../src/schema';
 
@@ -23,6 +24,7 @@ const resTD: res = {
 }
 export default function readCGI(c: Context) {
     const id = c.req.param('thID')
+    
     return (
         <>
         <div style="margin:0px;">
@@ -71,6 +73,7 @@ export const POST = createRoute(async (c) => {
     const db = drizzle(c.env.DB);//DB接続用
     
     //スレッド作成
+    let newTh = false;
     if (thTi) {
         await db.insert(threads).values({
             id: UnixTime,
@@ -78,9 +81,32 @@ export const POST = createRoute(async (c) => {
             createdAt: UnixTime,
             ip_addr: IP,
         });
+        const thID = UnixTime;
+        let resID = 1;//新規の場合は1
+        let newTh = true;
     }
-    console.log("name:", body.get("name"));
-    console.log("content:", body.get("MESSAGE"));
+    // ##書き込み##
+    //レス番号取得 新規じゃないなら代入できるよね
+    let resID = await db.query.post.findFirst({
+		where: (post, { eq }) => eq(post.id, thID),
+		orderBy: (post, { desc }) => [desc(post.res_id)],
+	});
+    // 新規スレッドではない場合+1する処理
+    if (newTh == false) {
+        resID = resID + 1;
+    }
+    //書き込み
+    const ex_id = Number(`${resID}${UnixTime}${Math.floor(Math.random() * 88) + 10}`,);
+    await db.insert(post).values({
+        ex_id: ex_id,
+        id: thID,
+        res_id: resID,
+        name: name,
+        mail: mail,
+        message: HEmes,
+        ip_addr: IP,
+        createdAt: UnixTime,
+    });
    
-    return c.redirect("/articles");
+    return c.redirect("/top");
   });
