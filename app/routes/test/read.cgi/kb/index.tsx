@@ -47,7 +47,16 @@ export const POST = createRoute(async (c) => {
     const db = drizzle(c.env.DB);//データベース
     const IP = '1.1.1.1'//テスト用
     // const IP = c.req.header('CF-Connecting-IP')//IP
-
+    //##チェック##
+    if (MESSAGE.length == 0) {
+        return c.redirect(`./error?e=0`);
+    }
+    if (name.length == 0) {
+        return c.redirect(`./error?e=1`);
+    }
+    if (thTi == null) {
+        return c.redirect(`./error?e=2`);
+    }
     let newTh = false;
     let resID = 1;
 

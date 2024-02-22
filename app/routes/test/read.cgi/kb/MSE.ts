@@ -5,11 +5,12 @@ export function MES(input: string|null): string {
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#039;',
-    '\n': '<br/>'
+    '\n': '\n<br/>\n' // Replace '\n' with '\n<br/>\n'
   };
   if (input == null){return '';}
-  return input.replace(/>>\d+/g, function(m) {
+  const convertedInput = input.replace(/[&<>"'\n]/g, function(m) { return map[m]; });
+  return convertedInput.replace(/>>\d+/g, function(m) {
     const num = m.substring(2);
     return `<a href="#${num}">&gt;&gt;${num}</a>`;
-  }).replace(/[&<>"'\n]/g, function(m) { return map[m]; });
+  });
 }
