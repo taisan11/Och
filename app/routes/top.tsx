@@ -15,7 +15,7 @@ export default createRoute((c) => {
             <p>ネットのサービスってそんなもんなんで、まぁ、気にせずにお楽しみください。</p>
             <p>あと、メッセージとかもだいぶコピペなので気を付けてね!!</p>
             <h3>板一覧</h3>
-            <p>・<a href="./test/read.cgi/kb/">テスト用板</a></p>
+            <p>・<a href="./test/read.cgi/kb">テスト用板</a></p>
         </div></div>
     );
 });
