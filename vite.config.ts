@@ -2,6 +2,7 @@ import pages from '@hono/vite-cloudflare-pages'
 import honox from 'honox/vite'
 import client from 'honox/vite/client'
 import { defineConfig } from 'vite'
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig(({ mode }) => {
   if (mode === 'client') {
@@ -10,7 +11,7 @@ export default defineConfig(({ mode }) => {
     }
   } else {
     return {
-      plugins: [honox(), pages()]
+      plugins: [honox(), pages(),visualizer()]
     }
   }
 })

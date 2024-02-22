@@ -15,7 +15,7 @@ export default async function readCGI(c: Context) {
         <>
         {result.map(result => (
         <div key={result.id}>
-            <a href={`./kb/${result.id}`}>{result.title} -- 作成時間{new Date(result.createdAt).toLocaleString()}</a><br />
+            <a href={`./kb/${result.id}`}>{result.title} -- 作成時間{new Date(Number(result.createdAt)).toLocaleString()}</a><br />
         </div>
         ))}
         <p>スレ作成</p>
@@ -30,6 +30,9 @@ export default async function readCGI(c: Context) {
             <input type="text" id="mail" name="mail" /><br />
             <textarea rows="5" cols="70" name="MESSAGE"/>
         </form>
+        <br />
+        <br />
+        <p>READ.CGI(?) for JS - Och BBS β</p>
         </>
     )
 }
@@ -38,7 +41,7 @@ export const POST = createRoute(async (c) => {
     const body = await c.req.formData();
     const thTi = body.get('thTi');//タイトル(新規作成時)
     let thID:number|null = body.get('thID');//スレッドID(かきこ時)
-    const name = body.get('name');//名前
+    let Name = body.get('name');//名前
     const mail = body.get('mail');//メアドor色々
     const MESSAGE = body.get('MESSAGE');//内容
     const HEmes = MES(MESSAGE);//内容toHTML
@@ -46,14 +49,13 @@ export const POST = createRoute(async (c) => {
     const date = new Date();//時間
     const UnixTime = date.getTime()//UnixTime
     const db = drizzle(c.env.DB);//データベース
-    const IP = '1.1.1.1'//テスト用
-    // const IP = c.req.header('CF-Connecting-IP')//IP
+    const IP = c.req.header('CF-Connecting-IP')//IP
     //##チェック##
-    if (MESSAGE.length == 0) {
+    if (MESSAGE.length == 0||MESSAGE.length>1000) {
         return c.redirect(`./error?e=0`);
     }
-    if (name.length == 0) {
-        return c.redirect(`./error?e=1`);
+    if (Name.length == 0||Name.length>100) {
+        Name = '名無しん';
     }
     if (thTi == null) {
         return c.redirect(`./error?e=2`);
@@ -83,7 +85,7 @@ export const POST = createRoute(async (c) => {
         ex_id: ex_id,
         id: thID,
         res_id: resID,
-        name: name,
+        name: Name,
         mail: mail,
         message: HEmes,
         ip_addr: IP,

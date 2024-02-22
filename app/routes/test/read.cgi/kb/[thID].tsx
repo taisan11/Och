@@ -16,10 +16,7 @@ export default async function readCGI(c: Context) {
         <div style="margin:0px;">
         <div style="margin-top:1em;">
             <span style="float:left;">
-            <a href="../">■掲示板に戻る■</a>
-            <a href="#">全部</a>
-            <a href="#">1-</a>
-            <a href="#">最新50</a>
+            <a href=".">■掲示板に戻る■</a>眠たいね
             </span>
             <span style="float:right;">
             </span>&nbsp;
@@ -30,7 +27,7 @@ export default async function readCGI(c: Context) {
         <dl class="thread">
         {result.map(result => (
         <>
-            <dt id={result.res_id}>{result.res_id} ：<font color="seagreen"><b>{result.name}</b><b>{result.mail}</b></font>：{result.createdAt.toLocaleString()} ID:Test010101</dt>
+            <dt id={result.res_id}>{result.res_id} ：<font color="seagreen"><b>{result.name}</b><b>{result.mail}</b></font>：{new Date(Number(result.createdAt)).toLocaleString()} ID:Test010101</dt>
             <dd dangerouslySetInnerHTML={{ __html: result.message }}></dd>
         </>
         ))}
@@ -56,32 +53,29 @@ export const POST = createRoute(async (c) => {
     const body = await c.req.formData();
     const thTi = body.get('thTi');//タイトル(新規作成時)
     let thID:number|null = body.get('thID');//スレッドID(かきこ時)
-    const name = body.get('name');//名前
+    let Name = body.get('name');//名前
     const mail = body.get('mail');//メアドor色々
     const MESSAGE = body.get('MESSAGE');//内容
     const HEmes = MES(MESSAGE);//内容toHTML
     const bbs = body.get('bbs');//掲示板名
     const date = new Date();//時間
     const UnixTime = date.getTime()//UnixTime
-    // const db = drizzle(c.env.DB);//データベース
     const db = drizzle(c.env.DB, { schema });
-    const IP = '1.1.1.1'//テスト用
-    // const IP = c.req.header('CF-Connecting-IP')//IP
+    const IP = c.req.header('CF-Connecting-IP')//IP
     // ##制限check!!##
     // 文字数制限
-    if (MESSAGE.length == 0) {
+    if (MESSAGE.length == 0||MESSAGE.length>1000) {
         return c.redirect(`./error?e=0`);
     }
-    if (name.length == 0) {
-        return c.redirect(`./error?e=1`);
+    if (Name.length == 0||Name.length>100) {
+        Name = '名無しん';
     }
     if (thID == null) {
         return c.redirect(`./error?e=2`);
     }
     let newTh = false;
     const thID2 = Number(thID);
-    const name2 = String(name);
-    const mail2:string|null = String(mail);
+    const name2 = String(Name);
 	let resulta = await db.query.post.findFirst({
 		where: (post, { eq }) => eq(post.id, thID2),
 		orderBy: (post, { desc }) => [desc(post.res_id)],
