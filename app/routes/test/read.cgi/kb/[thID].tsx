@@ -10,6 +10,7 @@ export default async function readCGI(c: Context) {
     const id = parseInt(c.req.param('thID'))    
     const db = drizzle(c.env.DB);
     const result = await db.select().from(post).where(eq(post.id, id));
+    const thTi = await db.select({ title: threads.title }).from(threads).where(eq(threads.id, id)).execute();
     return (
         <>
         <div style="margin:0px;">
@@ -25,7 +26,7 @@ export default async function readCGI(c: Context) {
         </div>
         </div>
         <hr style="background-color:#888;color:#888;border-width:0;height:1px;position:relative;top:-.4em;"></hr>
-        <h1 style="color:#CC0000;font-size:larger;font-weight:normal;margin:-.5em 0 0;">{result}</h1>
+        <h1 style="color:#CC0000;font-size:larger;font-weight:normal;margin:-.5em 0 0;">{thTi[0].title}</h1>
         <dl class="thread">
         {result.map(result => (
         <>
@@ -44,6 +45,9 @@ export default async function readCGI(c: Context) {
             <input type="text" id="mail" name="mail" /><br />
             <textarea rows="5" cols="70" name="MESSAGE"/>
         </form>
+        <br />
+        <br />
+        <p>READ.CGI(?) for JS - Och BBS β</p>
         </>
     )
 }

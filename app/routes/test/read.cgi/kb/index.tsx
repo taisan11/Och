@@ -9,12 +9,12 @@ import { threads,post } from '../../../../../src/schema';
 
 export default async function readCGI(c: Context) {
     const db = drizzle(c.env.DB,);
-    const result = await db.select().from(threads).limit(10).execute(); // 最初の10個のレコードを取得
+    const result = await db.select().from(threads).orderBy(desc(threads.createdAt)).limit(20).execute();
     return (
         <>
         {result.map(result => (
         <div key={result.id}>
-            <a href={`./kb/${result.id}`}>{result.title}</a><br />
+            <a href={`./kb/${result.id}`}>{result.title} -- 作成時間{new Date(result.createdAt).toLocaleString()}</a><br />
         </div>
         ))}
         <p>スレ作成</p>
