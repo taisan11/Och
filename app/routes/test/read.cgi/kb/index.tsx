@@ -9,7 +9,8 @@ import { threads,post } from '../../../../../src/schema';
 
 export default async function readCGI(c: Context) {
     const db = drizzle(c.env.DB,);
-    const result = await db.select().from(threads).orderBy(desc(threads.createdAt)).limit(20).execute();
+    let result = await db.select().from(threads).orderBy(desc(threads.createdAt)).limit(20).execute();
+    if (!result) result = [{ id: 0, title: 'スレッドがありません', createdAt: "0",ip_addr:"0.0.0.0",isDelete:false}]
     return (
         <>
         {result.map(result => (
