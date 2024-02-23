@@ -5,6 +5,7 @@ import { desc, eq } from "drizzle-orm";
 import { MES } from './MSE';
 import { threads,post } from '../../../../../src/schema';
 import * as schema from "../../../../../src/schema";
+import { NES } from './NES';
 
 export default async function readCGI(c: Context) {
     const id = parseInt(c.req.param('thID'))    
@@ -75,7 +76,7 @@ export const POST = createRoute(async (c) => {
     }
     let newTh = false;
     const thID2 = Number(thID);
-    const name2 = String(Name);
+    const name2 = String(await NES(Name));
 	let resulta = await db.query.post.findFirst({
 		where: (post, { eq }) => eq(post.id, thID2),
 		orderBy: (post, { desc }) => [desc(post.res_id)],

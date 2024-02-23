@@ -6,6 +6,7 @@ import { drizzle } from "drizzle-orm/d1";
 import { desc, eq } from "drizzle-orm";
 import { MES } from './MSE';
 import { threads,post } from '../../../../../src/schema';
+import { NES } from './NES';
 
 export default async function readCGI(c: Context) {
     const db = drizzle(c.env.DB,);
@@ -79,13 +80,13 @@ export const POST = createRoute(async (c) => {
         });
         resID = resID + 1;
     }
-
+    const name2 = String(await NES(Name));
     const ex_id = Number(`${resID}${UnixTime}${Math.floor(Math.random() * 88) + 10}`);
     await db.insert(post).values({
         ex_id: ex_id,
         id: thID,
         res_id: resID,
-        name: Name,
+        name: name2,
         mail: mail,
         message: HEmes,
         ip_addr: IP,

@@ -1,4 +1,3 @@
-// app/routes/_error.tsx
 import { ErrorHandler } from 'hono'
 
 const handler: ErrorHandler = (e, c) => {
