@@ -8,13 +8,6 @@ type Bindings = {
 
 const app = createApp()
 
-// app.post('/',async (c) => {
-//     const body = await c.req.parseBody();
-  
-//     if (body.ok) {
-//       const { name, email } = body.form;
-// })
-
 showRoutes(app)
 
 export default app
