@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "dev": "bun run --hot src/server.ts"
+  },
+  "dependencies": {
+    "hono": "^4.1.5",
+    "unstorage": "^1.10.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
