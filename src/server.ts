@@ -4,6 +4,6 @@ import BBS from './BBS'
 
 const app = new Hono()
 
-app.route("/test", BBS);
+app.route("/", BBS);
 app.get('*', serveStatic({root: './html'}))
 export default app

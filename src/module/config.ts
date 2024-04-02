@@ -1,6 +1,7 @@
 import { loadConfig } from "c12";
 import type { ResolvedConfig, ConfigLayerMeta } from "c12";
 import { resolve } from 'pathe'
+import configa from '../../data/system.config'
 
 export type Config = {
     caps: {
@@ -118,10 +119,4 @@ export const defaults:Config = {
     }
 }
 
-export async function config():Promise<ResolvedConfig<Config, ConfigLayerMeta>> {
-    const config = await loadConfig<Config>({cwd:resolve(__dirname, '../../data'),name:'system'})
-    if(config === undefined||config === null) {
-        return 
-    }
-    return config
-}
+export function config():Config {return configa}

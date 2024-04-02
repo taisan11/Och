@@ -3,6 +3,7 @@ import { jsxRenderer } from "hono/jsx-renderer";
 import { storage } from "./module/storage";
 import { subjectpaser,datpaser } from "./module/pase";
 import { kakiko } from "./module/kakiko";
+import { config } from "./module/config";
 
 declare module "hono" {
   interface ContextRenderer {
@@ -31,7 +32,7 @@ app.get(
   }),
 );
 
-app.get("/test/read.cgi/error", async (c) => {
+app.get(`${config().preference.site.InstDIR}/read.cgi/error`, async (c) => {
   const e = c.req.query("e");
   let em = "";
   switch (e) {
@@ -64,7 +65,7 @@ app.get("/test/read.cgi/error", async (c) => {
   );
 })
 
-app.get("/", async (c) => {
+app.get(`${config().preference.site.InstDIR}`, async (c) => {
   return c.render(
     <>
       <h1>hello</h1>
@@ -74,12 +75,12 @@ app.get("/", async (c) => {
   );
 });
 
-app.post("/read.cgi/:BBSKEY", async (c) => {
+app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   const kextuka = await kakiko(c, "newth",'test');
   return c.redirect(kextuka.redirect);
 });
 
-app.get("/read.cgi/:BBSKEY", async (c) => {
+app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   const SUBJECTTXT = await storage.getItem(`/${BBSKEY}/SUBJECT.TXT`);
   if (!SUBJECTTXT) {
@@ -132,12 +133,12 @@ app.get("/read.cgi/:BBSKEY", async (c) => {
 //   いつか実装したいです
 ////////////////////////
 
-app.post("/read.cgi/:BBSKEY/:THID", async (c) => {
+app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
   const kextuka = await kakiko(c, "kakiko",'test');
   return c.redirect(kextuka.redirect);
 });
 
-app.get("/read.cgi/:BBSKEY/:THID", async (c) => {
+app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   const THID = c.req.param("THID");
   const THDATTXT = await storage.getItem(`/${BBSKEY}/dat/${THID}.dat`);
