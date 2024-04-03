@@ -1,5 +1,3 @@
-import { loadConfig } from "c12";
-import type { ResolvedConfig, ConfigLayerMeta } from "c12";
 import { resolve } from 'pathe'
 import configa from '../../data/system.config'
 
