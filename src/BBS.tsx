@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
-import { storage } from "./module/storage";
-import { subjectpaser,datpaser } from "./module/pase";
+import { getSubject, getThread } from "./module/storage";
 import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
 
@@ -82,8 +81,8 @@ app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
 
 app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
-  const SUBJECTTXT = await storage.getItem(`/${BBSKEY}/SUBJECT.TXT`);
-  if (!SUBJECTTXT) {
+  const SUBJECTJSON = await getSubject(BBSKEY);
+  if (!SUBJECTJSON?.has) {
     return c.render(
       <>
         <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
@@ -92,12 +91,38 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
       { title: "掲示板がない" },
     );
   }
-  const SUBJECTJSON = subjectpaser(SUBJECTTXT.toString());
+  if (!SUBJECTJSON.data) {
+    return c.render(
+      <>
+        <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
+        <p>スレッドがありません</p>
+        <p>作成してみてはいかがでしょうか?</p>
+        <p>スレ作成</p>
+        <form method="post">
+          <input type="hidden" name="bbs" value="testing" />
+          <label htmlFor="thTi">スレタイ:</label>
+          <input type="text" id="thTi" name="thTi" />
+          <button type="submit">新規スレッド作成</button>
+          <br />
+          <label htmlFor="name">名前</label>
+          <input type="text" id="name" name="name" />
+          <label htmlFor="mail">メール(省略可)</label>
+          <input type="text" id="mail" name="mail" />
+          <br />
+          <textarea rows="5" cols="70" name="MESSAGE" />
+        </form>
+        <br />
+        <br />
+        <p>READ.CGI for BBS.TSX by Och BBS β</p>
+      </>,
+      { title: "スレッドがない" },
+    );
+  }
   return c.render(
     <>
       <h1>READ.CGI</h1>
       {
-        Object.entries(SUBJECTJSON).map(([unixtime, [threadName, responseCount]]) => {
+        Object.entries(SUBJECTJSON.data).map(([unixtime, [threadName, responseCount]]) => {
           const date = new Date(parseInt(unixtime) * 1000);
           const formattedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
           return (
@@ -141,8 +166,8 @@ app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c)
 app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   const THID = c.req.param("THID");
-  const THDATTXT = await storage.getItem(`/${BBSKEY}/dat/${THID}.dat`);
-  if (!THDATTXT) {
+  const THD = await getThread(BBSKEY,THID)
+  if (!THD?.has) {
     return c.render(
       <>
         <h1>READ.CGI for BBS.TSX by Och</h1>
@@ -152,7 +177,6 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
     );
   }
   const EXAS = `../${BBSKEY}`;
-  const DATJSON = JSON.parse(datpaser(THDATTXT.toString()));
   return c.render(
     <>
       <div style="margin:0px;">
@@ -165,11 +189,11 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
       </div>
       <hr style="background-color:#888;color:#888;border-width:0;height:1px;position:relative;top:-.4em;" />
       <h1 style="color:#CC0000;font-size:larger;font-weight:normal;margin:-.5em 0 0;">
-        {DATJSON.title}
+        {JSON.parse(THD.date).title}
       </h1>
       <dl class="thred">
         {//@ts-ignore
-        DATJSON.post.map((post) => (
+        JSON.parse(THD.date).post.map((post) => (
           <>
             <dt id={post.postid}>
               {post.postid} ：

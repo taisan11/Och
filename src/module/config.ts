@@ -44,6 +44,7 @@ export type Config = {
                 AuthLink: boolean;
                 CookieDateExp: number;
             };
+            saveformat: string;
         };
         display: {
             PRtext: string;
@@ -101,7 +102,8 @@ export const defaults:Config = {
                 'GazoToIMG':false,
                 'AuthLink':true,
                 'CookieDateExp':30
-            }
+            },
+            'saveformat':"file"
         },
         'display':{
             'PRtext':'Och~おーちゃんねる~',

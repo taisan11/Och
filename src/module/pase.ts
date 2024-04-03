@@ -2,7 +2,6 @@ export function subjectpaser(subjecttxt: string): { [key: string]: [string, stri
     subjecttxt = subjecttxt.replace(/\r\n/g, '\n');
     const lines: string[] = subjecttxt.split('\n');
     const result: { [key: string]: [string, string] } = {};
-    console.debug(lines)
     for (const line of lines) {
         const match = line.match(/^(\d+)\.dat<>(.+) \((\d+)\)$/);
         if (match) {

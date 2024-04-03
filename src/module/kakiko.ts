@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { storage } from "./storage";
+import { getThread,postThread,NewThread,getSubject,DeleteOldSubject,addSubject } from "./storage";
 import { KAS } from "./KAS";
 
 /**
@@ -11,7 +11,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
     const body = await c.req.parseBody()
     if (mode === 'newth') {
         // 内容物の取得
-        const ThTi = body.thTi
+        const ThTi = String(body.thTi)
         const Name = String(body.name);//名前
         const mail = String(body.mail);//メアドor色々
         const MESSAGE = String(body.MESSAGE);//内容
@@ -27,9 +27,8 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         // 加工
         const KASS = await KAS(MESSAGE, Name, mail, Number(UnixTime));
         // 保存
-        const SUBTXT = await storage.getItem(`/${BBSKEY}/SUBJECT.TXT`);
-        await storage.setItem(`/${BBSKEY}/SUBJECT.TXT`, `${UnixTime}.dat<>${ThTi} (1)\n${SUBTXT}`)
-        await storage.setItem(`/${BBSKEY}/dat/${UnixTime}.dat`, `${KASS.name}<>${KASS.mail}<>${KASS.time}<>${KASS.mes}<>${ThTi}`);
+        await NewThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time, title: ThTi, id: UnixTime });
+        // 返す
         return { 'sc': 'ok', 'redirect': `/${base}/read.cgi/${BBSKEY}/${UnixTime}` };
     }
     if (mode === 'kakiko') {
@@ -51,8 +50,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         if (!BBSKEY) { return {'sc':'no','redirect':`/${base}/read.cgi/error?e=3`} }
         if (!THID) { return {'sc':'no','redirect':`/${base}/read.cgi/error?e=4`} }
         // 入力
-        const THDATTXT = await storage.getItem(`/${BBSKEY}/dat/${THID}.dat`);
-        await storage.setItem(`/${BBSKEY}/dat/${THID}.dat`, `${THDATTXT}\n${KASS.name}<>${KASS.mail}<>${KASS.time}<>${KASS.mes}`);
+        await postThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time, id: THID });
         return {'sc':'ok','redirect':`/${base}/read.cgi/${BBSKEY}/${THID}`};
       
     }
