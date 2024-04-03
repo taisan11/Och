@@ -64,16 +64,6 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/error`, async (c) => {
   );
 })
 
-app.get(`${config().preference.site.InstDIR}`, async (c) => {
-  return c.render(
-    <>
-      <h1>hello</h1>
-      <p>このサイトは[READ.CGI for BBS.TSX by Och BBS β]スクリプトを利用しています</p>
-    </>,
-    { title: "Hello" },
-  );
-});
-
 app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   const kextuka = await kakiko(c, "newth",'test');
   return c.redirect(kextuka.redirect);
@@ -222,5 +212,53 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
     { title: "READ.CGI" },
   );
 });
+
+app.get('/:BBSKEY', async (c) => {
+  return c.render(
+    <tbody>
+      <tr>
+        <td>
+          <table border={0} width="100%">
+            <tbody>
+              <tr>
+                <td>
+                  <font size="+1">
+                    <b>楽しく雑談しよう。ただそれだけの場所です</b>
+                  </font>
+                </td>
+                <td align="right">
+                  <a href="#menu">■</a> <a href="#1">▼</a>
+                </td>
+              </tr>
+              <tr>
+                <td colspan={2}>
+                  <div align="center" style={{ margin: "1.2em 0" }}>
+                    <font color="red">
+                      クリックで救える命が…ないです(｀・ω・´)シャキーン
+                    </font>
+                  </div>
+
+                  <b>掲示板使用上の注意</b>
+                  <blockquote style={{ marginTop: 0, fontWeight: "bold" }}>
+                    ・日本法に準拠する<br />
+                    ・かといってがっちがちではない<br />
+                    ・管理者Tに従う<br />
+                  </blockquote>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+          <a href="../test/search.cgi" target="_blank">
+            <small>■<b>レス検索</b>■</small>
+          </a>
+        </td>
+      </tr>
+    </tbody>,{
+    'title': "BBS"
+  })});
 
 export default app;
