@@ -3,6 +3,7 @@ import fsDriver from "unstorage/drivers/fs";
 import { config } from "../config";
 import { subjectpaser,datpaser } from "../pase";
 import { NewThreadParams,PostThreadParams } from "../storage";
+import * as IconvCP932 from "iconv-cp932";
 
 export function writedat(dat: string, datname: string) {
     const storage = createStorage({ driver: fsDriver({ base: "./data" }) });
@@ -33,7 +34,11 @@ export async function getSubject_file(BBSKEY:string,) {
     }
     return {'data':subjectpaser(String(SUBTXT)),'has':HASSUB};
 }
-
+export async function getSubjecttxt_file(BBSKEY:string,) {
+    const storage = createStorage({ driver: fsDriver({ base: "./data" }) });
+    const SUBTXT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
+    return IconvCP932.encode(SUBTXT);
+}
 export async function NewThread_file(BBSKEY:string,{ name, mail, message, date, title, id }: NewThreadParams) {
     const storage = createStorage({ driver: fsDriver({ base: "./data" }) });
     await storage.setItem(`${BBSKEY}/dat/${id}.dat`, `${name}<>${mail}<>${date}<>${message}<>${title}`);
@@ -53,4 +58,9 @@ export async function getThread_file(BBSKEY:string,id: string) {
     const dat = await storage.getItem(`${BBSKEY}/dat/${id}.dat`);
     const hasdat=  await storage.hasItem(`${BBSKEY}/dat/${id}.dat`);
     return {'date':datpaser(String(dat)),has:hasdat};
+}
+export async function getdat_file(BBSKEY:string,idextension: string) {
+    const storage = createStorage({ driver: fsDriver({ base: "./data" }) });
+    const dat = await storage.getItem(`${BBSKEY}/dat/${idextension}.dat`);
+    return IconvCP932.encode(dat);
 }

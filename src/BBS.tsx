@@ -1,8 +1,9 @@
 import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
-import { getSubject, getThread } from "./module/storage";
+import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
+import { kakiko_dat } from "./module/kakiko.dat";
 
 declare module "hono" {
   interface ContextRenderer {
@@ -63,11 +64,6 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/error`, async (c) => {
     { title: "ERROR" },
   );
 })
-
-app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
-  const kextuka = await kakiko(c, "newth",'test');
-  return c.redirect(kextuka.redirect);
-});
 
 app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
@@ -142,14 +138,22 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   );
 });
 
+app.post(`${config().preference.site.InstDIR}/bbs.cgi`, async (c) => {
+})
+
 ////////////////////////
 //   ##現在の仕様のコーナー
 //   現在はですね、IPを方法がないので放置です
 //   いつか実装したいです
 ////////////////////////
-
+// 書き込み
 app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
-  const kextuka = await kakiko(c, "kakiko",'test');
+  const kextuka = await kakiko_dat(c,'test');
+  return c.redirect(kextuka.redirect);
+});
+// Newスレッド
+app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
+  const kextuka = await kakiko(c, "newth",'test');
   return c.redirect(kextuka.redirect);
 });
 
@@ -260,5 +264,18 @@ app.get('/:BBSKEY', async (c) => {
     </tbody>,{
     'title': "BBS"
   })});
+app.get('/:BBSKEY/subject.txt', async (c) => {
+  const BBSKEY = c.req.param("BBSKEY");
+  //@ts-ignore
+  c.header("Content-Type", "text/plain; charset=Shift_JIS");
+  return c.body(await getSubjecttxt(BBSKEY))
+})
+app.get('/:BBSKEY/dat/:THIDextension', async (c) => {
+  const BBSKEY = c.req.param("BBSKEY");
+  const THIDextension = c.req.param("THIDextension");
+  const dat = await getdat(BBSKEY,THIDextension)
+  c.header("Content-Type", "text/plain; charset=Shift_JIS");
+  return c.body(dat)
+})
 
 export default app;
