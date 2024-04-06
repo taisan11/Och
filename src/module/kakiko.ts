@@ -27,7 +27,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         // 加工
         const KASS = await KAS(MESSAGE, Name, mail, Number(UnixTime));
         // 保存
-        await NewThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time, title: ThTi, id: UnixTime });
+        await NewThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+'testtests', title: ThTi, id: UnixTime });
         // 返す
         return { 'sc': 'ok', 'redirect': `/${base}/read.cgi/${BBSKEY}/${UnixTime}` };
     }
@@ -50,7 +50,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         if (!BBSKEY) { return {'sc':'no','redirect':`/${base}/read.cgi/error?e=3`} }
         if (!THID) { return {'sc':'no','redirect':`/${base}/read.cgi/error?e=4`} }
         // 入力
-        await postThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time, id: THID });
+        await postThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+'testtests', id: THID });
         return {'sc':'ok','redirect':`/${base}/read.cgi/${BBSKEY}/${THID}`};
       
     }

@@ -138,8 +138,8 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   );
 });
 
-app.post(`${config().preference.site.InstDIR}/bbs.cgi`, async (c) => {
-})
+// app.post(`${config().preference.site.InstDIR}/bbs.cgi`, async (c) => {
+// })
 
 ////////////////////////
 //   ##現在の仕様のコーナー
