@@ -66,6 +66,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/error`, async (c) => {
 })
 
 app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
+  const URL = c.req.url;
   const BBSKEY = c.req.param("BBSKEY");
   const SUBJECTJSON = await getSubject(BBSKEY);
   if (!SUBJECTJSON?.has) {
@@ -84,7 +85,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
         <p>スレッドがありません</p>
         <p>作成してみてはいかがでしょうか?</p>
         <p>スレ作成</p>
-        <form method="post">
+        <form method="post" action={URL}>
           <input type="hidden" name="bbs" value="testing" />
           <label htmlFor="thTi">スレタイ:</label>
           <input type="text" id="thTi" name="thTi" />
@@ -117,7 +118,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
         })
       }
       <p>スレ作成</p>
-      <form method="post">
+      <form method="post" action={URL}>
         <input type="hidden" name="bbs" value="testing" />
         <label htmlFor="thTi">スレタイ:</label>
         <input type="text" id="thTi" name="thTi" />
@@ -171,6 +172,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
     );
   }
   const EXAS = `../${BBSKEY}`;
+  const URL = c.req.url;
   return c.render(
     <>
       <div style="margin:0px;">
@@ -201,7 +203,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
           </>
         ))}
       </dl>
-      <form method="post">
+      <form method="post" action={URL}>
         <button type="submit">書き込む</button>
         <label htmlfor="name">名前:</label>
         <input type="text" id="name" name="name" />
