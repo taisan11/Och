@@ -7,6 +7,7 @@
     "hono": "^4.1.5",
     "iconv-cp932": "^1.2.2",
     "pathe": "^1.1.2",
+    "std-env": "^3.7.0",
     "unix-crypt-td-js": "^1.1.4",
     "unstorage": "^1.10.2"
   },
