@@ -1,3 +1,6 @@
+//@ts-ignore
+import { createTripByKey } from "./trip";
+
 function formatUnixTime(unixTime: number): string {
   // UNIXタイムをミリ秒に変換
   const date = new Date(unixTime * 1000);
@@ -71,8 +74,8 @@ async function NES(input: string, mail: string): Promise<{ name: string, mail: s
     const convertedInput = input.replace(/[◆★\n]/g, function (m) { return map[m]; });
     let trip = '';
     if (length > 0) {
-        // trip = `◆`+await convertTrip(match, length, true);
-        trip = `◆` + `現在一時的にトリップは使用できません`
+        trip = `◆`+await createTripByKey(match[1]);
+        // trip = `◆` + `現在一時的にトリップは使用できません`
     }
     return { "name": `${convertedInput.replace(/#.*/, '')}${trip}`, "mail": mail }
 }
