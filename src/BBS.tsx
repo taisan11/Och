@@ -149,7 +149,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
 ////////////////////////
 // 書き込み
 app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
-  const kextuka = await kakiko_dat(c,'test');
+  const kextuka = await kakiko(c,'kakiko','test');
   return c.redirect(kextuka.redirect);
 });
 // Newスレッド
