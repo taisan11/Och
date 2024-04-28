@@ -19,18 +19,6 @@ async function build() {
                 plugins: [DenoPlugin]
             },
         )
-    } else if (type === 'nodeless') {
-        console.log('Nodeless Build')
-        Bun.$`rm -rf ./dist/*`
-        Bun.build(
-            {
-                entrypoints: ['src/server.ts'],
-                outdir: 'dist',
-                minify: true,
-                target:'bun',
-                plugins: [nodelessPlugin]
-            },
-        )
     } else if (type === 'cloudflare') {
         console.log('Cloudflare Worker Build')
         Bun.$`rm -rf ./dist/*`
@@ -49,7 +37,8 @@ async function build() {
             entrypoints: ['src/server.ts'],
             outdir: 'dist',
             minify: true,
-            target:'bun'
+            target:'bun',
+            plugins: [nodelessPlugin]
         },
     )
 }

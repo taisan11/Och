@@ -1,6 +1,7 @@
 import type { Context } from "hono";
 import { getThread,postThread,NewThread,getSubject,DeleteOldSubject,addSubject } from "./storage";
 import { KAS } from "./KAS";
+import { id } from "./id";
 
 /**
  * @param c Hono Context
@@ -17,6 +18,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         const MESSAGE = String(body.MESSAGE);//内容
         const BBSKEY = c.req.param("BBSKEY");//BBSKEY
         const date = new Date();//時間
+        const ip = c.req.header('CF-Connecting-IP')//IP(cloudflare tunnel使えば行けるやろ)
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
         // 文字数制限など
         if (Name.length > 30) { return { 'sc': 'no', 'redirect': `/${base}/read.cgi/error?e=0` } }
@@ -40,7 +42,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         const THID = c.req.param("THID");//スレID
         const date = new Date();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
-        const IP = c.req.header('CF-Connecting-IP')//IP(cloudflare tunnel使えば行けるやろ)
+        const IP = c.req.header('CF-Connecting-IP')||c.env.ip.address||'0.0.0.0'//IP(cloudflare tunnel使えば行けるやろ)
         // 変換
         const KASS = await KAS(MESSAGE,Name,mail,Number(UnixTime));
         // 制限
@@ -49,8 +51,9 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         if (mail.length > 70) { return {'sc':'no','redirect':`/${base}/read.cgi/error?e=2`} }
         if (!BBSKEY) { return {'sc':'no','redirect':`/${base}/read.cgi/error?e=3`} }
         if (!THID) { return {'sc':'no','redirect':`/${base}/read.cgi/error?e=4`} }
+        const ID = await id(IP,BBSKEY);
         // 入力
-        await postThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+'testtests', id: THID });
+        await postThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, id: THID });
         return {'sc':'ok','redirect':`/${base}/read.cgi/${BBSKEY}/${THID}`};
       
     }

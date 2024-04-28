@@ -3,15 +3,19 @@ import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
-import { kakiko_dat } from "./module/kakiko.dat";
+import type { SocketAddress } from 'bun'
 
 declare module "hono" {
   interface ContextRenderer {
     (content: string | Promise<string>, props: { title?: string }): Response;
   }
 }
+type Bindings = {
+  ip: SocketAddress
+}
 
-const app = new Hono();
+
+const app = new Hono<{ Bindings: Bindings }>()
 
 app.get(
   "*",

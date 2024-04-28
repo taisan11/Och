@@ -4,6 +4,7 @@ import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
 import { kakiko_dat } from "./module/kakiko.dat";
+import { basicAuth } from 'hono/basic-auth'
 
 declare module "hono" {
   interface ContextRenderer {
@@ -12,6 +13,8 @@ declare module "hono" {
 }
 
 const app = new Hono();
+
+app.use(basicAuth({username:config().user.admin.name,password:config().user.admin.password}))
 
 app.get(
   "*",
@@ -37,6 +40,8 @@ app.get(`${config().preference.site.InstDIR}/admin.cgi`, async (c) => {
         <>
         <h1>管理画面</h1>
         <p>管理画面</p>
+        <p>version:V0.0.1</p>
+        <p>Git Hash:{}</p>
         </>,
         { title: "管理画面" },
     );
