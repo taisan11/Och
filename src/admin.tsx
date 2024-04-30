@@ -14,7 +14,7 @@ declare module "hono" {
 
 const app = new Hono();
 
-app.use(basicAuth({username:config().user.admin.name,password:config().user.admin.password}))
+app.use('/admin.cgi',basicAuth({username:config().user.admin.name,password:config().user.admin.password}))
 
 app.get(
   "*",

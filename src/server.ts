@@ -31,6 +31,7 @@ app.route("/TBS", TBS);
 // app.get('*', serveStatic({root: './html'}))
 
 Bun.serve({
+    port:'8000',
     fetch(req, server) {
         return app.fetch(req, { ip: server.requestIP(req) })
     }
