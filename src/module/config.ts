@@ -1,4 +1,3 @@
-import { resolve } from 'pathe'
 import configa from '../../data/system.config'
 
 export type Config = {
@@ -23,6 +22,9 @@ export type Config = {
             InstDIR: string;
             KejibanConfigDIR: string;
             name: string;
+            use: "bun"|"node"|"deno"|"cloudflare"|"other",
+            websocket: boolean;
+            API:boolean;
         };
         limit: {
             MaxSubject: number;
@@ -82,6 +84,9 @@ export const defaults:Config = {
             'InstDIR':'/test',
             'KejibanConfigDIR':'..',
             'name':'Och',
+            'use':'bun',
+            'websocket':true,
+            'API':true
         },
         'limit':{
             'MaxSubject':500,
