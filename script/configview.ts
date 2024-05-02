@@ -7,7 +7,7 @@ async function main() {
     // console.log(c.config)
     console.log(resolve(process.cwd(), 'data'))
     // const cf: Config = (await config()).config;
-    console.log(await config())
+    console.log(config().preference)
 }
 
 main()

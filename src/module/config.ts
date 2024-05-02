@@ -126,12 +126,7 @@ export const defaults:Config = {
         }
     }
 }
-async function PromiseConfig (): Promise<Config> {
-    const module = await import('../../data/system.config');
-    return module.default; // 設定ファイルがデフォルトエクスポートを持っていると仮定
+import configa from "../../data/system.config";
+export function config():Config{
+    return configa
 }
-// NOTO:動的importだから、設定ファイル作成までエラーが出てうるさいので
-export function config(): Config {
-    PromiseConfig.then
-   }
-   
