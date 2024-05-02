@@ -1,4 +1,5 @@
-import configa from '../../data/system.config'
+import { use } from "hono/jsx";
+import fsDriver from "unstorage/drivers/fs"
 
 export type Config = {
     caps: {
@@ -25,6 +26,7 @@ export type Config = {
             use: "bun"|"node"|"deno"|"cloudflare"|"other",
             websocket: boolean;
             API:boolean;
+            driver:Function
         };
         limit: {
             MaxSubject: number;
@@ -86,7 +88,8 @@ export const defaults:Config = {
             'name':'Och',
             'use':'bun',
             'websocket':true,
-            'API':true
+            'API':true,
+            'driver':fsDriver({ base: "./data" })
         },
         'limit':{
             'MaxSubject':500,
@@ -123,5 +126,12 @@ export const defaults:Config = {
         }
     }
 }
-
-export function config():Config {return configa}
+async function PromiseConfig (): Promise<Config> {
+    const module = await import('../../data/system.config');
+    return module.default; // 設定ファイルがデフォルトエクスポートを持っていると仮定
+}
+// NOTO:動的importだから、設定ファイル作成までエラーが出てうるさいので
+export function config(): Config {
+    PromiseConfig.then
+   }
+   
