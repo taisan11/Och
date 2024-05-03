@@ -5,7 +5,6 @@ import { CloudflareWokerPlugin } from "./build/cloudflare"
 
 
 const type = Bun.argv[2]
-console.log('type:'+type)
 async function build() {
     if (type === 'deno') {
         console.log('Deno Build')
@@ -32,15 +31,21 @@ async function build() {
         )
     } else {
     console.log('Start Build')
-    Bun.build(
+    const result = await Bun.build(
         {
             entrypoints: ['src/server.ts'],
             outdir: 'dist',
             minify: true,
             target:'bun',
-            plugins: [nodelessPlugin]
+            plugins: [nodelessPlugin],
+            
         },
     )
+    console.log(result)
+    for (const message of result.logs) {
+        // Bun will pretty print the message object
+        console.log(message.message);
+      }
 }
 }
 build()
