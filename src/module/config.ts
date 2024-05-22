@@ -1,4 +1,3 @@
-import { use } from "hono/jsx";
 import fsDriver from "unstorage/drivers/fs"
 
 export type Config = {
