@@ -3,7 +3,6 @@ import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
-import { kakiko_dat } from "./module/kakiko.dat";
 import { basicAuth } from 'hono/basic-auth'
 
 declare module "hono" {

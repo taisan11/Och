@@ -12,8 +12,14 @@
     "unstorage": "^1.10.2"
   },
   "devDependencies": {
+    "@azure/app-configuration": "^1.6.0",
+    "@azure/identity": "^4.2.0",
+    "@netlify/blobs": "^7.3.0",
     "@types/bun": "latest",
+    "@vercel/kv": "^1.0.1",
     "drizzle-kit": "^0.21.2",
+    "ioredis": "^5.4.1",
+    "mongodb": "^6.6.2",
     "unenv": "^1.9.0"
   }
 }

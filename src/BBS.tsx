@@ -96,7 +96,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
           <label htmlFor="mail">メール(省略可)</label>
           <input type="text" id="mail" name="mail" />
           <br />
-          <textarea rows="5" cols="70" name="MESSAGE" />
+          <textarea rows={5} cols={70} name="MESSAGE" />
         </form>
         <br />
         <br />
@@ -129,7 +129,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
         <label htmlFor="mail">メール(省略可)</label>
         <input type="text" id="mail" name="mail" />
         <br />
-        <textarea rows="5" cols="70" name="MESSAGE" />
+        <textarea rows={5} cols={70} name="MESSAGE" />
       </form>
       <br />
       <br />
@@ -209,7 +209,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
         <input type="text" id="name" name="name" />
         <label htmlfor="mail">メール(省略可):</label>
         <input type="text" id="mail" name="mail" /><br />
-        <textarea rows="5" cols="70" name="MESSAGE"></textarea>
+        <textarea rows={5} cols={70} name="MESSAGE"></textarea>
       </form>
       <br />
       <br />
@@ -270,6 +270,7 @@ app.get('/:BBSKEY/subject.txt', async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   //@ts-ignore
   c.header("Content-Type", "text/plain; charset=Shift_JIS");
+  //@ts-ignore
   return c.body(await getSubjecttxt(BBSKEY))
 })
 app.get('/:BBSKEY/dat/:THIDextension', async (c) => {
@@ -277,6 +278,7 @@ app.get('/:BBSKEY/dat/:THIDextension', async (c) => {
   const THIDextension = c.req.param("THIDextension");
   const dat = await getdat(BBSKEY,THIDextension)
   c.header("Content-Type", "text/plain; charset=Shift_JIS");
+  //@ts-ignore
   return c.body(dat)
 })
 

@@ -1,7 +1,7 @@
-import fsDriver from "unstorage/drivers/fs"
+import fsDriver, { FSStorageOptions } from "unstorage/drivers/fs"
 
 export type Config = {
-    caps: {
+    caps?: {
         [key:string]: {
             name: string;
             pw: string;
@@ -9,7 +9,7 @@ export type Config = {
             description: string;
         };
     };
-    user: {
+    user?: {
         [key:string]: {
             name: string;
             password: string;
@@ -22,12 +22,13 @@ export type Config = {
             InstDIR: string;
             KejibanConfigDIR: string;
             name: string;
-            use: "bun"|"node"|"deno"|"cloudflare"|"other",
+            use?: RuntimeName|"other",
             websocket: boolean;
             API:boolean;
-            driver:Function
+            driver:"unstorage"|"db"
+            UnstorageOptions?:Driver
         };
-        limit: {
+        limit?: {
             MaxSubject: number;
             MaxRes: number;
             MaxAnchor: number;
@@ -35,7 +36,7 @@ export type Config = {
             HostLog: number;
             MaxUserWriteFailureLog: number;
         };
-        other: {
+        other?: {
             header: {
                 text: string;
                 link: string;
@@ -47,7 +48,7 @@ export type Config = {
             };
             saveformat: string;
         };
-        display: {
+        display?: {
             PRtext: string;
             PRlink: string;
             kokuti: {
@@ -55,7 +56,7 @@ export type Config = {
                 inOther: boolean;
             };
         };
-        kisei: {
+        kisei?: {
             "2jyuu": boolean;
             ShortPostRegulationSec: number;
             sinTorip: boolean;
@@ -88,7 +89,8 @@ export const defaults:Config = {
             'use':'bun',
             'websocket':true,
             'API':true,
-            'driver':fsDriver({ base: "./data" })
+            'driver':"unstorage",
+            'UnstorageOptions':fsDriver({base:"./data"})
         },
         'limit':{
             'MaxSubject':500,
@@ -126,6 +128,13 @@ export const defaults:Config = {
     }
 }
 import configa from "../../data/system.config";
+import { RuntimeName, runtimeInfo } from "std-env";
+import { Driver } from "unstorage";
 export function config():Config{
+    configa.preference.site.use = runtimeInfo?.name ||"other"|| configa.preference.site.use;
+    if (configa.preference.limit) {
+        configa.preference.limit.MaxSubject = configa.preference.limit.MaxSubject || 20;
+    }
+
     return configa
 }
