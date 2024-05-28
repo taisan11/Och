@@ -12,7 +12,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
     const body = await c.req.parseBody()
     if (mode === 'newth') {
         // 内容物の取得
-        const ThTi = String(body.thTi)
+        const ThTi = String(body.ThTitle)
         const Name = String(body.name);//名前
         const mail = String(body.mail);//メアドor色々
         const MESSAGE = String(body.MESSAGE);//内容
@@ -29,7 +29,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         // 加工
         const KASS = await KAS(MESSAGE, Name, mail, Number(UnixTime));
         // 保存
-        await NewThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+'testtests', title: ThTi, id: UnixTime });
+        await NewThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+'testtests', title: ThTi, id: UnixTime });
         // 返す
         return { 'sc': 'ok', 'redirect': `/${base}/read.cgi/${BBSKEY}/${UnixTime}` };
     }
@@ -53,7 +53,7 @@ export async function kakiko(c: Context, mode: 'newth' | 'kakiko', base: string)
         if (!THID) { return {'sc':'no','redirect':`/${base}/read.cgi/error?e=4`} }
         const ID = await id(IP,BBSKEY);
         // 入力
-        await postThread(base,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, id: THID });
+        await postThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, id: THID });
         return {'sc':'ok','redirect':`/${base}/read.cgi/${BBSKEY}/${THID}`};
       
     }

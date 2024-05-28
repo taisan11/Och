@@ -1,6 +1,5 @@
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
-import { use } from "hono/jsx";
 import { config } from "../config";
 import { subjectpaser,datpaser } from "../pase";
 import { NewThreadParams,PostThreadParams } from "../storage";
@@ -31,10 +30,8 @@ export async function DeleteOldSubject_file(BBSKEY:string,) {
 
 export async function getSubject_file(BBSKEY:string,) {
     const storage = createStorage(drives);
-    console.log(await storage.getKeys())
     const SUBTXT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
     const HASSUB = await storage.hasItem(`${BBSKEY}/SUBJECT.TXT`);
-    console.log((SUBTXT))
     if (!HASSUB) {
         return {'data':[],'has':HASSUB};
     }
