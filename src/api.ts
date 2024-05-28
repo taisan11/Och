@@ -3,6 +3,8 @@ import { vValidator } from "@hono/valibot-validator";
 import { newPost, newThread } from './types';
 import { kakiko } from './module/kakiko';
 import { kakikoAPI } from './module/kakiko-api';
+import { subjectpaser } from './module/pase';
+import { getSubject, getThread } from './module/storage';
 
 const app = new Hono({});
 
@@ -11,7 +13,7 @@ app.get('/', (c) => {
 })
 
 app.post(
-  "/thread",
+  "/thread/:BBSKEY",
   vValidator("json", newThread, (result, c) => {
     if (!result.success) {
       return c.json({ message: "errorだよん" }, 400);
@@ -24,7 +26,7 @@ app.post(
   }
 );
 app.post(
-  "/thread/:ThID",
+  "/thread/:BBSKEY/:ThID",
   vValidator("json", newPost, (result, c) => {
     if (!result.success) {
       return c.json({ message: "errorだよん" }, 400);
@@ -36,4 +38,25 @@ app.post(
     return c.json(result);
   }
 );
+app.get("/thread/:BBSKEY",async(c)=>{
+  const BBSKEY = c.req.param().BBSKEY
+  const SUBJECTJSON = await getSubject(BBSKEY)
+  if (!SUBJECTJSON?.has) {
+    return c.json({"error":"指定された板がありません"})
+  }
+  if (!SUBJECTJSON.data) {
+    return c.json({"error":"板にスレッドがありません"})
+  }
+  return c.json(SUBJECTJSON.data)
+})
+app.get("/thread/:BBSKEY/:ThID",async(c)=>{
+  const BBSKEY = c.req.param().BBSKEY
+  const ThID = c.req.param().ThID
+  const THD = await getThread(BBSKEY,ThID)
+  if (!THD?.has) {
+    return c.json({"error":"スレッドがねえ"})
+  }
+  return c.json(THD.date)
+})
+
 export default app;
