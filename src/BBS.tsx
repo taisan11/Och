@@ -120,7 +120,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
       <p>スレ作成</p>
       <form method="post" action={URL}>
         <input type="hidden" name="bbs" value="testing" />
-        <label htmlFor="thTi">スレタイ:</label>
+        <label htmlFor="ThTitle">スレタイ:</label>
         <input type="text" id="ThTitle" name="ThTitle" />
         <button type="submit">新規スレッド作成</button>
         <br />
