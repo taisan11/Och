@@ -27,7 +27,7 @@ export type Config = {
             API:boolean;
             driver:"unstorage"|"db"
             UnstorageOptions?:Driver
-            dbOptin?:string
+            dbOptin?:"sqlite"|"mysql"|"posgresql"
         };
         limit?: {
             MaxSubject: number;
