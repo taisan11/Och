@@ -29,7 +29,7 @@ await db.insert(schema.threds).values({
 
 await db.insert(schema.posts).values({
     id: "test909090909090001",
-    postNum: 1,  // 数値から文字列に変更
+    postNum: 1, 
     ItaID: "test",
     ThID: 90909090909,
     name: "テスト",
