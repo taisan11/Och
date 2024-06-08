@@ -5,14 +5,14 @@
   "dependencies": {
     "@hono/valibot-validator": "^0.2.5",
     "drizzle-orm": "^0.30.10",
-    "hono": "^4.4.3",
+    "hono": "^4.4.4",
     "iconv-cp932": "^1.2.2",
     "pathe": "^1.1.2",
     "std-env": "^3.7.0",
     "unenv": "^1.9.0",
     "unix-crypt-td-js": "^1.1.4",
     "unstorage": "^1.10.2",
-    "valibot": "^0.31.0-rc.11"
+    "valibot": "^0.31.0"
   },
   "devDependencies": {
     "@types/bun": "latest",
