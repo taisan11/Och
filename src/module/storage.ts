@@ -17,7 +17,6 @@ export type NewThreadParams = {
     title: string;
     id: string;
 };
-
 export type PostThreadParams = {
     name: string;
     mail: string;
@@ -25,27 +24,47 @@ export type PostThreadParams = {
     date: string;
     id: string;
 };
+export type getThreadReturn = {
+    has: boolean;
+    data: {
+        title: string;
+        post: {
+            postid: string;
+            name: string;
+            mail: string;
+            date: string;
+            message: string;
+        }[];
+    }
+};
+export type getSubjectReturn = {
+    has: boolean;
+    data: { [key: string]: [string, string] };
+};
 const driver = config().preference.site.driver;
-export async function addSubject(BBSKEY:string,date: string, title: string,id: string) {
+export async function addSubject(BBSKEY:string,date: string, title: string,id: string): Promise<void>{
     if (driver === "unstorage") {
         return await addSubject_file(BBSKEY,date, title,id)
     }
 }
 
-export async function DeleteOldSubject(BBSKEY:string,) {
+export async function DeleteOldSubject(BBSKEY:string,): Promise<void>{
     if (driver === "unstorage") {
         return await DeleteOldSubject_file(BBSKEY)
     }
 }
-export async function getSubjecttxt(BBSKEY:string,) {
+export async function getSubjecttxt(BBSKEY:string,): Promise<string>{
     if (driver === "unstorage") {
         return await getSubjecttxt_file(BBSKEY)
     }
+    return ""
 }
-export async function getSubject(BBSKEY:string,) {
+export async function getSubject(BBSKEY:string,): Promise<getSubjectReturn>{
     if (driver === "unstorage") {
+        //@ts-ignore
         return await getSubject_file(BBSKEY)
     }
+    return {has:false,data:{}}
 }
 
 export async function NewThread(BBSKEY:string,{ name, mail, message, date, title, id }: NewThreadParams) {

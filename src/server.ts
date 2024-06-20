@@ -5,7 +5,7 @@ import { trimTrailingSlash } from 'hono/trailing-slash'
 import { logger } from 'hono/logger'
 import BBS from './UI'
 // import TBS from './TBS'
-import admin from './admin'
+// import admin from './admin'
 // import API from './api'
 
 type Bindings = {
@@ -23,7 +23,7 @@ app.use(logger(customLogger))
 // app.route("/TBS", TBS);
 // app.route("/api",API)
 app.route("/", BBS);
-app.route("/",admin)
+// app.route("/",admin)
 // app.get('*', serveStatic({root: './html'}))
 
 const server =  Bun.serve({

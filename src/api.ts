@@ -58,5 +58,17 @@ app.get("/thread/:BBSKEY/:ThID",async(c)=>{
   }
   return c.json(THD.date)
 })
+app.get("/thread/:BBSKEY/:ThID/:res",async(c)=>{
+  const BBSKEY = c.req.param().BBSKEY
+  const ThID = c.req.param().ThID
+  const res = c.req.param().res
+  const THD = await getThread(BBSKEY,ThID)
+  if (!THD?.has) {
+    return c.json({"error":"スレッドがねえ"})
+  }
+  if (!THD.date.date[postid]) {
+    return c.json({"error":"レスがねえ"})
+  }
+})
 
 export default app;

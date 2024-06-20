@@ -40,7 +40,7 @@ export async function getSubject_file(BBSKEY:string,) {
 export async function getSubjecttxt_file(BBSKEY:string,) {
     const storage = createStorage(drives);
     const SUBTXT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
-    return SUBTXT;
+    return String(SUBTXT);
 }
 export async function NewThread_file(BBSKEY:string,{ name, mail, message, date, title, id }: NewThreadParams) {
     const storage = createStorage(drives);
