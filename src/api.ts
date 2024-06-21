@@ -68,5 +68,6 @@ app.get("/thread/:BBSKEY/:ThID/:res",async(c)=>{
   //   return c.json({"error":"レスがねえ"})
   // }
 })
+app.get("/thread")
 
 export default app;
