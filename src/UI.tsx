@@ -188,7 +188,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
         {THD.data.title}
       </h1>
       <dl class="thred">
-        {//@ts-ignore
+        {
         THD.data.post.map((post) => (
           <>
             <dt id={post.postid}>
@@ -268,9 +268,7 @@ app.get('/:BBSKEY', async (c) => {
   })});
 app.get('/:BBSKEY/subject.txt', async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
-  //@ts-ignore
   c.header("Content-Type", "text/plain; charset=Shift_JIS");
-  //@ts-ignore
   return c.body(await getSubjecttxt(BBSKEY))
 })
 app.get('/:BBSKEY/dat/:THIDextension', async (c) => {
@@ -278,7 +276,6 @@ app.get('/:BBSKEY/dat/:THIDextension', async (c) => {
   const THIDextension = c.req.param("THIDextension");
   const dat = await getdat(BBSKEY,THIDextension)
   c.header("Content-Type", "text/plain; charset=Shift_JIS");
-  //@ts-ignore
   return c.body(dat)
 })
 

@@ -3,7 +3,6 @@ import fsDriver from "unstorage/drivers/fs";
 import { config } from "../config";
 import { subjectpaser,datpaser } from "../pase";
 import { NewThreadParams,PostThreadParams, getSubjectReturn, getThreadReturn, postReturn } from "../storage";
-import * as IconvCP932 from "iconv-cp932";
 
 const drives = {driver:config().preference.site.UnstorageOptions} || {driver:fsDriver({ base: "./data" })};
 
@@ -20,10 +19,8 @@ export async function addSubject_file(BBSKEY:string,date: string, title: string,
 export async function DeleteOldSubject_file(BBSKEY:string,):Promise<void> {
     const storage = createStorage(drives);
     const SUBJECT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
-    //@ts-ignore
-    const lines = SUBJECT.split('\n');
-    //@ts-ignore
-    const newLines = lines.slice(0, config().preference.limit.MaxSubject); // Keep the first 10 lines
+    const lines = String(SUBJECT).split('\n');
+    const newLines = lines.slice(0, config()!.preference!.limit!.MaxSubject); // Keep the first 10 lines
     const newSubject = newLines.join('\n');
     await storage.setItem(`${BBSKEY}/SUBJECT.TXT`, newSubject);
 }
@@ -37,8 +34,7 @@ export async function getSubject_file(BBSKEY:string,):Promise<getSubjectReturn> 
     const SUBTXT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
     const HASSUB = await storage.hasItem(`${BBSKEY}/SUBJECT.TXT`);
     if (!HASSUB) {
-        //@ts-ignore
-        return {'data':[],'has':HASSUB};
+        return {'data':{'a':["a","a"]},'has':HASSUB};
     }
     return {'data':subjectpaser(String(SUBTXT)),'has':HASSUB};
 }

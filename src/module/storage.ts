@@ -64,7 +64,6 @@ export async function getSubjecttxt(BBSKEY:string,): Promise<string>{
 }
 export async function getSubject(BBSKEY:string,): Promise<getSubjectReturn>{
     if (driver === "unstorage") {
-        //@ts-ignore
         return await getSubject_file(BBSKEY)
     }
     return {has:false,data:{}}
