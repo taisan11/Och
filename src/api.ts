@@ -56,7 +56,7 @@ app.get("/thread/:BBSKEY/:ThID",async(c)=>{
   if (!THD?.has) {
     return c.json({"error":"スレッドがねえ"})
   }
-  return c.json(THD.date)
+  return c.json(THD.data)
 })
 app.get("/thread/:BBSKEY/:ThID/:res",async(c)=>{
   const BBSKEY = c.req.param().BBSKEY
@@ -66,9 +66,9 @@ app.get("/thread/:BBSKEY/:ThID/:res",async(c)=>{
   if (!THD?.has) {
     return c.json({"error":"スレッドがねえ"})
   }
-  if (!THD.date.date[postid]) {
-    return c.json({"error":"レスがねえ"})
-  }
+  // if (!THD.data.post[]) {
+  //   return c.json({"error":"レスがねえ"})
+  // }
 })
 
 export default app;

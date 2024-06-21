@@ -162,7 +162,7 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
   const BBSKEY = c.req.param("BBSKEY");
   const THID = c.req.param("THID");
   const THD = await getThread(BBSKEY,THID)
-  if (!THD?.has) {
+  if (!THD.has) {
     return c.render(
       <>
         <h1>READ.CGI for BBS.TSX by Och</h1>
@@ -185,11 +185,11 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
       </div>
       <hr style="background-color:#888;color:#888;border-width:0;height:1px;position:relative;top:-.4em;" />
       <h1 style="color:#CC0000;font-size:larger;font-weight:normal;margin:-.5em 0 0;">
-        {JSON.parse(THD.date).title}
+        {THD.data.title}
       </h1>
       <dl class="thred">
         {//@ts-ignore
-        JSON.parse(THD.date).post.map((post) => (
+        THD.data.post.map((post) => (
           <>
             <dt id={post.postid}>
               {post.postid} ：

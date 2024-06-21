@@ -18,7 +18,7 @@ export function subjectpaser(subjecttxt: string): { [key: string]: [string, stri
  * @param {string} dattxt
  * @returns {string}
  */
-export function datpaser(dattxt: string) {
+export function datpaser(dattxt: string):string {
     const lines = dattxt.split("\n");
     const posts: any[] = [];
     let title = "";
