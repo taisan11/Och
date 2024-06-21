@@ -1,9 +1,7 @@
 import {Hono} from 'hono';
 import { vValidator } from "@hono/valibot-validator";
 import { newPost, newThread } from './types';
-import { kakiko } from './module/kakiko';
 import { kakikoAPI } from './module/kakiko-api';
-import { subjectpaser } from './module/pase';
 import { getSubject, getThread } from './module/storage';
 
 const app = new Hono({});
