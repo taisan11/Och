@@ -23,7 +23,7 @@ export const customLogger = (message: string, ...rest: string[]) => {
 }
 
 app.use(logger(customLogger))
-app.use(compress())
+// app.use(compress())
 app.use(cors())
 app.use(csrf())
 app.use(etag())

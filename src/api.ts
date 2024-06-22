@@ -9,7 +9,6 @@ const app = new Hono({});
 app.get('/', (c) => {
   return c.text('掲示板APIだよ!!')
 })
-
 app.post(
   "/thread/:BBSKEY",
   vValidator("json", newThread, (result, c) => {
@@ -59,14 +58,12 @@ app.get("/thread/:BBSKEY/:ThID",async(c)=>{
 app.get("/thread/:BBSKEY/:ThID/:res",async(c)=>{
   const BBSKEY = c.req.param().BBSKEY
   const ThID = c.req.param().ThID
-  const res = c.req.param().res
+  const res = Number(c.req.param().res) -1
   const THD = await getThread(BBSKEY,ThID)
   if (!THD?.has) {
     return c.json({"error":"スレッドがねえ"})
   }
-  // if (!THD.data.post[]) {
-  //   return c.json({"error":"レスがねえ"})
-  // }
+  return c.json(THD.data.post[res])
 })
 app.get("/thread")
 
