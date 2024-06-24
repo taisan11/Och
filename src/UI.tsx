@@ -32,40 +32,7 @@ app.get(
   }),
 );
 
-app.get(`${config().preference.site.InstDIR}/read.cgi/error`, async (c) => {
-  const e = c.req.query("e");
-  let em = "";
-  switch (e) {
-    case "0":
-      em = "名前が入力されていないか、30文字を超えています";
-      break;
-    case "1":
-      em = "内容が入力されていないか、300文字を超えています";
-      break;
-    case "2":
-      em = "メールが70文字を超えています";
-      break;
-    case "3":
-      em = "BBSKEYがありません";
-      break;
-    case "4":
-      em = "THIDがありません";
-      break;
-    case "5":
-      em = "スレタイが入力されていません";
-      break;
-  }
-  return c.render(
-    <>
-      <h1>ERROR</h1>
-      <p>えらーがきたぞー</p>
-      <p>{em}</p>
-    </>,
-    { title: "ERROR" },
-  );
-})
-
-app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
+app.get(`/:BBSKEY`, async (c) => {
   const URL = c.req.url;
   const BBSKEY = c.req.param("BBSKEY");
   const SUBJECTJSON = await getSubject(BBSKEY);
@@ -139,26 +106,23 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   );
 });
 
-// app.post(`${config().preference.site.InstDIR}/bbs.cgi`, async (c) => {
-// })
-
 ////////////////////////
 //   ##現在の仕様のコーナー
 //   現在はですね、IPを方法がないので放置です
 //   いつか実装したいです
 ////////////////////////
 // 書き込み
-app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
-  const kextuka = await kakiko(c,'kakiko','test');
+app.post(`/:BBSKEY/:THID`, async (c) => {
+  const kextuka = await kakiko(c,'kakiko');
   return c.redirect(kextuka.redirect);
 });
 // Newスレッド
-app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
-  const kextuka = await kakiko(c, "newth",'test');
+app.post(`/:BBSKEY`, async (c) => {
+  const kextuka = await kakiko(c, "newth");
   return c.redirect(kextuka.redirect);
 });
 
-app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
+app.get(`/:BBSKEY/:THID`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   const THID = c.req.param("THID");
   const THD = await getThread(BBSKEY,THID)
@@ -219,53 +183,6 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
   );
 });
 
-app.get('/:BBSKEY', async (c) => {
-  return c.render(
-    <tbody>
-      <tr>
-        <td>
-          <table border={0} width="100%">
-            <tbody>
-              <tr>
-                <td>
-                  <font size="+1">
-                    <b>楽しく雑談しよう。ただそれだけの場所です</b>
-                  </font>
-                </td>
-                <td align="right">
-                  <a href="#menu">■</a> <a href="#1">▼</a>
-                </td>
-              </tr>
-              <tr>
-                <td colspan={2}>
-                  <div align="center" style={{ margin: "1.2em 0" }}>
-                    <font color="red">
-                      クリックで救える命が…ないです(｀・ω・´)シャキーン
-                    </font>
-                  </div>
-
-                  <b>掲示板使用上の注意</b>
-                  <blockquote style={{ marginTop: 0, fontWeight: "bold" }}>
-                    ・日本法に準拠する<br />
-                    ・かといってがっちがちではない<br />
-                    ・管理者Tに従う<br />
-                  </blockquote>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td align="center">
-          <a href="../test/search.cgi" target="_blank">
-            <small>■<b>レス検索</b>■</small>
-          </a>
-        </td>
-      </tr>
-    </tbody>,{
-    'title': "BBS"
-  })});
 app.get('/:BBSKEY/subject.txt', async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   c.header("Content-Type", "text/plain; charset=Shift_JIS");

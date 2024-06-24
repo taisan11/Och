@@ -9,17 +9,16 @@ export type Config = {
             description: string;
         };
     };
-    user?: {
-        [key:string]: {
-            name: string;
-            password: string;
-            fullname: string;
-            admin: boolean;
-        };
-    };
+    // user?: {
+    //     [key:string]: {
+    //         name: string;
+    //         password: string;
+    //         fullname: string;
+    //         admin: boolean;
+    //     };
+    // };
     preference: {
         site: {
-            InstDIR: string;
             KejibanConfigDIR: string;
             name: string;
             use?: RuntimeName|"other",
@@ -49,19 +48,19 @@ export type Config = {
             };
             saveformat: string;
         };
-        display?: {
-            PRtext: string;
-            PRlink: string;
-            kokuti: {
-                inIndex: boolean;
-                inOther: boolean;
-            };
-        };
-        kisei?: {
-            "2jyuu": boolean;
-            ShortPostRegulationSec: number;
-            sinTorip: boolean;
-        };
+        // display?: {
+        //     PRtext: string;
+        //     PRlink: string;
+        //     kokuti: {
+        //         inIndex: boolean;
+        //         inOther: boolean;
+        //     };
+        // };
+        // kisei?: {
+        //     "2jyuu": boolean;
+        //     ShortPostRegulationSec: number;
+        //     sinTorip: boolean;
+        // };
     };
 };
 
@@ -74,17 +73,8 @@ export const defaults:Config = {
             'description':'Administrator',
         }
     },
-    'user':{
-        'admin':{
-            'name':'admin',
-            'password':'admin',
-            'fullname':'Administrator',
-            'admin':true
-        }
-    },
     'preference':{
         'site':{
-            'InstDIR':'/test',
             'KejibanConfigDIR':'..',
             'name':'Och',
             'use':'bun',
@@ -112,19 +102,6 @@ export const defaults:Config = {
                 'CookieDateExp':30
             },
             'saveformat':"file"
-        },
-        'display':{
-            'PRtext':'Och~おーちゃんねる~',
-            'PRlink':'https://github.com/taisan11/Och',
-            'kokuti':{
-                'inIndex':true,
-                'inOther':false
-            }
-        },
-        'kisei':{
-            '2jyuu':true,
-            'ShortPostRegulationSec':0,
-            'sinTorip':true,
         }
     }
 }
