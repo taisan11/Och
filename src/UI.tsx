@@ -3,13 +3,13 @@ import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
+import { hc } from "hono/client";
 
 declare module "hono" {
   interface ContextRenderer {
     (content: string | Promise<string>, props: { title?: string }): Response;
   }
 }
-
 
 const app = new Hono()
 
@@ -182,18 +182,5 @@ app.get(`/:BBSKEY/:THID`, async (c) => {
     { title: "READ.CGI" },
   );
 });
-
-app.get('/:BBSKEY/subject.txt', async (c) => {
-  const BBSKEY = c.req.param("BBSKEY");
-  c.header("Content-Type", "text/plain; charset=Shift_JIS");
-  return c.body(await getSubjecttxt(BBSKEY))
-})
-app.get('/:BBSKEY/dat/:THIDextension', async (c) => {
-  const BBSKEY = c.req.param("BBSKEY");
-  const THIDextension = c.req.param("THIDextension");
-  const dat = await getdat(BBSKEY,THIDextension)
-  c.header("Content-Type", "text/plain; charset=Shift_JIS");
-  return c.body(dat)
-})
 
 export default app;

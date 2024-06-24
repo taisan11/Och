@@ -10,6 +10,7 @@ import { etag } from 'hono/etag'
 import { secureHeaders } from 'hono/secure-headers'
 import BBS from './UI'
 import API from './api'
+import OldUI from './oldui'
 
 type Bindings = {
     ip: SocketAddress
@@ -29,6 +30,7 @@ app.use(logger(customLogger))
 app.use(etag())
 // app.use(secureHeaders())
 
+app.route("/", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
 
