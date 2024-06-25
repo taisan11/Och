@@ -25,7 +25,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         // 保存
         await NewThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+'testtests', title: ThTitle, id: UnixTime });
         // 返す
-        return { 'sc': true, 'ThID': `${BBSKEY}/${UnixTime}` };
+        return { 'sc': true, 'ThID': `/${BBSKEY}/${UnixTime}` };
     }
     if (mode === 'kakiko') {
         // 内容物の取得
@@ -43,7 +43,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         const ID = await id(IP,BBSKEY);
         // 入力
         await postThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, id: ThID });
-        return {'sc':true,'ThID':`${BBSKEY}/${ThID}`};
+        return {'sc':true,'ThID':`/${BBSKEY}/${ThID}`};
       
     }
     return {sc:false,ThID:'error999999999'}

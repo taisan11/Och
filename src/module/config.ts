@@ -1,4 +1,4 @@
-import fsDriver, { FSStorageOptions } from "unstorage/drivers/fs"
+import fsDriver from "unstorage/drivers/fs"
 
 export type Config = {
     caps?: {

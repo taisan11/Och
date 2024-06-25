@@ -25,10 +25,10 @@ export const customLogger = (message: string, ...rest: string[]) => {
 
 app.use(logger(customLogger))
 // app.use(compress())
-// app.use(cors())
+app.use(cors())
 // app.use(csrf())
 app.use(etag())
-// app.use(secureHeaders())
+app.use(secureHeaders())
 
 app.route("/", OldUI);
 app.route("/api",API)

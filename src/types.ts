@@ -1,4 +1,4 @@
-import {object,string,number,pipe,array,date,trim,endsWith} from 'valibot'
+import {object,string,number} from 'valibot'
 
 const v = {object,string,number}
 
