@@ -18,7 +18,7 @@ function formatUnixTime(unixTime: number): string {
 }
 
 export async function KAS(mes:string,name:string,mail:string,time:number){
-    const kkk = NewMES(mes)
+    const kkk = MES(mes)
     const lll = await NES(name,mail)
     const ttt = formatUnixTime(time)
     return {
@@ -29,7 +29,7 @@ export async function KAS(mes:string,name:string,mail:string,time:number){
     }
 }
 
-function NewMES(input: string | null): string {
+function MES(input: string | null): string {
   if (!input) return '';
 
   // HTML特殊文字を変換

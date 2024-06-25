@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
-import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
 import { hc } from "hono/client";
+import { kakikoAPI } from "./module/kakiko-api";
 
 declare module "hono" {
   interface ContextRenderer {
@@ -113,13 +113,25 @@ app.get(`/:BBSKEY`, async (c) => {
 ////////////////////////
 // 書き込み
 app.post(`/:BBSKEY/:THID`, async (c) => {
-  const kextuka = await kakiko(c,'kakiko');
-  return c.redirect(kextuka.redirect);
+  const body = await c.req.parseBody()
+  const Name = String(body.name);//名前
+  const mail = String(body.mail);//メアドor色々
+  const MESSAGE = String(body.MESSAGE);//内容
+  const BBSKEY = c.req.param("BBSKEY");//BBSKEY
+  const THID = c.req.param("THID");//スレID
+  const kextuka = await kakikoAPI({ThID:THID,name:Name,mail,MESSAGE,BBSKEY},c,"kakiko")
+  return c.redirect(kextuka.ThID);
 });
 // Newスレッド
 app.post(`/:BBSKEY`, async (c) => {
-  const kextuka = await kakiko(c, "newth");
-  return c.redirect(kextuka.redirect);
+  const body = await c.req.parseBody()
+  const ThTi = String(body.ThTitle)
+  const Name = String(body.name);//名前
+  const mail = String(body.mail);//メアドor色々
+  const MESSAGE = String(body.MESSAGE);//内容
+  const BBSKEY = c.req.param("BBSKEY");//BBSKEY
+  const kextuka = await kakikoAPI({ThTitle:ThTi,name:Name,mail,MESSAGE,BBSKEY},c,"newth")
+  return c.redirect(kextuka.ThID);
 });
 
 app.get(`/:BBSKEY/:THID`, async (c) => {

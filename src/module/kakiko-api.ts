@@ -12,7 +12,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
     const body = await c.req.parseBody()
     if (mode === 'newth') {
         const date = new Date();//時間
-        const ip = c.req.header('CF-Connecting-IP')//IP(cloudflare tunnel使えば行けるやろ)
+        const IP = c.req.header('CF-Connecting-IP')||c.env.ip.address||'0.0.0.0'
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
         // 文字数制限など
         if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
@@ -31,7 +31,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         // 内容物の取得
         const date = new Date();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
-        const IP = c.req.header('CF-Connecting-IP')||c.env.ip.address||'0.0.0.0'//IP(cloudflare tunnel使えば行けるやろ)
+        const IP = c.req.header('CF-Connecting-IP')||c.env.ip.address||'0.0.0.0'
         // 変換
         const KASS = await KAS(MESSAGE,name,mail,Number(UnixTime));
         // 制限
