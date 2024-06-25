@@ -1,9 +1,7 @@
 import {Hono} from 'hono';
 import { vValidator } from "@hono/valibot-validator";
 import { newPost, newThread } from './types';
-import { kakiko } from './module/kakiko';
 import { kakikoAPI } from './module/kakiko-api';
-import { subjectpaser } from './module/pase';
 import { getSubject, getThread } from './module/storage';
 
 const app = new Hono({});
@@ -11,7 +9,6 @@ const app = new Hono({});
 app.get('/', (c) => {
   return c.text('掲示板APIだよ!!')
 })
-
 app.post(
   "/thread/:BBSKEY",
   vValidator("json", newThread, (result, c) => {
@@ -56,7 +53,18 @@ app.get("/thread/:BBSKEY/:ThID",async(c)=>{
   if (!THD?.has) {
     return c.json({"error":"スレッドがねえ"})
   }
-  return c.json(THD.date)
+  return c.json(THD.data)
 })
+app.get("/thread/:BBSKEY/:ThID/:res",async(c)=>{
+  const BBSKEY = c.req.param().BBSKEY
+  const ThID = c.req.param().ThID
+  const res = Number(c.req.param().res) -1
+  const THD = await getThread(BBSKEY,ThID)
+  if (!THD?.has) {
+    return c.json({"error":"スレッドがねえ"})
+  }
+  return c.json(THD.data.post[res])
+})
+app.get("/thread")
 
 export default app;

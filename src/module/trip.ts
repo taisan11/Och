@@ -1,4 +1,4 @@
-import * as IconvCP932 from "iconv-cp932";
+import {encode} from "iconv-cp932";
 
 import { create10DigitsTrip, create12DigitsTrip, createRawKeyTrip } from './trip/index'
 
@@ -12,7 +12,7 @@ const maskSpecialSymbols = (text: string) => text.replace(/★/g, '☆').replace
 
 export const createTripByKey = (key: string) => {
 //   const encodedKeyString = convert(key, { from: 'UNICODE', to: 'SJIS', fallback: 'html-entity' })
-    const encodedKeyString = IconvCP932.encode(key).toString()
+    const encodedKeyString = encode(key).toString()
 
   // 10 桁トリップ
   if (encodedKeyString.length < 12) return create10DigitsTrip(key)
