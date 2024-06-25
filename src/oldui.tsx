@@ -3,7 +3,6 @@ import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
-import { basicAuth } from 'hono/basic-auth'
 
 declare module "hono" {
   interface ContextRenderer {
@@ -11,9 +10,8 @@ declare module "hono" {
   }
 }
 
-const app = new Hono();
 
-app.use('/admin.cgi',basicAuth({username:config().user.admin.name,password:config().user.admin.password}))
+const app = new Hono()
 
 app.get(
   "*",
@@ -34,16 +32,27 @@ app.get(
   }),
 );
 
-app.get(`${config().preference.site.InstDIR}/admin.cgi`, async (c) => {
+app.get("/bbsmenu.html", async (c) => {
     return c.render(
-        <>
-        <h1>管理画面</h1>
-        <p>管理画面</p>
-        <p>version:V0.0.1</p>
-        <p>Git Hash:{}</p>
-        </>,
-        { title: "管理画面" },
+        <div>
+        <b>aaa</b>
+        <br/>
+        <a href="https://kenmo.org/refuge/">テスト</a>
+        <br/>
+        </div>,{title: "掲示板メニュー"}
     );
+})
+app.get('/:BBSKEY/subject.txt', async (c) => {
+  const BBSKEY = c.req.param("BBSKEY");
+  c.header("Content-Type", "text/plain; charset=Shift_JIS");
+  return c.body(await getSubjecttxt(BBSKEY))
+})
+app.get('/:BBSKEY/dat/:THIDextension', async (c) => {
+  const BBSKEY = c.req.param("BBSKEY");
+  const THIDextension = c.req.param("THIDextension");
+  const dat = await getdat(BBSKEY,THIDextension)
+  c.header("Content-Type", "text/plain; charset=Shift_JIS");
+  return c.body(dat)
 })
 
 export default app;

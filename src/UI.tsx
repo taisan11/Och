@@ -1,15 +1,13 @@
 import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
-import { kakiko } from "./module/kakiko";
-import { config } from "./module/config";
+import { kakikoAPI } from "./module/kakiko-api";
 
 declare module "hono" {
   interface ContextRenderer {
     (content: string | Promise<string>, props: { title?: string }): Response;
   }
 }
-
 
 const app = new Hono()
 
@@ -32,40 +30,7 @@ app.get(
   }),
 );
 
-app.get(`${config().preference.site.InstDIR}/read.cgi/error`, async (c) => {
-  const e = c.req.query("e");
-  let em = "";
-  switch (e) {
-    case "0":
-      em = "名前が入力されていないか、30文字を超えています";
-      break;
-    case "1":
-      em = "内容が入力されていないか、300文字を超えています";
-      break;
-    case "2":
-      em = "メールが70文字を超えています";
-      break;
-    case "3":
-      em = "BBSKEYがありません";
-      break;
-    case "4":
-      em = "THIDがありません";
-      break;
-    case "5":
-      em = "スレタイが入力されていません";
-      break;
-  }
-  return c.render(
-    <>
-      <h1>ERROR</h1>
-      <p>えらーがきたぞー</p>
-      <p>{em}</p>
-    </>,
-    { title: "ERROR" },
-  );
-})
-
-app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
+app.get(`/:BBSKEY`, async (c) => {
   const URL = c.req.url;
   const BBSKEY = c.req.param("BBSKEY");
   const SUBJECTJSON = await getSubject(BBSKEY);
@@ -139,30 +104,39 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
   );
 });
 
-// app.post(`${config().preference.site.InstDIR}/bbs.cgi`, async (c) => {
-// })
-
 ////////////////////////
 //   ##現在の仕様のコーナー
 //   現在はですね、IPを方法がないので放置です
 //   いつか実装したいです
 ////////////////////////
 // 書き込み
-app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
-  const kextuka = await kakiko(c,'kakiko','test');
-  return c.redirect(kextuka.redirect);
+app.post(`/:BBSKEY/:THID`, async (c) => {
+  const body = await c.req.parseBody()
+  const Name = String(body.name);//名前
+  const mail = String(body.mail);//メアドor色々
+  const MESSAGE = String(body.MESSAGE);//内容
+  const BBSKEY = c.req.param("BBSKEY");//BBSKEY
+  const THID = c.req.param("THID");//スレID
+  const kextuka = await kakikoAPI({ThID:THID,name:Name,mail,MESSAGE,BBSKEY},c,"kakiko")
+  return c.redirect(kextuka.ThID);
 });
 // Newスレッド
-app.post(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY`, async (c) => {
-  const kextuka = await kakiko(c, "newth",'test');
-  return c.redirect(kextuka.redirect);
+app.post(`/:BBSKEY`, async (c) => {
+  const body = await c.req.parseBody()
+  const ThTi = String(body.ThTitle)
+  const Name = String(body.name);//名前
+  const mail = String(body.mail);//メアドor色々
+  const MESSAGE = String(body.MESSAGE);//内容
+  const BBSKEY = c.req.param("BBSKEY");//BBSKEY
+  const kextuka = await kakikoAPI({ThTitle:ThTi,name:Name,mail,MESSAGE,BBSKEY},c,"newth")
+  return c.redirect(kextuka.ThID);
 });
 
-app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) => {
+app.get(`/:BBSKEY/:THID`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   const THID = c.req.param("THID");
   const THD = await getThread(BBSKEY,THID)
-  if (!THD?.has) {
+  if (!THD.has) {
     return c.render(
       <>
         <h1>READ.CGI for BBS.TSX by Och</h1>
@@ -185,11 +159,11 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
       </div>
       <hr style="background-color:#888;color:#888;border-width:0;height:1px;position:relative;top:-.4em;" />
       <h1 style="color:#CC0000;font-size:larger;font-weight:normal;margin:-.5em 0 0;">
-        {JSON.parse(THD.date).title}
+        {THD.data.title}
       </h1>
       <dl class="thred">
-        {//@ts-ignore
-        JSON.parse(THD.date).post.map((post) => (
+        {
+        THD.data.post.map((post) => (
           <>
             <dt id={post.postid}>
               {post.postid} ：
@@ -218,68 +192,5 @@ app.get(`${config().preference.site.InstDIR}/read.cgi/:BBSKEY/:THID`, async (c) 
     { title: "READ.CGI" },
   );
 });
-
-app.get('/:BBSKEY', async (c) => {
-  return c.render(
-    <tbody>
-      <tr>
-        <td>
-          <table border={0} width="100%">
-            <tbody>
-              <tr>
-                <td>
-                  <font size="+1">
-                    <b>楽しく雑談しよう。ただそれだけの場所です</b>
-                  </font>
-                </td>
-                <td align="right">
-                  <a href="#menu">■</a> <a href="#1">▼</a>
-                </td>
-              </tr>
-              <tr>
-                <td colspan={2}>
-                  <div align="center" style={{ margin: "1.2em 0" }}>
-                    <font color="red">
-                      クリックで救える命が…ないです(｀・ω・´)シャキーン
-                    </font>
-                  </div>
-
-                  <b>掲示板使用上の注意</b>
-                  <blockquote style={{ marginTop: 0, fontWeight: "bold" }}>
-                    ・日本法に準拠する<br />
-                    ・かといってがっちがちではない<br />
-                    ・管理者Tに従う<br />
-                  </blockquote>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td align="center">
-          <a href="../test/search.cgi" target="_blank">
-            <small>■<b>レス検索</b>■</small>
-          </a>
-        </td>
-      </tr>
-    </tbody>,{
-    'title': "BBS"
-  })});
-app.get('/:BBSKEY/subject.txt', async (c) => {
-  const BBSKEY = c.req.param("BBSKEY");
-  //@ts-ignore
-  c.header("Content-Type", "text/plain; charset=Shift_JIS");
-  //@ts-ignore
-  return c.body(await getSubjecttxt(BBSKEY))
-})
-app.get('/:BBSKEY/dat/:THIDextension', async (c) => {
-  const BBSKEY = c.req.param("BBSKEY");
-  const THIDextension = c.req.param("THIDextension");
-  const dat = await getdat(BBSKEY,THIDextension)
-  c.header("Content-Type", "text/plain; charset=Shift_JIS");
-  //@ts-ignore
-  return c.body(dat)
-})
 
 export default app;
