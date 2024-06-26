@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
-import { kakiko } from "./module/kakiko";
 import { config } from "./module/config";
 
 declare module "hono" {
