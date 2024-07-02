@@ -4,12 +4,14 @@ import { KAS } from "./KAS";
 import { id } from "./id";
 
 /**
+ * kakikoAPI
+ * @description 情報を加工し、保存する
+ * @param {ThTitle:string,name:string,mail:string,MESSAGE:string,BBSKEY:string,ThID:string} 情報
  * @param c Hono Context
  * @param mode 新しいスレッドを立てるか、レスを書き込むか
  * @returns {sc:'ok'|false,redirect:string} 成功したか、リダイレクト先
  */
 export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle?:string,name:string,mail:string,MESSAGE:string,BBSKEY:string,ThID?:string},c: Context, mode: 'newth' | 'kakiko'): Promise<{ sc: boolean, ThID: string }> {
-    const body = await c.req.parseBody()
     if (mode === 'newth') {
         const date = new Date();//時間
         const IP = c.req.header('CF-Connecting-IP')||c.env.ip.address||'0.0.0.0'

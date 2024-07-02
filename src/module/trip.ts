@@ -7,9 +7,15 @@ type Options = Partial<{
 }>
 
 const rawKeyPettern = /^#[0-9A-Fa-f]{16}[.\/0-9A-Za-z]{0,2}$/
-
+/**
+ * @param text 文章
+ * @returns 入力不可文字を変換した文章
+ */
 const maskSpecialSymbols = (text: string) => text.replace(/★/g, '☆').replace(/◆/g, '◇')
-
+/**
+ * @param key 一つ目の#を覗いた鍵となる部分。
+ * @returns 
+ */
 const create12DigitsTrip = (key: string) => {
   //   const arrayBuffer = convert(key, { from: 'UNICODE', to: 'SJIS', type: 'arraybuffer', fallback: 'html-entity' })
     const arrayBuffer = encode(key)
@@ -17,7 +23,10 @@ const create12DigitsTrip = (key: string) => {
     // 余裕があったらawaitを使用したweb標準の物を使いたい
     return createHash('sha1').update(byteArray).digest().toString('base64').replace(/\+/g, '.').substr(0, 12)
 }
-
+/**
+ * @param key 一つ目の#を覗いた鍵となる部分。
+ * @returns 
+ */
 const create10DigitsTrip = (key: string) => {
   const saltSuffixString = 'H.'
 //   const encodedKeyString = convert(key, { from: 'UNICODE', to: 'SJIS', fallback: 'html-entity' })
@@ -53,7 +62,10 @@ const create10DigitsTrip = (key: string) => {
 
   return (crypt(encodedKeyString, salt) as string).substr(-10, 10)
 }
-
+/**
+ * @param key 一つ目の#を覗いた鍵となる部分。
+ * @returns 
+ */
 const createRawKeyTrip = (key: string) => {
   const saltSuffixString = '..'
 
@@ -75,7 +87,11 @@ const createRawKeyTrip = (key: string) => {
 
   return (crypt(rawKey, salt) as string).substr(-10, 10)
 }
-
+/**
+ * 
+ * @param key 一つ目の#を覗いた鍵となる部分。
+ * @returns trip
+ */
 export const createTripByKey = (key: string) => {
 //   const encodedKeyString = convert(key, { from: 'UNICODE', to: 'SJIS', fallback: 'html-entity' })
     const encodedKeyString = encode(key).toString()
@@ -94,7 +110,12 @@ export const createTripByKey = (key: string) => {
   // 12 桁トリップ
   return create12DigitsTrip(key)
 }
-
+/**
+ * 
+ * @param text 文章(名前など)
+ * @param options 設定する。
+ * @returns tripに変換された文章とその他の文字列
+ */
 export const createTripByText = (text: string, options?: Options) => {
   const indexOfSharp = (() => {
     const indexOfHalfWidthSharp = text.indexOf('#')

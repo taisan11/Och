@@ -1,3 +1,8 @@
+/**
+ * @description subject.txtをJSONに変換し、使いやすくする
+ * @param subjecttxt subjectファイル
+ * @returns { [key: string]: [string, string] } subject for JSON
+ */
 export function subjectpaser(subjecttxt: string): { [key: string]: [string, string] } {
     subjecttxt = subjecttxt.replace(/\r\n/g, '\n');
     const lines: string[] = subjecttxt.split('\n');
@@ -13,8 +18,8 @@ export function subjectpaser(subjecttxt: string): { [key: string]: [string, stri
     }
     return result;
 }
-//JSdoc
 /**
+ * @description datファイルをJSONに変換し、使いやすくする
  * @param {string} dattxt
  * @returns {string}
  */

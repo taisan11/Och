@@ -16,7 +16,14 @@ function formatUnixTime(unixTime: number): string {
   // フォーマットを組み立てる
   return `${ymd} ${hms}.${ms}`;
 }
-
+/**
+ * 様々な情報を加工する
+ * @param mes メッセージ
+ * @param name 名前
+ * @param mail メアド(コマンド)
+ * @param time 時間
+ * @returns {mes:string,name:string,mail:string,time:number}
+ */
 export async function KAS(mes:string,name:string,mail:string,time:number){
     const kkk = MES(mes)
     const lll = await NES(name,mail)
