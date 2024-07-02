@@ -6,7 +6,7 @@
     "@hono/valibot-validator": "^0.2.5",
     "@taisan11/hono-shiftjis": "npm:@jsr/taisan11__hono-shiftjis",
     "drizzle-orm": "^0.30.10",
-    "hono": "^4.4.8",
+    "hono": "^4.4.10",
     "iconv-cp932": "^1.2.2",
     "pathe": "^1.1.2",
     "std-env": "^3.7.0",
