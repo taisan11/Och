@@ -112,23 +112,23 @@ app.get(`/:BBSKEY`, async (c) => {
 // 書き込み
 app.post(`/:BBSKEY/:THID`, async (c) => {
   const body = await c.req.parseBody()
-  const Name = String(body.name);//名前
+  const name = String(body.name);//名前
   const mail = String(body.mail);//メアドor色々
   const MESSAGE = String(body.MESSAGE);//内容
   const BBSKEY = c.req.param("BBSKEY");//BBSKEY
-  const THID = c.req.param("THID");//スレID
-  const kextuka = await kakikoAPI({ThID:THID,name:Name,mail,MESSAGE,BBSKEY},c,"kakiko")
+  const ThID = c.req.param("THID");//スレID
+  const kextuka = await kakikoAPI({ThID,name,mail,MESSAGE,BBSKEY},c,"kakiko")
   return c.redirect(kextuka.ThID);
 });
 // Newスレッド
 app.post(`/:BBSKEY`, async (c) => {
   const body = await c.req.parseBody()
-  const ThTi = String(body.ThTitle)
-  const Name = String(body.name);//名前
+  const ThTitle = String(body.ThTitle)
+  const name = String(body.name);//名前
   const mail = String(body.mail);//メアドor色々
   const MESSAGE = String(body.MESSAGE);//内容
   const BBSKEY = c.req.param("BBSKEY");//BBSKEY
-  const kextuka = await kakikoAPI({ThTitle:ThTi,name:Name,mail,MESSAGE,BBSKEY},c,"newth")
+  const kextuka = await kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY},c,"newth")
   return c.redirect(kextuka.ThID);
 });
 
