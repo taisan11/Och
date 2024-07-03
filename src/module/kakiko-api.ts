@@ -2,6 +2,7 @@ import type { Context } from "hono";
 import { getThread,postThread,NewThread,getSubject,DeleteOldSubject,addSubject } from "./storage";
 import { KAS } from "./KAS";
 import { id } from "./id";
+import { exic } from "./plugin";
 
 /**
  * kakikoAPI
@@ -34,8 +35,6 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         const date = new Date();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
         const IP = c.req.header('CF-Connecting-IP')||c.env.ip.address||'0.0.0.0'
-        // 変換
-        const KASS = await KAS(MESSAGE,name,mail,Number(UnixTime));
         // 制限
         if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
         if (!MESSAGE || MESSAGE.length > 300) { return { 'sc': false, 'ThID':"error1" } }
@@ -43,8 +42,12 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         if (!BBSKEY) { return { 'sc': false, 'ThID': "error3" } }
         if (!ThID) { return {'sc':false,'ThID':"error4"} }
         const ID = await id(IP,BBSKEY);
-        // 入力
+        // 変換
+        const KASS = await KAS(MESSAGE,name,mail,Number(UnixTime));
+        const a = await exic(16,{name:KASS.name,mail:KASS.mail,message:KASS.mes,date:KASS.time+' ID:'+ID});
+        // 保存
         await postThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, id: ThID });
+        // 返す
         return {'sc':true,'ThID':`/${BBSKEY}/${ThID}`};
       
     }

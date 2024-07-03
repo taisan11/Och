@@ -24,7 +24,6 @@ const config:Config = {
     },
     preference:{
         site:{
-            KejibanConfigDIR:'..',
             name:'Och',
             use:'bun',
             websocket:true,

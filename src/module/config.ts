@@ -1,6 +1,9 @@
 import fsDriver from "unstorage/drivers/fs"
 
 export type Config = {
+    /**
+     * キャップの設定
+     */
     caps?: {
         [key:string]: {
             name: string;
@@ -17,9 +20,11 @@ export type Config = {
     //         admin: boolean;
     //     };
     // };
+    /**
+     * サイトの設定
+     */
     preference: {
         site: {
-            KejibanConfigDIR: string;
             name: string;
             use?: RuntimeName|"other",
             websocket: boolean;
@@ -75,7 +80,6 @@ export const defaults:Config = {
     },
     'preference':{
         'site':{
-            'KejibanConfigDIR':'..',
             'name':'Och',
             'use':'bun',
             'websocket':true,

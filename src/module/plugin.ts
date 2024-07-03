@@ -19,11 +19,14 @@ export async function exic(type: number, data: any): Promise<any> {
     for (const path of paths) {
         const plugin = await load(path);
         if (plugin.type.includes(type)) {
-            result.push(path);
+            result.push(plugin);
         }
     }
-    await import(result[0]);
-    return result;
+    const pluginPromises = result.map(async (plugin) => {
+        const module = await import(plugin.path);
+        return module.main({data,type});
+    });
+    return Promise.all(pluginPromises);
 }
 export type PluginInfo = {
     /**
