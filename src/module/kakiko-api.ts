@@ -23,10 +23,12 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         if (mail.length > 70) { return { 'sc': false, 'ThID': "error2" } }
         if (!BBSKEY) { return { 'sc': false, 'ThID': "error3" } }
         if (!ThTitle) { return { 'sc': false, 'ThID': "error5" } }
+        const ID = await id(IP,BBSKEY);
         // 加工
         const KASS = await KAS(MESSAGE, name, mail, Number(UnixTime));
+        const a = await exic(16,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
         // 保存
-        await NewThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+'testtests', title: ThTitle, id: UnixTime });
+        await NewThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, title: ThTitle, id: UnixTime });
         // 返す
         return { 'sc': true, 'ThID': `/${BBSKEY}/${UnixTime}` };
     }
@@ -44,7 +46,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         const ID = await id(IP,BBSKEY);
         // 変換
         const KASS = await KAS(MESSAGE,name,mail,Number(UnixTime));
-        const a = await exic(16,{name:KASS.name,mail:KASS.mail,message:KASS.mes,date:KASS.time+' ID:'+ID});
+        const a = await exic(16,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
         // 保存
         await postThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, id: ThID });
         // 返す

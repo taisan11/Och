@@ -18,6 +18,6 @@ export const info:PluginInfo = {
  * @param {object} - プラグインに渡されるデータ
  * @returns {} - プラグインの処理結果
  */
-export function main({sys,form,type}:{sys:any,form:any,type:number}):any {
-    return {code:0, data:{sys,form,type}}
+export function main(type: number, data:{name:string,mail:string,message:string}):{code:number,data:{name:string,mail:string,message:string}} {
+    return {code:0, data}
 }

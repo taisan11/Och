@@ -14,7 +14,7 @@ export async function load(path: string): Promise<PluginInfo> {
     const plugin = await import(path);
     return plugin.info;
 }
-export async function exic(type: number, data: any): Promise<any> {
+export async function exic(type: number, data:{name:string,mail:string,message:string}): Promise<any> {
     const result: any[] = [];
     for (const path of paths) {
         const plugin = await load(path);
