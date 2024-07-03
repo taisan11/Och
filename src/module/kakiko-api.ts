@@ -48,7 +48,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         const KASS = await KAS(MESSAGE,name,mail,Number(UnixTime));
         const a = await exic(2,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
         // 保存
-        await postThread(BBSKEY,{ name: a.data.name, mail: a.data.mail, message: a.data.message, date: KASS.time+' ID:'+ID, id: ThID });
+        await postThread(BBSKEY,{ name: a.data.name||KASS.name, mail: a.data.mail, message: a.data.message, date: KASS.time+' ID:'+ID, id: ThID });
         // 返す
         return {'sc':true,'ThID':`/${BBSKEY}/${ThID}`};
       

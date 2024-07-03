@@ -34,6 +34,7 @@ export async function exic(type: number, data:{name:string,mail:string,message:s
             resultData = pluginResult;
         }
     }
+    console.log(resultData!)
     return resultData!;
 }
 export type PluginInfo = {
