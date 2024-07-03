@@ -26,7 +26,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         const ID = await id(IP,BBSKEY);
         // 加工
         const KASS = await KAS(MESSAGE, name, mail, Number(UnixTime));
-        const a = await exic(16,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
+        const a = await exic(1,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
         // 保存
         await NewThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, title: ThTitle, id: UnixTime });
         // 返す
@@ -46,9 +46,9 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         const ID = await id(IP,BBSKEY);
         // 変換
         const KASS = await KAS(MESSAGE,name,mail,Number(UnixTime));
-        const a = await exic(16,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
+        const a = await exic(2,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
         // 保存
-        await postThread(BBSKEY,{ name: KASS.name, mail: KASS.mail, message: KASS.mes, date: KASS.time+' ID:'+ID, id: ThID });
+        await postThread(BBSKEY,{ name: a.data.name, mail: a.data.mail, message: a.data.message, date: KASS.time+' ID:'+ID, id: ThID });
         // 返す
         return {'sc':true,'ThID':`/${BBSKEY}/${ThID}`};
       

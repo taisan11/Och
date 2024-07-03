@@ -29,7 +29,7 @@ export async function exic(type: number, data:{name:string,mail:string,message:s
     let resultData: { code: number, data: { name: string, mail: string, message: string } } | null = null;
     for (const plugin of result) {
         const module = await import(plugin.path);
-        const pluginResult = await module.main({ data, type });
+        const pluginResult = await module.main(type,{ data });
         if (resultData === null || pluginResult.code > resultData.code) {
             resultData = pluginResult;
         }
