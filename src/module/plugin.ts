@@ -6,6 +6,7 @@ import { init } from "./plugin-bun" with { type: 'macro' };
 export async function exic(type: number, data:{name:string,mail:string,message:string}): Promise<{code:number,data:{name:string,mail:string,message:string}}> {
     return {code:10,data}
     const result: any[] = [];
+    //@ts-ignore
     for (const path of paths) {
         const plugin = await import(path);
         if (plugin.type.includes(type)) {
@@ -16,6 +17,7 @@ export async function exic(type: number, data:{name:string,mail:string,message:s
     for (const plugin of result) {
         const module = await import(plugin.path);
         const pluginResult = await module.main(type,{ data });
+        //@ts-ignore
         if (resultData === null || pluginResult.code > resultData.code) {
             resultData = pluginResult;
         }
