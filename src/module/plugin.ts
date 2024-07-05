@@ -1,27 +1,13 @@
-/**
- * @module plugin
- * @description pluginの読み込み、管理、実行を行う
- * @link https://github.com/PrefKarafuto/ex0ch/blob/main/test/module/plugin.pl
- */
+//@ts-ignore
+import { init } from "./plugin-bun" with { type: 'macro' };
 
-/**
- *  @description pluginのパス一覧 
- */
-const paths: string[] = [];
-/**
- * @description plugin情報の読み込み
- * @param string path - pluginのパス
- * @returns {object} plugin情報
- */
-export async function load(path: string): Promise<PluginInfo> {
-    paths.push(path);
-    const plugin = await import(path);
-    return plugin.info;
-}
+// const paths:string[] = await init();
+
 export async function exic(type: number, data:{name:string,mail:string,message:string}): Promise<{code:number,data:{name:string,mail:string,message:string}}> {
+    return {code:10,data}
     const result: any[] = [];
     for (const path of paths) {
-        const plugin = await load(path);
+        const plugin = await import(path);
         if (plugin.type.includes(type)) {
             result.push(plugin);
         }
