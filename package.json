@@ -6,11 +6,11 @@
     "@hono/valibot-validator": "^0.2.5",
     "@taisan11/hono-shiftjis": "npm:@jsr/taisan11__hono-shiftjis",
     "drizzle-orm": "^0.30.10",
-    "hono": "^4.4.13",
+    "hono": "^4.5.1",
     "iconv-cp932": "^1.2.2",
     "pathe": "^1.1.2",
     "std-env": "^3.7.0",
-    "unenv": "^1.9.0",
+    "unenv": "^1.10.0",
     "unix-crypt-td-js": "^1.1.4",
     "unstorage": "^1.10.2",
     "valibot": "^0.31.1"
