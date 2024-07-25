@@ -1,0 +1,15 @@
+{
+  "unstable": ["byonm", "bare-node-builtins", "sloppy-imports"],
+  "imports": {
+    "@hono/hono": "jsr:@hono/hono@^4.5.1",
+    "@taisan11/hono-shiftjis": "jsr:@taisan11/hono-shiftjis@^0.0.1",
+    "hono": "jsr:@hono/hono@^4.5.1"
+  },
+  "tasks": {
+    "dev": "deno run -A src/deno-server.ts"
+  },
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "hono/jsx"
+  }
+}

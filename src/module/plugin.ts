@@ -1,5 +1,5 @@
 //@ts-ignore
-import { init } from "./plugin-bun" with { type: 'macro' };
+// import { init } from "./plugin-bun" with { type: 'macro' };
 
 // const paths:string[] = await init();
 

@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { config } from "./module/config";
-import {shiftjis} from '@taisan11/hono-shiftjis/src/index'
+// import {shiftjis} from '@taisan11/hono-shiftjis/src/index'
 
 declare module "hono" {
   interface ContextRenderer {
