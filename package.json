@@ -4,7 +4,6 @@
   },
   "dependencies": {
     "@hono/valibot-validator": "^0.2.5",
-    "@taisan11/hono-shiftjis": "npm:@jsr/taisan11__hono-shiftjis",
     "drizzle-orm": "^0.30.10",
     "hono": "^4.5.1",
     "iconv-cp932": "^1.2.2",
@@ -16,6 +15,7 @@
     "valibot": "^0.31.1"
   },
   "devDependencies": {
+    "@deno/types": "^0.0.1",
     "@types/bun": "latest",
     "drizzle-kit": "^0.21.4"
   }

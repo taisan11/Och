@@ -1,10 +1,9 @@
 import { createStorage } from "unstorage";
-import fsDriver from "unstorage/drivers/fs";
 import { config } from "../config";
 import { subjectpaser,datpaser } from "../pase";
 import { NewThreadParams,PostThreadParams, getSubjectReturn, getThreadReturn, postReturn } from "../storage";
 
-const drives = {driver:config().preference.site.UnstorageOptions} || {driver:fsDriver({ base: "./data" })};
+const drives = {driver:config().preference.site.UnstorageOptions}
 
 export async function addSubject_file(BBSKEY:string,date: string, title: string,id: string):Promise<void> {
     const storage = createStorage(drives);

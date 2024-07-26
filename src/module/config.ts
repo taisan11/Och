@@ -1,5 +1,3 @@
-import fsDriver from "unstorage/drivers/fs"
-
 export type Config = {
     /**
      * キャップの設定
@@ -69,46 +67,6 @@ export type Config = {
     };
 };
 
-export const defaults:Config = {
-    'caps':{
-        'admin':{
-            'name':'Admin',
-            'pw':'Admin',
-            'fullname':'Administrator',
-            'description':'Administrator',
-        }
-    },
-    'preference':{
-        'site':{
-            'name':'Och',
-            'use':'bun',
-            'websocket':true,
-            'API':true,
-            'driver':"unstorage",
-            'UnstorageOptions':fsDriver({base:"./data"})
-        },
-        'limit':{
-            'MaxSubject':500,
-            'MaxRes':1000,
-            'MaxAnchor':10,
-            'MaxErrorLog':500,
-            'HostLog':500,
-            'MaxUserWriteFailureLog':500,
-        },
-        'other':{
-            'header':{
-                'text':'<small>■<b>レス検索</b>■</small>',
-                'link':'../test/search.cgi'
-            },
-            'URL':{
-                'GazoToIMG':false,
-                'AuthLink':true,
-                'CookieDateExp':30
-            },
-            'saveformat':"file"
-        }
-    }
-}
 import configa from "../../data/system.config";
 import { RuntimeName, runtimeInfo } from "std-env";
 import { Driver } from "unstorage";

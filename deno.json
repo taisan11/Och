@@ -1,5 +1,11 @@
 {
-  "unstable": ["byonm", "bare-node-builtins", "sloppy-imports"],
+  "name": "",
+  "unstable": [
+    "byonm",
+    "bare-node-builtins",
+    "sloppy-imports",
+    "kv"
+  ],
   "imports": {
     "@hono/hono": "jsr:@hono/hono@^4.5.1",
     "@taisan11/hono-shiftjis": "jsr:@taisan11/hono-shiftjis@^0.0.1",
@@ -11,5 +17,29 @@
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx"
+  },
+  "fmt": {
+    "exclude": [
+      "node_modules",
+      "dist"
+    ]
+  },
+  "lint": {
+    "exclude": [
+      "node_modules",
+      "dist"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "deploy": {
+    "project": "66e99dc8-68e5-4ca5-9559-91334b981750",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "dist\\deno-server.js"
   }
 }

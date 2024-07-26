@@ -19,7 +19,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.use(trimTrailingSlash())
-export const customLogger = (message: string, ...rest: string[]) => {
+const customLogger = (message: string, ...rest: string[]) => {
     console.log(message, ...rest)
 }
 

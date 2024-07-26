@@ -10,6 +10,7 @@ import { secureHeaders } from 'hono/secure-headers'
 import BBS from './UI'
 import API from './api'
 import OldUI from './oldui'
+// import { Deno } from '@deno/types'
 
 type Bindings = {
     ip: {
@@ -20,7 +21,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.use(trimTrailingSlash())
-export const customLogger = (message: string, ...rest: string[]) => {
+const customLogger = (message: string, ...rest: string[]) => {
     console.log(message, ...rest)
 }
 
