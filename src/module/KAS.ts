@@ -52,7 +52,7 @@ function MES(input: string | null): string {
 
   // 改行をbrタグに変換
   const newlineEscaped = htmlEscaped.replace(/\r?\n/g, '<br/>');
-  const numLinkConverted = newlineEscaped.replace(/\b(\d+)\b/g, '<a href="#$1">&gt;&gt;$1</a>');
+  const numLinkConverted = newlineEscaped.replace(/&gt;&gt;(\d+)/g, '<a href="#$1">&gt;&gt;$1</a>');
   return numLinkConverted;
 }
 
