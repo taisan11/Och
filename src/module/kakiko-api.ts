@@ -3,6 +3,7 @@ import { getThread,postThread,NewThread,getSubject,DeleteOldSubject } from "./st
 import { KAS } from "./KAS";
 import { id } from "./id";
 import { exic } from "./plugin";
+import { getConnInfo } from "./unHono";
 
 /**
  * kakikoAPI
@@ -15,7 +16,7 @@ import { exic } from "./plugin";
 export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle?:string,name:string,mail:string,MESSAGE:string,BBSKEY:string,ThID?:string},c: Context, mode: 'newth' | 'kakiko'): Promise<{ sc: boolean, ThID: string }> {
     if (mode === 'newth') {
         const date = new Date();//時間
-        const IP = c.req.header('CF-Connecting-IP')||c.env.ip.address||'0.0.0.0'
+        const IP = c.req.header('CF-Connecting-IP')||getConnInfo(c).remote.address||'0.0.0.0'
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
         // 文字数制限など
         if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
@@ -36,7 +37,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID}:{ThTitle
         // 内容物の取得
         const date = new Date();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
-        const IP = c.req.header('CF-Connecting-IP')||c.env.ip.address||'0.0.0.0'
+        const IP = c.req.header('CF-Connecting-IP')||getConnInfo(c).remote.address||'0.0.0.0'
         // 制限
         if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
         if (!MESSAGE || MESSAGE.length > 300) { return { 'sc': false, 'ThID':"error1" } }
