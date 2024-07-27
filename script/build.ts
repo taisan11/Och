@@ -27,6 +27,7 @@ async function build() {
                 outdir: 'dist',
                 minify: true,
                 target:'bun',
+                plugins: [CloudflareWokerPlugin]
             },
         )
     } else {
