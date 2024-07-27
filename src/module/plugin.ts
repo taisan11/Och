@@ -1,6 +1,3 @@
-//@ts-ignore
-import { init } from "./plugin-bun" with { type: 'macro' };
-
 // const paths:string[] = await init();
 
 export async function exic(type: number, data:{name:string,mail:string,message:string}): Promise<{code:number,data:{name:string,mail:string,message:string}}> {

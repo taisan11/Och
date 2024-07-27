@@ -1,1 +1,0 @@
-Bun.$`rm -rf ./dist/*`
