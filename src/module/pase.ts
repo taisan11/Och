@@ -39,7 +39,8 @@ export function datpaser(dattxt: string):string {
                 name: parts[0],
                 mail: parts[1],
                 date: parts[2],
-                message: index === 0 ? parts[4] : parts[3],
+                // message: index === 0 ? parts[4] : parts[3],
+                message: parts[3],
             };
             posts.push(post);
         }
