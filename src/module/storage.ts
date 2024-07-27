@@ -45,11 +45,11 @@ export type postReturn = {
     redirect:string
 }
 const driver = config().preference.site.driver;
-export async function addSubject(BBSKEY:string,date: string, title: string,id: string): Promise<void>{
-    if (driver === "unstorage") {
-        return await addSubject_file(BBSKEY,date, title,id)
-    }
-}
+// export async function addSubject(BBSKEY:string,date: string, title: string,id: string): Promise<void>{
+//     if (driver === "unstorage") {
+//         return await addSubject_file(BBSKEY,date, title,id)
+//     }
+// }
 
 export async function DeleteOldSubject(BBSKEY:string,): Promise<void>{
     if (driver === "unstorage") {

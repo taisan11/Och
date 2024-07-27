@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { getThread,postThread,NewThread,getSubject,DeleteOldSubject,addSubject } from "./storage";
+import { getThread,postThread,NewThread,getSubject,DeleteOldSubject } from "./storage";
 import { KAS } from "./KAS";
 import { id } from "./id";
 import { exic } from "./plugin";

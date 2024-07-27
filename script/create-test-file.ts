@@ -39,6 +39,7 @@ export default config`
 
 export async function setTestBBS(testSUBJECT:string,testDAT:string) {
     const storage = createStorage({driver: fsDriver({ base: "./data" }),});
+    await storage.clear();
     await storage.setItem("/test/SUBJECT.TXT", testSUBJECT);
     console.log('TEST(subjectFile):',await storage.hasItem("/test/SUBJECT.TXT"))
     await storage.setItem("/test/dat/1662626407.dat", testDAT);
