@@ -1,1 +1,1 @@
-declare module 'unix-crypt-td-js';
+declare module 'unix-crypt-td-js'

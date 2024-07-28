@@ -1,6 +1,10 @@
 {
   "scripts": {
-    "dev": "bun run --hot src/server.ts"
+    "dev": "bun run --hot src/server.ts",
+    "format":"biome format --write ./src/*",
+    "lint": "bun run biome lint ./src/*",
+    "check": "bun run biome check --write ./src/*",
+    "biome-c": "biome"
   },
   "dependencies": {
     "@hono/valibot-validator": "^0.3.0",
@@ -18,6 +22,7 @@
     "valibot": "^0.36.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@types/bun": "^1.1.6",
     "drizzle-kit": "^0.23.0"
   }
