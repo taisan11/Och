@@ -124,7 +124,8 @@ export async function id(ip: string,itaID: string): Promise<string> {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const formattedDate = `${year}${month}${day}`;
-  const hash = await SHA512(ip + itaID + formattedDate);
+  const host = await ipHost(ip);
+  const hash = await SHA512(ip + itaID+ host + formattedDate);
   return hash.slice(0, 9);
 }
 //## サブ関数
