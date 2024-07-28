@@ -1,4 +1,4 @@
-import { createTripByKey } from "./trip";
+import { createTripByKey } from "./data-util";
 
 function formatUnixTime(unixTime: number): string {
   // UNIXタイムをミリ秒に変換

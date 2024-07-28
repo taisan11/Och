@@ -4,6 +4,7 @@
   },
   "dependencies": {
     "@hono/valibot-validator": "^0.3.0",
+    "@leichtgewicht/dns-packet": "^6.0.3",
     "@taisan11/hono-shiftjis": "npm:@jsr/taisan11__hono-shiftjis",
     "drizzle-orm": "^0.32.1",
     "hono": "^4.5.2",

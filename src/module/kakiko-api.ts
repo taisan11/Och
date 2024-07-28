@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { getThread,postThread,NewThread,getSubject,DeleteOldSubject } from "./storage";
 import { KAS } from "./KAS";
-import { id } from "./id";
+import { id } from "./data-util";
 import { exic } from "./plugin";
 import { getConnInfo } from "./unHono";
 
