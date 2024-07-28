@@ -1,7 +1,5 @@
 # Och
 強くて賢い掲示板
-## バッジ
-[![Checked with Biome](https://img.shields.io/badge/Checked_with-Biome-60a5fa?style=flat&logo=biome)](https://biomejs.dev)
 ## ファイル構成
 ```
 root/

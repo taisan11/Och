@@ -1,5 +1,5 @@
-import { createStorage } from 'unstorage'
-import fsDriver from 'unstorage/drivers/fs'
+import { createStorage } from "unstorage";
+import fsDriver from "unstorage/drivers/fs";
 // import { defaults } from "../src/module/config";
 
 const testSUBJECT = `1662626407.dat<>★テスト (6)`
@@ -37,19 +37,16 @@ const config:Config = {
 
 export default config`
 
-export async function setTestBBS(testSUBJECT: string, testDAT: string) {
-  const storage = createStorage({ driver: fsDriver({ base: './data' }) })
-  await storage.clear()
-  await storage.setItem('/test/SUBJECT.TXT', testSUBJECT)
-  console.log('TEST(subjectFile):', await storage.hasItem('/test/SUBJECT.TXT'))
-  await storage.setItem('/test/dat/1662626407.dat', testDAT)
-  console.log(
-    'TEST(datFile):',
-    await storage.hasItem('/test/dat/1662626407.dat'),
-  )
-  await storage.setItem('system.config.ts', defaults)
-  // await storage.setItem('system.config.ts',JSON.stringify(defaults_DB))
-  console.log('TEST(configFile):', await storage.hasItem('/system.config.ts'))
+export async function setTestBBS(testSUBJECT:string,testDAT:string) {
+    const storage = createStorage({driver: fsDriver({ base: "./data" }),});
+    await storage.clear();
+    await storage.setItem("/test/SUBJECT.TXT", testSUBJECT);
+    console.log('TEST(subjectFile):',await storage.hasItem("/test/SUBJECT.TXT"))
+    await storage.setItem("/test/dat/1662626407.dat", testDAT);
+    console.log('TEST(datFile):',await storage.hasItem("/test/dat/1662626407.dat"))
+    await storage.setItem('system.config.ts', defaults)
+    // await storage.setItem('system.config.ts',JSON.stringify(defaults_DB))
+    console.log('TEST(configFile):',await storage.hasItem("/system.config.ts"))
 }
 
-setTestBBS(testSUBJECT, testDAT)
+setTestBBS(testSUBJECT,testDAT);

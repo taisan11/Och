@@ -1,6 +1,6 @@
-import { number, object, string } from 'valibot'
+import {object,string,number} from 'valibot'
 
-const v = { object, string, number }
+const v = {object,string,number}
 
 export const newThread = v.object({
   ThTitle: v.string(),
