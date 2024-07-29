@@ -2,7 +2,11 @@
   "task": {
     "dev": "deno serve ./src/server.ts"
   },
-  "unstable": ["byonm"],
+  "unstable": ["byonm","kv"],
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "hono/jsx"
+  },
   "imports": {
     "@hono/valibot-validator": "npm:@hono/valibot-validator@^0.3.0",
     "@taisan11/hono-shiftjis": "jsr:@taisan11/hono-shiftjis@^0.0.1",
