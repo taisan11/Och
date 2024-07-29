@@ -45,4 +45,4 @@ jobs:
           project: "och"
           # rootからのパスだったわ
           entrypoint: "./server.js"
-          root: "/dist"
+          root: "./dist"
