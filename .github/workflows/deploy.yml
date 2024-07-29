@@ -43,5 +43,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "och"
-          entrypoint: "/dist/server.ts"
+          entrypoint: "./dist/server.js"
           root: "/dist"
