@@ -33,9 +33,11 @@ build({
     entryPoints: ['./src/server.ts'],
     outdir: 'dist',
     minify: true,
+    sourcemap: true,
     bundle: true,
     platform: 'node',
     target: 'esnext',
+    format: 'esm',
     plugins: [DenoPlugin],
     external: [
         './node_modules/unstorage/drivers/fs-lite.cjs',
