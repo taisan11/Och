@@ -1,14 +1,13 @@
 import { Hono } from 'hono'
 import { trimTrailingSlash } from 'hono/trailing-slash'
 import { logger } from 'hono/logger'
-import { compress } from 'hono/compress'
 import { cors } from 'hono/cors'
-import { csrf } from 'hono/csrf'
 import { etag } from 'hono/etag'
 import { secureHeaders } from 'hono/secure-headers'
 import BBS from './UI'
 import API from './api'
 import OldUI from './oldui'
+// import bbsmenuJson from './module/bbsmenu'
 
 const app = new Hono()
 
@@ -28,4 +27,4 @@ app.route("/", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
 
-export default app
+Deno.server(app.fetch)

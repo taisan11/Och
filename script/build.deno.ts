@@ -30,7 +30,7 @@ export const DenoPlugin: Plugin = {
 };
 
 build({
-    entryPoints: ['./src/server.ts'],
+    entryPoints: ['./src/server.deno.ts'],
     outdir: 'dist',
     minify: true,
     sourcemap: true,
