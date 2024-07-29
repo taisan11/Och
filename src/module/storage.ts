@@ -1,8 +1,5 @@
-import { createStorage } from "unstorage";
-import fsDriver from "unstorage/drivers/fs";
 import { config } from "./config";
 import { addSubject_file, DeleteOldSubject_file, getSubject_file, NewThread_file, postThread_file, getThread_file,getSubjecttxt_file,getdat_file } from "./storage/unstrage-base";
-export const storage = createStorage({ driver: fsDriver({ base: "./data" }), });
 
 export type Subject = {
     date: Date;
