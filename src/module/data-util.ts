@@ -197,5 +197,5 @@ async function ipHost(ip:string) {
     }
   });
   const data = await response.json();
-  return data.Answer[0].data;
+  return data.Authority[0].data;
 }

@@ -7,6 +7,7 @@ import { secureHeaders } from 'hono/secure-headers'
 import BBS from './UI'
 import API from './api'
 import OldUI from './oldui'
+// import bbsmenuJson from './module/bbsmenu'
 
 const app = new Hono()
 
@@ -26,11 +27,15 @@ app.route("/", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
 
-const server =  Bun.serve({
-    port:'8000',
-    fetch(req, server) {
-        return app.fetch(req)
-    }
-})
+// app.get("/bbsmenu.json", async (c) => {
+//     return c.json(bbsmenuJson());
+// })
+export default app
+// const server =  Bun.serve({
+//     port:'8000',
+//     fetch(req, server) {
+//         return app.fetch(req)
+//     }
+// })
 
-console.log(`Listening on ${server.url}`);
+// console.log(`Listening on ${server.url}`);
