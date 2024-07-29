@@ -43,5 +43,6 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "och"
-          entrypoint: "./dist/server.js"
+          # rootからのパスだったわ
+          entrypoint: "./server.js"
           root: "/dist"
