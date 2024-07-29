@@ -12,7 +12,7 @@ import OldUI from './oldui'
 const app = new Hono()
 
 app.use(trimTrailingSlash())
-export const customLogger = (message: string, ...rest: string[]) => {
+const customLogger = (message: string, ...rest: string[]) => {
     console.log(message, ...rest)
 }
 
