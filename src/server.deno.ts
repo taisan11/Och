@@ -7,6 +7,7 @@ import { secureHeaders } from 'hono/secure-headers'
 import BBS from './UI'
 import API from './api'
 import OldUI from './oldui'
+import admin from './admin'
 // import bbsmenuJson from './module/bbsmenu'
 
 const app = new Hono()
@@ -26,5 +27,6 @@ app.use(secureHeaders())
 app.route("/", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
+app.route("/admin", admin);
 
 Deno.serve(app.fetch)

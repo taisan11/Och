@@ -61,3 +61,5 @@ app.post(`/init`, async (c) => {
         { title: "初期化失敗" },
     );
 })
+
+export default app
