@@ -36,7 +36,7 @@ app.get(`/init`, async (c) => {
         <>
             <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
             <h1>掲示板初期化君(仮)</h1>
-            <form method="post" action="./">
+            <form method="post">
                 <label htmlFor="psw">パスワード:</label>
                 <input type="password" id="psw" name="psw" />
                 <button type="submit">初期化</button>
