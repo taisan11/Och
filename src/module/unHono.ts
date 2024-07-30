@@ -3,7 +3,7 @@ import { getConnInfo as cfconn } from 'hono/cloudflare-workers'
 import { runtime } from "std-env"
 import { Context } from 'hono'
 
-export function getConnInfo(c:Context) {
+export async function getConnInfo(c:Context) {
     if (runtime === 'deno') {
         return import('hono/deno').then((m) => m.getConnInfo(c))
     } 

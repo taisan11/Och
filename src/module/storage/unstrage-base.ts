@@ -77,3 +77,16 @@ export async function getdat_file(BBSKEY:string,idextension: string):Promise<str
     const dat = await storage.getItem(`${BBSKEY}/dat/${idextension}.dat`);
     return String(dat)
 }
+
+/**
+ * @description 仮実装 init admin
+ */
+export async function init_file():Promise<string> {
+    const storage = createStorage(drives);
+    await storage.clear();
+    await storage.setItem("/test/SUBJECT.TXT", '1.dat<>初期スレ (1)');
+    console.log('TEST(subjectFile):',await storage.hasItem("/test/SUBJECT.TXT"))
+    await storage.setItem("/test/dat/1.dat", 'カワイイ名無しさん<><>2022/09/08(木) 17:40:07.67 ID:000000000<>こんにちは!!<>初期スレ');
+    console.log('TEST(datFile):',await storage.hasItem("/test/dat/1.dat"))
+    return String('init!!')
+}

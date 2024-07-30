@@ -1,5 +1,5 @@
 import { config } from "./config";
-import { addSubject_file, DeleteOldSubject_file, getSubject_file, NewThread_file, postThread_file, getThread_file,getSubjecttxt_file,getdat_file } from "./storage/unstrage-base";
+import { addSubject_file, DeleteOldSubject_file, getSubject_file, NewThread_file, postThread_file, getThread_file,getSubjecttxt_file,getdat_file, init_file } from "./storage/unstrage-base";
 
 export type Subject = {
     date: Date;
@@ -87,6 +87,16 @@ export async function getThread(BBSKEY:string,id: string):Promise<getThreadRetur
 export async function getdat(BBSKEY:string,idextension: string):Promise<string> {
     if (driver === "unstorage") {
         return await getdat_file(BBSKEY,idextension)
+    }
+    return ""
+}
+
+/**
+ * @description 仮実装 init admin
+ */
+export async function init():Promise<string> {
+    if (driver === "unstorage") {
+        return await init_file()
     }
     return ""
 }
