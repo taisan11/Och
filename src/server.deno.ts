@@ -24,9 +24,10 @@ app.use(cors())
 app.use(etag())
 app.use(secureHeaders())
 
+app.route("/admin", admin);
 app.route("/", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
-app.route("/admin", admin);
+
 
 Deno.serve(app.fetch)
