@@ -5,7 +5,7 @@
   "dependencies": {
     "@hono/valibot-validator": "^0.3.0",
     "drizzle-orm": "^0.32.1",
-    "hono": "^4.5.2",
+    "hono": "^4.5.3",
     "iconv-cp932": "^1.2.2",
     "pathe": "^1.1.2",
     "std-env": "^3.7.0",

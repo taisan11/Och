@@ -124,8 +124,8 @@ export async function id(ip: string,itaID: string): Promise<string> {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const formattedDate = `${year}${month}${day}`;
-  const host = await ipHost(ip);
-  const hash = await SHA512(ip + itaID+ host + formattedDate);
+  // const host = await ipHost(ip);
+  const hash = await SHA512(ip + itaID + formattedDate);
   return hash.slice(0, 9);
 }
 //## サブ関数
@@ -189,13 +189,13 @@ function isPublicWifi(country: string, ipAddr: string, remoho: string): string {
   return isFwifi;
 }
 
-async function ipHost(ip:string) {
-  const reip = ip.split('.').reverse().join('.') + '.in-addr.arpa';
-  const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${reip}&type=PTR`, {
-    headers: {
-      'Accept': 'application/dns-json'
-    }
-  });
-  const data = await response.json();
-  return data.Authority[0].data;
-}
+// async function ipHost(ip:string) {
+//   const reip = ip.split('.').reverse().join('.') + '.in-addr.arpa';
+//   const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${reip}&type=PTR`, {
+//     headers: {
+//       'Accept': 'application/dns-json'
+//     }
+//   });
+//   const data = await response.json();
+//   return data.Authority[0].data;
+// }
