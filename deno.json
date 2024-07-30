@@ -1,6 +1,6 @@
 {
   "task": {
-    "dev": "deno serve ./src/server.ts"
+    "dev": "deno run ./src/server.deno.ts"
   },
   "unstable": ["byonm","kv"],
   "compilerOptions": {
