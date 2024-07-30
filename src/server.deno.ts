@@ -27,4 +27,4 @@ app.route("/", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
 
-Deno.server(app.fetch)
+Deno.serve(app.fetch)
