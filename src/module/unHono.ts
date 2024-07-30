@@ -8,7 +8,7 @@ export function getConnInfo(c:Context) {
         return import('hono/deno').then((m) => m.getConnInfo(c))
     } 
     if (runtime === 'workerd') {
-        return cfconn(c)
+        return import('hono/cloudflare-workers').then((m) => m.getConnInfo(c))
     }
-    return bunconn(c)
+    return import('hono/bun').then((m) => m.getConnInfo(c))
 }
