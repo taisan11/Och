@@ -12,7 +12,7 @@
     "unenv": "^1.10.0",
     "unix-crypt-td-js": "^1.1.4",
     "unstorage": "^1.10.2",
-    "valibot": "^0.36.0",
+    "valibot": "^0.37.0",
     "@taisan11/hono-shiftjis": "npm:@jsr/taisan11__hono-shiftjis"
   },
   "devDependencies": {

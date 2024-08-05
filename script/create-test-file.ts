@@ -12,6 +12,10 @@ dkwdkw<>ddwdwd<>2022/09/13(火) 15:46:37.98<>wdl,wldwdo<>
 
 const defaults = `import fsDriver from "unstorage/drivers/fs";
 import { Config } from "../src/module/config";
+import {drizzle} from "drizzle-orm/bun-sqlite"
+import { Database } from "bun:sqlite";
+
+const sqlite = new Database("sqlite.db");
 
 const config:Config = {
     caps:{
@@ -30,7 +34,7 @@ const config:Config = {
             API:true,
             driver:"unstorage",
             UnstorageOptions:fsDriver({base:"./data"}),
-            dbOptin:"sqlite",
+            drizzle:drizzle(sqlite),
         },
     }
 }

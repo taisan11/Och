@@ -11,7 +11,7 @@ console.log(`Seeding complete.`);
 //@ts-ignore
 await $`rm -rf ./drizzle/ sqlite.db`
 //@ts-ignore
-await $`bun x drizzle-kit generate:sqlite --schema ./src/module/storage/schema/sqlite.ts`
+await $`bun x drizzle-kit generate`
 const sqlite = new Database("sqlite.db");
 const db = drizzle(sqlite);
 //@ts-ignore
