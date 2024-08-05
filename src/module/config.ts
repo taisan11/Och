@@ -29,6 +29,7 @@ export type Config = {
             API:boolean;
             driver:"unstorage"|"db"
             UnstorageOptions?:Driver
+            // ちゃんと型を指定したい
             drizzle?:any
         };
         limit?: {
