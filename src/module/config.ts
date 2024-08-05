@@ -1,3 +1,5 @@
+import { drizzle } from "drizzle-orm/bun-sqlite";
+
 export type Config = {
     /**
      * キャップの設定
@@ -29,8 +31,7 @@ export type Config = {
             API:boolean;
             driver:"unstorage"|"db"
             UnstorageOptions?:Driver
-            // ちゃんと型を指定したい
-            drizzle?:any
+            drizzle:ReturnType<typeof drizzle>;
         };
         limit?: {
             MaxSubject: number;
