@@ -17,25 +17,31 @@ const db = drizzle(sqlite);
 //@ts-ignore
 await migrate(db, { migrationsFolder: "./drizzle" });
 //@ts-ignore
+const now = new Date().toISOString()
+// UnixTime
+const nowUnix = Math.floor(new Date(now).getTime() / 1000).toString()
 await db.insert(schema.Ita).values({
     id:"test",
     name:"test"
 })
 //@ts-ignore
 await db.insert(schema.threds).values({
-    id:90909090909,
+    id:"90909090909",
     ItaID:"test",
     name:"テスト",
     PostNumNow:"0",
     ThTitle:"テスト",
+    createdAt:nowUnix
 })
 //@ts-ignore
 await db.insert(schema.posts).values({
     id: "test909090909090001",
     postNum: 1, 
     ItaID: "test",
-    ThID: 90909090909,
+    ThID: "90909090909",
     name: "テスト",
     MESSAGE: "iusdhdlnllnjknjnasnon\nowf",
-    mail: "a"
+    mail: "a",
+    date: "てすとでーす",
+    createAt: nowUnix,
 })
