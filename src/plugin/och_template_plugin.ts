@@ -5,19 +5,24 @@
  * @since 20xx-xx-xx
  */
 
-import { PluginInfo } from "../module/plugin";
+import { Plugin } from "../module/plugin";
 
-export const info:PluginInfo = {
-    name: 'och_template_plugin',
-    description: 'サンプルプラグイン',
-    type: [1,2],
-}
-
-/**
- * @description プラグインのメイン処理
- * @param {object} - プラグインに渡されるデータ
- * @returns {} - プラグインの処理結果
- */
-export function main(type: number, data:{name:string,mail:string,message:string}):{code:number,data:{name:string,mail:string,message:string}} {
-    return {code:0, data}
+export default function och_template_plugin(): Plugin {
+    return {
+        PluginInfo: () => ({
+            name: "och_template_plugin",
+            description: "サンプルプラグイン",
+            type: [1, 2],
+        }),
+        main: (type, data) => {
+            return {
+                code: 200,
+                data: {
+                    name: data.name,
+                    mail: data.mail,
+                    message: data.message,
+                },
+            };
+        },
+    };
 }

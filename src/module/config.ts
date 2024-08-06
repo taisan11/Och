@@ -32,6 +32,7 @@ export type Config = {
             driver:"unstorage"|"db"
             UnstorageOptions?:Driver
             drizzle:ReturnType<typeof drizzle>;
+            plugins?: Plugin[];
         };
         limit?: {
             MaxSubject: number;
@@ -72,6 +73,7 @@ export type Config = {
 import configa from "../../data/system.config";
 import { RuntimeName, runtimeInfo } from "std-env";
 import { Driver } from "unstorage";
+import { Plugin } from "./plugin";
 export function config():Config{
     configa.preference.site.use = runtimeInfo?.name ||"other"|| configa.preference.site.use;
     if (configa.preference.limit) {

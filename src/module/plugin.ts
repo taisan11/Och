@@ -1,28 +1,24 @@
-// const paths:string[] = await init();
+import { config } from "./config";
 
 export async function exic(type: number, data:{name:string,mail:string,message:string}): Promise<{code:number,data:{name:string,mail:string,message:string}}> {
-    return {code:10,data}
-    const result: any[] = [];
-    //@ts-ignore
-    for (const path of paths) {
-        const plugin = await import(path);
-        if (plugin.type.includes(type)) {
-            result.push(plugin);
-        }
+    // return {code:10,data}
+    const plugins = config().preference.site.plugins;
+    if (!plugins) {
+        return {code:11,data}
     }
-    let resultData: { code: number, data: { name: string, mail: string, message: string } } | null = null;
-    for (const plugin of result) {
-        const module = await import(plugin.path);
-        const pluginResult = await module.main(type,{ data });
-        //@ts-ignore
-        if (resultData === null || pluginResult.code > resultData.code) {
-            resultData = pluginResult;
+    let result = {code:0,data}
+    config().preference.site.plugins!.forEach(plugin => {
+        if (plugin.PluginInfo().type.includes(type)) {
+            const a = plugin.main(type, result.data);
+            if (a.code !== 200) {
+                result = a;
+            }
         }
-    }
-    console.log(resultData!)
-    return resultData!;
+    });
+    return result;
 }
-export type PluginInfo = {
+
+type PluginInfo = {
     /**
      * @description プラグイン名
      * @example och_template_plugin
@@ -42,4 +38,11 @@ export type PluginInfo = {
     * @deprecated 
      */
     version?: string,
-}
+};
+
+type main = (type: number, data: { name: string, mail: string, message: string }) => { code: number, data: { name: string, mail: string, message: string } };
+
+export type Plugin = {
+    PluginInfo: () => PluginInfo,
+    main: main
+};
