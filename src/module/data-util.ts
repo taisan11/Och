@@ -189,13 +189,13 @@ function isPublicWifi(country: string, ipAddr: string, remoho: string): string {
   return isFwifi;
 }
 
-// async function ipHost(ip:string) {
-//   const reip = ip.split('.').reverse().join('.') + '.in-addr.arpa';
-//   const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${reip}&type=PTR`, {
-//     headers: {
-//       'Accept': 'application/dns-json'
-//     }
-//   });
-//   const data = await response.json();
-//   return data.Authority[0].data;
-// }
+async function ipHost(ip:string) {
+  const reip = ip.split('.').reverse().join('.') + '.in-addr.arpa';
+  const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${reip}&type=PTR`, {
+    headers: {
+      'Accept': 'application/dns-json'
+    }
+  });
+  const data = await response.json();
+  return data.Authority[0].data;
+}
