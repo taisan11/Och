@@ -139,6 +139,7 @@ app.get(`/:BBSKEY/:THID`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   const THID = c.req.param("THID");
   const THD = await getThread(BBSKEY,THID)
+  console.log(THD.data.post[9])
   if (!THD.has) {
     return c.render(
       <>
@@ -171,8 +172,7 @@ app.get(`/:BBSKEY/:THID`, async (c) => {
             <dt id={post.postid}>
               {post.postid} ：
               <font color="seagreen">
-                <b>{post.name}</b>
-                <b>{post.mail}</b>
+                {post.name}
               </font>
               ：{post.date}
             </dt>

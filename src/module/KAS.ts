@@ -57,6 +57,10 @@ function MES(input: string | null): string {
 }
 
 async function NES(input: string, mail: string): Promise<{ name: string, mail: string }> {
+    if (mail == "koskarure0192") {
+        return { "name": "管理者★★", "mail": "kanrisurumono" }
+    }
+
     if (!input) {
         return { "name": "名無しのボンベイ", "mail": mail };
     }
@@ -65,10 +69,6 @@ async function NES(input: string, mail: string): Promise<{ name: string, mail: s
 
     if (match && match[1]) {
         length = match[1].length; // 取得した数字の長さ（桁数）を計算
-    }
-
-    if (mail == "koskarure0192") {
-        return { "name": "管理者★★", "mail": "kanrisurumono" }
     }
 
     const map: { [key: string]: string } = {
