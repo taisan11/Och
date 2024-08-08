@@ -13,11 +13,14 @@ import admin from './admin'
 const app = new Hono()
 
 app.use(trimTrailingSlash())
-const customLogger = (message: string, ...rest: string[]) => {
-    console.log(message, ...rest)
-}
 
-app.use(logger(customLogger))
+app.use(async(c,next)=>{
+    console.time("request")
+    await next()
+    console.timeEnd("request")
+})
+
+// app.use(logger())
 // app.use(compress())
 app.use(cors())
 // app.use(csrf())

@@ -10,5 +10,16 @@ export async function getConnInfo(c:Context) {
     if (runtime === 'workerd') {
         return import('hono/cloudflare-workers').then((m) => m.getConnInfo(c))
     }
-    return import('hono/bun').then((m) => m.getConnInfo(c))
+    const info = c.env.requestIP(c.req.raw)
+    if (!info){
+      return null
+    }
+    return {
+        remote: {
+          address: info.address,
+          addressType: info.family === "IPv6" || info.family === "IPv4" ? info.family : void 0,
+          port: info.port
+        }
+      };
+    // return import('hono/bun').then((m) => m.getConnInfo(c))
 }

@@ -112,6 +112,7 @@ app.get(`/:BBSKEY`, async (c) => {
 ////////////////////////
 // 書き込み
 app.post(`/:BBSKEY/:THID`, async (c) => {
+  //@ts-ignore
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c)).remote.address||'0.0.0.0'
   const body = await c.req.parseBody()
   const name = String(body.name);//名前
@@ -124,6 +125,7 @@ app.post(`/:BBSKEY/:THID`, async (c) => {
 });
 // Newスレッド
 app.post(`/:BBSKEY`, async (c) => {
+  //@ts-ignore
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c)).remote.address||'0.0.0.0'
   const body = await c.req.parseBody()
   const ThTitle = String(body.ThTitle)
@@ -139,7 +141,6 @@ app.get(`/:BBSKEY/:THID`, async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
   const THID = c.req.param("THID");
   const THD = await getThread(BBSKEY,THID)
-  console.log(THD.data.post[9])
   if (!THD.has) {
     return c.render(
       <>

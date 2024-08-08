@@ -1,3 +1,4 @@
+import { env } from "hono/adapter";
 import { createTripByKey } from "./data-util";
 
 function formatUnixTime(unixTime: number): string {
@@ -24,9 +25,9 @@ function formatUnixTime(unixTime: number): string {
  * @param time 時間
  * @returns {mes:string,name:string,mail:string,time:number}
  */
-export async function KAS(mes:string,name:string,mail:string,time:number){
+export async function KAS(mes:string,name:string,mail:string,time:number,pw?:string|null):Promise<{mes:string,name:string,mail:string,time:string}>{
     const kkk = MES(mes)
-    const lll = await NES(name,mail)
+    const lll = await NES(name,mail,pw)
     const ttt = formatUnixTime(time)
     return {
       mes:kkk,
@@ -56,8 +57,8 @@ function MES(input: string | null): string {
   return numLinkConverted;
 }
 
-async function NES(input: string, mail: string): Promise<{ name: string, mail: string }> {
-    if (mail == "koskarure0192") {
+async function NES(input: string, mail: string,pw?:string|null): Promise<{ name: string, mail: string }> {
+    if (mail == pw) {
         return { "name": "管理者★★", "mail": "kanrisurumono" }
     }
 
