@@ -13,14 +13,7 @@ import admin from './admin'
 const app = new Hono()
 
 app.use(trimTrailingSlash())
-
-app.use(async(c,next)=>{
-    console.time("request")
-    await next()
-    console.timeEnd("request")
-})
-
-// app.use(logger())
+app.use(logger())
 // app.use(compress())
 app.use(cors())
 // app.use(csrf())

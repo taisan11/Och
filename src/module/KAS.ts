@@ -77,7 +77,7 @@ async function NES(input: string, mail: string,pw?:string|null): Promise<{ name:
         '★': '☆',
         '\n': ''
     };
-    if (input == null) { return { name: '', mail: '' }; }
+    if (!input) return { name: '', mail: '' };
     const convertedInput = input.replace(/[◆★\n]/g, function (m) { return map[m]; });
     let trip = '';
     if (length > 0) {

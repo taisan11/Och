@@ -18,7 +18,7 @@ app.post(
     }
   }),
   async(c) => {
-    const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c)).remote.address||'0.0.0.0'
+    const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
     const { ThTitle,name,mail,MESSAGE,BBSKEY } = c.req.valid("json");
     const result = await kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,IP},c,"newth")
     return c.json(result);
@@ -32,7 +32,7 @@ app.post(
     }
   }),
   async(c) => {
-    const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c)).remote.address||'0.0.0.0'
+    const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
     const { THID,name,mail,MESSAGE,BBSKEY } = c.req.valid("json");
     const result = await kakikoAPI({ThID:THID,name,mail,MESSAGE,BBSKEY,IP},c,"kakiko")
     return c.json(result);

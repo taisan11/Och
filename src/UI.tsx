@@ -112,8 +112,7 @@ app.get(`/:BBSKEY`, async (c) => {
 ////////////////////////
 // 書き込み
 app.post(`/:BBSKEY/:THID`, async (c) => {
-  //@ts-ignore
-  const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c)).remote.address||'0.0.0.0'
+  const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
   const body = await c.req.parseBody()
   const name = String(body.name);//名前
   const mail = String(body.mail);//メアドor色々
@@ -125,8 +124,7 @@ app.post(`/:BBSKEY/:THID`, async (c) => {
 });
 // Newスレッド
 app.post(`/:BBSKEY`, async (c) => {
-  //@ts-ignore
-  const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c)).remote.address||'0.0.0.0'
+  const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
   const body = await c.req.parseBody()
   const ThTitle = String(body.ThTitle)
   const name = String(body.name);//名前
