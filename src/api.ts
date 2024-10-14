@@ -4,6 +4,7 @@ import { newPost, newThread } from './types';
 import { kakikoAPI } from './module/kakiko-api';
 import { getSubject, getThread } from './module/storage';
 import { getConnInfo } from './module/unHono';
+import { env } from "hono/adapter";
 
 const app = new Hono({});
 
@@ -20,7 +21,8 @@ app.post(
   async(c) => {
     const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
     const { ThTitle,name,mail,MESSAGE,BBSKEY } = c.req.valid("json");
-    const result = await kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,IP},c,"newth")
+    const psw = env(c).psw as string
+    const result = await kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,IP,psw},"newth")
     return c.json(result);
   }
 );
@@ -34,7 +36,8 @@ app.post(
   async(c) => {
     const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
     const { THID,name,mail,MESSAGE,BBSKEY } = c.req.valid("json");
-    const result = await kakikoAPI({ThID:THID,name,mail,MESSAGE,BBSKEY,IP},c,"kakiko")
+    const psw = env(c).psw as string
+    const result = await kakikoAPI({ThID:THID,name,mail,MESSAGE,BBSKEY,IP,psw},"kakiko")
     return c.json(result);
   }
 );

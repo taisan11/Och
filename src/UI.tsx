@@ -3,6 +3,7 @@ import { jsxRenderer } from "hono/jsx-renderer";
 import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakikoAPI } from "./module/kakiko-api";
 import { getConnInfo } from './module/unHono'
+import { env } from "hono/adapter";
 
 declare module "hono" {
   interface ContextRenderer {
@@ -119,7 +120,8 @@ app.post(`/:BBSKEY/:THID`, async (c) => {
   const MESSAGE = String(body.MESSAGE);//内容
   const BBSKEY = c.req.param("BBSKEY");//BBSKEY
   const ThID = c.req.param("THID");//スレID
-  const kextuka = await kakikoAPI({ThID,name,mail,MESSAGE,BBSKEY,IP},c,"kakiko")
+  const psw = env(c).psw as string
+  const kextuka = await kakikoAPI({ThID,name,mail,MESSAGE,BBSKEY,IP,psw},"kakiko")
   return c.redirect(kextuka.ThID);
 });
 // Newスレッド
@@ -131,7 +133,8 @@ app.post(`/:BBSKEY`, async (c) => {
   const mail = String(body.mail);//メアドor色々
   const MESSAGE = String(body.MESSAGE);//内容
   const BBSKEY = c.req.param("BBSKEY");//BBSKEY
-  const kextuka = await kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,IP},c,"newth")
+  const psw = env(c).psw as string
+  const kextuka = await kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,IP,psw},"newth")
   return c.redirect(kextuka.ThID);
 });
 
