@@ -28,8 +28,11 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
       - name: Install step
-        run: "npm i"
+        run: "bun i"
         
       - name: create data folder
         run: "mkdir ./data"
