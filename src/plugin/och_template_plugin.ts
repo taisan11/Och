@@ -24,5 +24,12 @@ export default function och_template_plugin(): Plugin {
                 },
             };
         },
+        ConfigList: {
+            "aaa":{
+                ConfigType:"string",
+                default:"aaa",
+                description:"aaa"
+            }
+        }
     };
 }

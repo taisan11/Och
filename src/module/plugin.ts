@@ -1,6 +1,6 @@
 import { config } from "./config";
 
-export async function exic(type: number, data:{name:string,mail:string,message:string}): Promise<{code:number,data:{name:string,mail:string,message:string}}> {
+export async function exic(type: 1|2|4|8|16, data:{name:string,mail:string,message:string}): Promise<{code:number,data:{name:string,mail:string,message:string}}> {
     // return {code:10,data}
     const plugins = config().preference.site.plugins;
     if (!plugins) {
@@ -40,9 +40,22 @@ type PluginInfo = {
     version?: string,
 };
 
-type main = (type: number, data: { name: string, mail: string, message: string }) => { code: number, data: { name: string, mail: string, message: string } };
+type main = (type: 1|2|4|8|16, data: { name: string, mail: string, message: string }) => { code: number, data: { name: string, mail: string, message: string } };
+type ConfigType = {
+    // ConfigTypeで指定する型の内容を定義します
+    type: string | number | boolean; // 例としてstring, number, boolean型を含める
+};
+
+type ConfigList = {
+    [key: string]: {
+        ConfigType: ConfigType["type"]; // ConfigTypeで指定された型を使用
+        default: ConfigType['type']; // ConfigTypeで指定された型を使用
+        description: string; // 説明文
+    };
+};
 
 export type Plugin = {
     PluginInfo: () => PluginInfo,
     main: main
+    ConfigList?: ConfigList
 };
