@@ -51,7 +51,7 @@ export async function getThread_file(BBSKEY:string,id: string):Promise<getThread
     const storage = createStorage(drives);
     const dat = await storage.getItem(`${BBSKEY}/dat/${id}.dat`);
     const hasdat=  await storage.hasItem(`${BBSKEY}/dat/${id}.dat`);
-    return {'data':JSON.parse(datpaser(String(dat))),has:hasdat};
+    return {'data':datpaser(String(dat)),has:hasdat};
 }
 export async function getdat_file(BBSKEY:string,idextension: string):Promise<string> {
     const storage = createStorage(drives);

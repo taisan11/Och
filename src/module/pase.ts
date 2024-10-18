@@ -4,15 +4,16 @@
  * @returns { [key: string]: [string, string] } subject for JSON
  */
 export function subjectpaser(subjecttxt: string): { [key: string]: [string, string] } {
-    subjecttxt = subjecttxt.replace(/\r\n/g, '\n');
-    const lines: string[] = subjecttxt.split('\n');
+    const lines: string[] = subjecttxt.replace(/\r\n/g, '\n').split('\n');
     const result: { [key: string]: [string, string] } = {};
     for (const line of lines) {
-        const match = line.match(/^(\d+)\.dat<>(.+) \((\d+)\)$/);
-        if (match) {
-            const [_, unixtime, threadName, responseCount] = match;
-            result[`${unixtime}`] = [threadName, responseCount];
-        } else {
+        const hoi = line.split('<>');
+        const unixtime = hoi[0].slice(0,-4);
+        const threadName = hoi[1].match(/(.+) \((\d+)\)/);
+        if (threadName) {
+            result[`${unixtime}`] = [threadName[1], threadName[2]];
+        } 
+        else {
             throw new Error('Invalid format');
         }
     }
@@ -23,7 +24,7 @@ export function subjectpaser(subjecttxt: string): { [key: string]: [string, stri
  * @param {string} dattxt
  * @returns {string}
  */
-export function datpaser(dattxt: string):string {
+export function datpaser(dattxt: string): {title:string,post: {postid: string;name: string;mail: string;date: string;message: string}[]} {
     const lines = dattxt.split("\n");
     const posts: any[] = [];
     let title = "";
@@ -50,6 +51,5 @@ export function datpaser(dattxt: string):string {
         title: title,
         post: posts,
     };
-
-    return JSON.stringify(result, null, 2);
+    return result;
 }

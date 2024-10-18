@@ -44,11 +44,11 @@ export async function getSubjecttxt_file(BBSKEY:string,):Promise<string> {
 }
 export async function getSubject_file(BBSKEY:string,):Promise<getSubjectReturn> {
     const storage = createStorage(drives);
-    const SUBTXT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
     const HASSUB = await storage.hasItem(`${BBSKEY}/SUBJECT.TXT`);
     if (!HASSUB) {
         return {'data':{'a':["a","a"]},'has':HASSUB};
     }
+    const SUBTXT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
     return {'data':subjectpaser(String(SUBTXT)),'has':HASSUB};
 }
 export async function NewThread_file(BBSKEY:string,{ name, mail, message, date, title, id }: NewThreadParams):Promise<postReturn> {
@@ -70,7 +70,7 @@ export async function getThread_file(BBSKEY:string,id: string):Promise<getThread
     const storage = createStorage(drives);
     const dat = await storage.getItem(`${BBSKEY}/dat/${id}.dat`);
     const hasdat=  await storage.hasItem(`${BBSKEY}/dat/${id}.dat`);
-    return {'data':JSON.parse(datpaser(String(dat))),has:hasdat};
+    return {'data':datpaser(String(dat)),has:hasdat};
 }
 export async function getdat_file(BBSKEY:string,idextension: string):Promise<string> {
     const storage = createStorage(drives);
