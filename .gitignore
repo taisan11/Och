@@ -5,3 +5,4 @@ dist
 sqlite.db
 drizzle/*
 .env
+cache

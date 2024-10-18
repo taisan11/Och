@@ -1,0 +1,17 @@
+{
+  "name": "Och-docs",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "vitepress": "^1.4.1",
+    "vue": "^3.5.12"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev .",
+    "docs:build": "vitepress build .",
+    "docs:preview": "vitepress preview ."
+  }
+}
