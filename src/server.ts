@@ -21,7 +21,7 @@ app.use(etag())
 app.use(secureHeaders())
 
 app.route("/admin", admin);
-app.route("/", OldUI);
+app.route("/old", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
 

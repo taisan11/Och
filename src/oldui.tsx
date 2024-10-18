@@ -4,7 +4,7 @@ import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakikoAPI } from "./module/kakiko-api";
 import { getConnInfo } from './module/unHono'
 import { env } from "hono/adapter";
-import {shiftjis} from "@taisan11/hono-shiftjis/src/index"
+import {encode} from "iconv-cp932"
 
 declare module "hono" {
   interface ContextRenderer {
@@ -14,7 +14,12 @@ declare module "hono" {
 
 const app = new Hono()
 
-app.use((c,next)=>shiftjis(c,next))
+app.use(async (c,next)=>{
+  await next()
+  const moto = await c.res.text()
+  const encoded = encode(moto)
+  c.res = new Response(encoded, c.res)
+})
 
 app.get(
   "*",
@@ -22,7 +27,7 @@ app.get(
     return (
       <html lang="ja">
         <head>
-          <meta charset="utf-8" />
+          <meta charset="shift_jis" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
