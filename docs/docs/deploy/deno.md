@@ -1,4 +1,4 @@
-## Deno Deployへのデプロイ方法
+# Deno Deployへのデプロイ方法
 このリポジトリをDeno Deployに上げるだけなんですが、いくつか注意点があります。
 ### 設定ファイルを作成する。
 `data/system.config.ts`を作成します。
