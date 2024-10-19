@@ -2,11 +2,12 @@
   "task": {
     "dev": "deno run ./src/server.deno.ts"
   },
-  "unstable": ["byonm","kv"],
+  "unstable": ["byonm","kv","sloppy-imports"],
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx"
   },
+  "nodeModulesDir": "none",
   "imports": {
     "@hono/valibot-validator": "npm:@hono/valibot-validator@^0.3.0",
     "@taisan11/hono-shiftjis": "jsr:@taisan11/hono-shiftjis@^0.0.1",
