@@ -2,6 +2,12 @@ name: Deploy
 on:
   push:
     branches: master
+    paths:
+      - "src/**"
+      - "script/**"
+      - "package.json"
+      - "deno.json"
+      - ".github/workflows/deploy.yml"
   pull_request:
     branches: master
 
