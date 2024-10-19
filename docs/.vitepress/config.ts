@@ -7,6 +7,7 @@ export default defineConfig({
   markdown: {config:(md) => {
     md.set({breaks:true})
   }},
+  base:"/Och/",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
