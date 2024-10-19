@@ -29,9 +29,7 @@ export type Config = {
             use?: RuntimeName|"other",
             websocket: boolean;
             API:boolean;
-            driver:"unstorage"|"db"
-            UnstorageOptions?:Driver
-            drizzle:ReturnType<typeof drizzle>;
+            driver:driver
             plugins?: Plugin[];
         };
         limit?: {
@@ -72,8 +70,8 @@ export type Config = {
 
 import configa from "../../data/system.config";
 import { RuntimeName, runtimeInfo } from "std-env";
-import { Driver } from "unstorage";
 import { Plugin } from "./plugin";
+import { driver } from "./storage";
 export function config():Config{
     configa.preference.site.use = runtimeInfo?.name ||"other"|| configa.preference.site.use;
     if (configa.preference.limit) {
