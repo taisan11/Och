@@ -12,7 +12,7 @@ export const threds = sqliteTable('threds', {
     id: text("id").primaryKey(),
     BBSKEY: text("BBSKEY").notNull().references(() => Ita.id),
     title: text("title").notNull(),
-    Res: integer("Res").notNull(),
+    postnum: integer("postnum").notNull(),
     createAt: integer("createAt",{mode:"timestamp_ms"}).notNull(),
 })
 

@@ -72,6 +72,7 @@ app.get(`/:BBSKEY`, async (c) => {
       { title: "スレッドがない" },
     );
   }
+  console.log(SUBJECTJSON.data);
   return c.render(
     <>
       <h1>READ.CGI</h1>
