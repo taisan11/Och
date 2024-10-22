@@ -34,7 +34,7 @@ export function unstorage_driver(UnstorageOptions:Driver):driver{
         const storage = createStorage(drives);
         const SUBJECT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
         const lines = String(SUBJECT).split('\n');
-        const newLines = lines.slice(0, config()!.preference!.limit!.MaxSubject); // Keep the first 10 lines
+        const newLines = lines.slice(0, (await config()!).preference!.limit!.MaxSubject); // Keep the first 10 lines
         const newSubject = newLines.join('\n');
         await storage.setItem(`${BBSKEY}/SUBJECT.TXT`, newSubject);
     }

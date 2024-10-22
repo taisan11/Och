@@ -72,7 +72,7 @@ import configa from "../../data/system.config";
 import { RuntimeName, runtimeInfo } from "std-env";
 import { Plugin } from "./plugin";
 import { driver } from "./storage";
-export function config():Config{
+export async function config():Promise<Config>{
     configa.preference.site.use = runtimeInfo?.name ||"other"|| configa.preference.site.use;
     if (configa.preference.limit) {
         configa.preference.limit.MaxSubject = configa.preference.limit.MaxSubject || 20;

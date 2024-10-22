@@ -2,19 +2,19 @@ import { config } from "./config";
 
 export async function exic(type: 1|2|4|8|16, data:{name:string,mail:string,message:string}): Promise<{code:number,data:{name:string,mail:string,message:string}}> {
     // return {code:10,data}
-    const plugins = config().preference.site.plugins;
+    const plugins = (await config()).preference.site.plugins;
     if (!plugins) {
         return {code:11,data}
     }
     let result = {code:0,data}
-    config().preference.site.plugins!.forEach(plugin => {
+    for (const plugin of (await config()).preference.site.plugins!) {
         if (plugin.PluginInfo().type.includes(type)) {
             const a = plugin.main(type, result.data);
             if (a.code !== 200) {
                 result = a;
             }
         }
-    });
+    }
     return result;
 }
 

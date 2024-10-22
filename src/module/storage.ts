@@ -51,7 +51,9 @@ export type driver = {
     getdat: (BBSKEY: string, idextension: string) => Promise<string>;
     init: () => Promise<string>;
 }
-const driver = config().preference.site.driver;
+
+const driver = config().then((config) => {return config.preference.site.driver});
+
 // export async function addSubject(BBSKEY:string,date: string, title: string,id: string): Promise<void>{
 //     if (driver === "unstorage") {
 //         return await addSubject_file(BBSKEY,date, title,id)
@@ -59,31 +61,30 @@ const driver = config().preference.site.driver;
 // }
 
 export async function DeleteOldSubject(BBSKEY:string,): Promise<void>{
-    return driver.DeleteOldSubject(BBSKEY)
+    return driver.then((driver) => {return driver.DeleteOldSubject(BBSKEY)})
 }
 export async function getSubjecttxt(BBSKEY:string,): Promise<string>{
-    return driver.getSubjecttxt(BBSKEY)
+    return driver.then((driver) => {return driver.getSubjecttxt(BBSKEY)})
 }
 export async function getSubject(BBSKEY:string,): Promise<getSubjectReturn>{
-    return driver.getSubject(BBSKEY)
+    return driver.then((driver) => {return driver.getSubject(BBSKEY)})
 }
 export async function NewThread(BBSKEY:string,{ name, mail, message, date, title, id }: NewThreadParams):Promise<postReturn> {
-    return driver.NewThread(BBSKEY,{ name, mail, message, date, title, id })
+    return driver.then((driver) => {return driver.NewThread(BBSKEY,{ name, mail, message, date, title, id })})
 }
 export async function postThread(BBSKEY:string,{ name, mail, message, date, id }: PostThreadParams):Promise<postReturn> {
-    return driver.postThread(BBSKEY,{ name, mail, message, date, id })
+    return driver.then((driver) => {return driver.postThread(BBSKEY,{ name, mail, message, date, id })})
 }
 
 export async function getThread(BBSKEY:string,id: string):Promise<getThreadReturn> {
-    return driver.getThread(BBSKEY,id)
+    return driver.then((driver) => {return driver.getThread(BBSKEY,id)})
 }
 export async function getdat(BBSKEY:string,idextension: string):Promise<string> {
-    return driver.getdat(BBSKEY,idextension)
+    return driver.then((driver) => {return driver.getdat(BBSKEY,idextension)})
 }
-
 /**
  * @description 仮実装 init admin
  */
 export async function init():Promise<string> {
-    return driver.init()
+    return driver.then((driver) => {return driver.init()})
 }
