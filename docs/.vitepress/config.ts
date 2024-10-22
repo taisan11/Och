@@ -16,16 +16,23 @@ export default defineConfig({
     ],
 
     sidebar: [
+      { text: 'メインページ', link: '/docs/' },
       {
-        text: 'concepts',
+        text: 'コンセプト',
         items: [
-          { text: 'Main Concepts', link: '/docs/' },
+          { text: 'Driverについて', link: '/docs/concepts/Driver' }
         ]
       },
       {
         text:"Deploy",
         items:[
-          {text:"Deno",link:"/docs/deploy/deno"}
+          {text:"Deno",link:"/docs/deploy/deno"},
+          {text:"Driver",
+            items:[
+              // {text:"Deno KV",link:"/docs/deploy/driver/deno_kv"}
+              {text:"drizzle_driver",link:"/docs/deploy/drizzle_driver"}
+            ]
+          }
         ]
       }
     ],
