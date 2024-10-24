@@ -4,8 +4,8 @@
   },
   "dependencies": {
     "@hono/valibot-validator": "^0.4.0",
-    "drizzle-orm": "^0.35.2",
-    "hono": "^4.6.5",
+    "drizzle-orm": "^0.35.3",
+    "hono": "^4.6.6",
     "iconv-cp932": "^1.2.2",
     "nanoid": "^5.0.7",
     "pathe": "^1.1.2",
@@ -16,7 +16,7 @@
     "valibot": "^0.42.1"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.11",
+    "@types/bun": "^1.1.12",
     "drizzle-kit": "^0.26.2"
   }
 }
