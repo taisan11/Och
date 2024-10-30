@@ -3,11 +3,11 @@
     "dev": "bun run --hot src/server.ts"
   },
   "dependencies": {
-    "@hono/valibot-validator": "^0.4.0",
+    "@hono/valibot-validator": "^0.4.1",
     "drizzle-orm": "^0.35.3",
-    "hono": "^4.6.6",
+    "hono": "^4.6.8",
     "iconv-cp932": "^1.2.2",
-    "nanoid": "^5.0.7",
+    "nanoid": "^5.0.8",
     "pathe": "^1.1.2",
     "std-env": "^3.7.0",
     "unenv": "^1.10.0",

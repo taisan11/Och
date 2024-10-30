@@ -12,14 +12,6 @@ export type Config = {
             description: string;
         };
     };
-    // user?: {
-    //     [key:string]: {
-    //         name: string;
-    //         password: string;
-    //         fullname: string;
-    //         admin: boolean;
-    //     };
-    // };
     /**
      * サイトの設定
      */
@@ -52,19 +44,6 @@ export type Config = {
             };
             saveformat: string;
         };
-        // display?: {
-        //     PRtext: string;
-        //     PRlink: string;
-        //     kokuti: {
-        //         inIndex: boolean;
-        //         inOther: boolean;
-        //     };
-        // };
-        // kisei?: {
-        //     "2jyuu": boolean;
-        //     ShortPostRegulationSec: number;
-        //     sinTorip: boolean;
-        // };
     };
 };
 
@@ -73,10 +52,10 @@ import { RuntimeName, runtimeInfo } from "std-env";
 import { Plugin } from "./plugin";
 import { driver } from "./storage";
 export async function config():Promise<Config>{
-    configa.preference.site.use = runtimeInfo?.name ||"other"|| configa.preference.site.use;
+    configa.preference.site.use = runtimeInfo?.name ?? configa.preference.site.use ?? "other";
     if (configa.preference.limit) {
-        configa.preference.limit.MaxSubject = configa.preference.limit.MaxSubject || 20;
+        configa.preference.limit.MaxSubject = configa.preference.limit.MaxSubject ?? 20;
     }
 
-    return configa
+    return configa;
 }
