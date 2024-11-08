@@ -5,7 +5,20 @@
 //## import
 import {encode} from "iconv-cp932";
 import crypt from 'unix-crypt-td-js'
-import { createHash } from 'node:crypto'
+//## 内部関数
+async function hashByteArray(byteArray:Uint8Array) {
+  // SHA-1でハッシュを生成
+  const hashBuffer = await crypto.subtle.digest('SHA-1', byteArray);
+
+  // ArrayBufferをUint8Arrayに変換
+  const hashArray = new Uint8Array(hashBuffer);
+
+  // Base64エンコードに変換
+  const base64String = btoa(String.fromCharCode(...hashArray)).replace(/\+/g, '.').substr(0, 12);
+
+  return base64String;
+}
+
 //## 出力する関数
 /**
  * @function createTripByKey
@@ -31,7 +44,7 @@ export const createTripByKey = (key: string) => {
     const arrayBuffer = encode(key);
     const byteArray = new Uint8Array(arrayBuffer);
     // 余裕があったらawaitを使用したweb標準の物を使いたい
-    return createHash('sha1').update(byteArray).digest().toString('base64').replace(/\+/g, '.').substr(0, 12);
+    return hashByteArray(byteArray)
   };
 
   /**
