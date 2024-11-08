@@ -1,23 +1,20 @@
 import { runtime } from "std-env"
 import { Context } from 'hono'
+import type {ConnInfo} from "hono/conninfo"
 
-export async function getConnInfo(c:Context) {
+export async function getConnInfo(c:Context):Promise<ConnInfo> {
     if (runtime === 'deno') {
         return import('hono/deno').then((m) => m.getConnInfo(c))
     } 
     if (runtime === 'workerd') {
         return import('hono/cloudflare-workers').then((m) => m.getConnInfo(c))
     }
-    const info = c.env.requestIP(c.req.raw)
-    if (!info){
-      return null
+    if (runtime === 'bun') {
+      return import('hono/bun').then((m) => m.getConnInfo(c))
     }
     return {
-        remote: {
-          address: info.address,
-          addressType: info.family === "IPv6" || info.family === "IPv4" ? info.family : void 0,
-          port: info.port
-        }
-      };
-    // return import('hono/bun').then((m) => m.getConnInfo(c))
+      remote: {
+        address:"0.0.0.0"
+      }
+    }
 }
