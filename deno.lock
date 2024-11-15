@@ -3,7 +3,9 @@
   "specifiers": {
     "npm:@hono/valibot-validator@0.3": "0.3.1_hono@4.6.5_valibot@0.36.0",
     "npm:@types/node@*": "22.5.4",
+    "npm:drizzle-kit@0.28": "0.28.0_esbuild@0.19.12",
     "npm:drizzle-kit@~0.26.2": "0.26.2_esbuild@0.19.12",
+    "npm:drizzle-kit@~0.28.1": "0.28.1_esbuild@0.19.12",
     "npm:drizzle-orm@~0.32.1": "0.32.2",
     "npm:hono@^4.5.2": "4.6.5",
     "npm:iconv-cp932@^1.2.2": "1.2.2",
@@ -334,6 +336,24 @@
     },
     "drizzle-kit@0.26.2_esbuild@0.19.12": {
       "integrity": "sha512-cMq8omEKywjIy5KcqUo6LvEFxkl8/zYHsgYjFVXjmPWWtuW4blcz+YW9+oIhoaALgs2ebRjzXwsJgN9i6P49Dw==",
+      "dependencies": [
+        "@drizzle-team/brocli",
+        "@esbuild-kit/esm-loader",
+        "esbuild@0.19.12",
+        "esbuild-register"
+      ]
+    },
+    "drizzle-kit@0.28.0_esbuild@0.19.12": {
+      "integrity": "sha512-KqI+CS2Ga9GYIrXpxpCDUJJrH/AT/k4UY0Pb4oRgQEGkgN1EdCnqp664cXgwPWjDr5RBtTsjZipw8+8C//K63A==",
+      "dependencies": [
+        "@drizzle-team/brocli",
+        "@esbuild-kit/esm-loader",
+        "esbuild@0.19.12",
+        "esbuild-register"
+      ]
+    },
+    "drizzle-kit@0.28.1_esbuild@0.19.12": {
+      "integrity": "sha512-JimOV+ystXTWMgZkLHYHf2w3oS28hxiH1FR0dkmJLc7GHzdGJoJAQtQS5DRppnabsRZwE2U1F6CuezVBgmsBBQ==",
       "dependencies": [
         "@drizzle-team/brocli",
         "@esbuild-kit/esm-loader",
