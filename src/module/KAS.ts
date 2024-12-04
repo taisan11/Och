@@ -1,4 +1,3 @@
-import { env } from "hono/adapter";
 import { createTripByKey } from "./data-util";
 
 function formatUnixTime(unixTime: number): string {

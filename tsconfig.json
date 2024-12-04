@@ -2,7 +2,8 @@
   "compilerOptions": {
     "strict": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "jsxImportSource": "hono/jsx",
+    "target": "ESNext"
   },
   "exclude": ["node_modules"]
 }
