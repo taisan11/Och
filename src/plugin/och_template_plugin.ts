@@ -5,7 +5,7 @@
  * @since 20xx-xx-xx
  */
 
-import { Plugin } from "../module/plugin";
+import type { Plugin } from "../module/plugin";
 
 export default function och_template_plugin(): Plugin {
     return {
