@@ -6,6 +6,7 @@
     "npm:drizzle-kit@0.28": "0.28.0_esbuild@0.19.12",
     "npm:drizzle-kit@~0.26.2": "0.26.2_esbuild@0.19.12",
     "npm:drizzle-kit@~0.28.1": "0.28.1_esbuild@0.19.12",
+    "npm:drizzle-kit@~0.30.4": "0.30.4_esbuild@0.19.12",
     "npm:drizzle-orm@~0.32.1": "0.32.2",
     "npm:hono@^4.5.2": "4.6.5",
     "npm:iconv-cp932@^1.2.2": "1.2.2",
@@ -354,6 +355,15 @@
     },
     "drizzle-kit@0.28.1_esbuild@0.19.12": {
       "integrity": "sha512-JimOV+ystXTWMgZkLHYHf2w3oS28hxiH1FR0dkmJLc7GHzdGJoJAQtQS5DRppnabsRZwE2U1F6CuezVBgmsBBQ==",
+      "dependencies": [
+        "@drizzle-team/brocli",
+        "@esbuild-kit/esm-loader",
+        "esbuild@0.19.12",
+        "esbuild-register"
+      ]
+    },
+    "drizzle-kit@0.30.4_esbuild@0.19.12": {
+      "integrity": "sha512-B2oJN5UkvwwNHscPWXDG5KqAixu7AUzZ3qbe++KU9SsQ+cZWR4DXEPYcvWplyFAno0dhRJECNEhNxiDmFaPGyQ==",
       "dependencies": [
         "@drizzle-team/brocli",
         "@esbuild-kit/esm-loader",
@@ -783,19 +793,19 @@
     ],
     "packageJson": {
       "dependencies": [
-        "npm:@hono/valibot-validator@0.4",
-        "npm:@types/bun@^1.1.11",
-        "npm:drizzle-kit@~0.26.2",
-        "npm:drizzle-orm@~0.35.2",
-        "npm:hono@^4.6.5",
+        "npm:@hono/valibot-validator@~0.5.2",
+        "npm:@types/bun@^1.2.1",
+        "npm:drizzle-kit@~0.30.4",
+        "npm:drizzle-orm@~0.39.1",
+        "npm:hono@^4.6.20",
         "npm:iconv-cp932@^1.2.2",
-        "npm:nanoid@^5.0.7",
-        "npm:pathe@^1.1.2",
-        "npm:std-env@^3.7.0",
+        "npm:nanoid@^5.0.9",
+        "npm:pathe@^2.0.2",
+        "npm:std-env@^3.8.0",
         "npm:unenv@^1.10.0",
         "npm:unix-crypt-td-js@^1.1.4",
-        "npm:unstorage@^1.12.0",
-        "npm:valibot@~0.42.1"
+        "npm:unstorage@^1.14.4",
+        "npm:valibot@^1.0.0-beta.14"
       ]
     }
   }

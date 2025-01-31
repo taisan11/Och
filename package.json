@@ -3,20 +3,20 @@
     "dev": "bun run --hot src/server.ts"
   },
   "dependencies": {
-    "@hono/valibot-validator": "^0.5.1",
-    "drizzle-orm": "^0.36.4",
-    "hono": "^4.6.12",
+    "@hono/valibot-validator": "^0.5.2",
+    "drizzle-orm": "^0.39.1",
+    "hono": "^4.6.20",
     "iconv-cp932": "^1.2.2",
     "nanoid": "^5.0.9",
     "std-env": "^3.8.0",
     "unix-crypt-td-js": "^1.1.4",
-    "unstorage": "^1.13.1",
-    "valibot": "^0.42.1"
+    "unstorage": "^1.14.4",
+    "valibot": "^1.0.0-beta.14"
   },
   "devDependencies": {
-    "pathe": "^1.1.2",
-    "@types/bun": "^1.1.14",
-    "drizzle-kit": "^0.28.1",
+    "pathe": "^2.0.2",
+    "@types/bun": "^1.2.1",
+    "drizzle-kit": "^0.30.4",
     "unenv": "^1.10.0"
   }
 }
