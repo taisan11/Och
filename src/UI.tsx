@@ -122,6 +122,15 @@ app.post(`/:BBSKEY/:THID`, async (c) => {
   const ThID = c.req.param("THID");//スレID
   const psw = env(c).psw as string
   const kextuka = await kakikoAPI({ThID,name,mail,MESSAGE,BBSKEY,IP,psw},"kakiko")
+  if (kextuka.sc === false) {
+    return c.render(
+      <>
+        <h1>READ.CGI for BBS.TSX by Och</h1>
+        <p>エラーが発生しました</p>
+      </>,
+      { title: "エラー" },
+    );
+  }
   return c.redirect(kextuka.ThID);
 });
 // Newスレッド
