@@ -794,7 +794,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@hono/valibot-validator@~0.5.2",
-        "npm:@types/bun@^1.2.1",
+        "npm:@types/bun@^1.2.2",
         "npm:drizzle-kit@~0.30.4",
         "npm:drizzle-orm@~0.39.1",
         "npm:hono@^4.6.20",
