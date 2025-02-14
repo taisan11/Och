@@ -1,6 +1,8 @@
 import { createRequire } from 'module';
 import { build, Plugin } from 'esbuild';
 import { nodeless, deno, env } from 'unenv';
+import esbui from "unplugin-isolated-decl/esbuild"
+import unsu from "unplugin-unused/esbuild"
 
 export const DenoPlugin: Plugin = {
     name: 'unenv-Deno',
@@ -30,7 +32,7 @@ export const DenoPlugin: Plugin = {
 };
 
 build({
-    entryPoints: ['./src/server.deno.ts'],
+    entryPoints: ['./src/server.ts'],
     outdir: 'dist',
     minify: true,
     sourcemap: true,
@@ -38,7 +40,7 @@ build({
     platform: 'node',
     target: 'esnext',
     format: 'esm',
-    plugins: [DenoPlugin],
+    plugins: [DenoPlugin,esbui(),unsu()],
     external: [
         './node_modules/unstorage/drivers/fs-lite.cjs',
         './node_modules/unstorage/drivers/fs-lite.mjs',

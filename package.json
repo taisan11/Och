@@ -14,10 +14,13 @@
     "valibot": "^1.0.0-rc.0"
   },
   "devDependencies": {
-    "pathe": "^2.0.3",
     "@types/bun": "^1.2.2",
     "drizzle-kit": "^0.30.4",
-    "unenv": "^1.10.0"
+    "listhen": "^1.9.0",
+    "pathe": "^2.0.3",
+    "unenv": "^1.10.0",
+    "unplugin-isolated-decl": "^0.11.0",
+    "unplugin-unused": "^0.4.1"
   },
   "patchedDependencies": {
     "unstorage@1.14.4": "patches/unstorage@1.14.4.patch"
