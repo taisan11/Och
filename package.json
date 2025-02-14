@@ -4,17 +4,17 @@
   },
   "dependencies": {
     "@hono/valibot-validator": "^0.5.2",
-    "drizzle-orm": "^0.39.1",
-    "hono": "^4.6.20",
+    "drizzle-orm": "^0.39.3",
+    "hono": "^4.7.1",
     "iconv-cp932": "^1.2.2",
     "nanoid": "^5.0.9",
     "std-env": "^3.8.0",
     "unix-crypt-td-js": "^1.1.4",
     "unstorage": "^1.14.4",
-    "valibot": "^1.0.0-beta.14"
+    "valibot": "^1.0.0-rc.0"
   },
   "devDependencies": {
-    "pathe": "^2.0.2",
+    "pathe": "^2.0.3",
     "@types/bun": "^1.2.2",
     "drizzle-kit": "^0.30.4",
     "unenv": "^1.10.0"

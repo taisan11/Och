@@ -12,6 +12,7 @@ dkwdkw<>ddwdwd<>2022/09/13(火) 15:46:37.98<>wdl,wldwdo<>
 
 const defaults = `import fsDriver from "unstorage/drivers/fs";
 import { Config } from "../src/module/config";
+import {unstorage_driver} from "../src/module/storage/unstrage-base";
 import {drizzle} from "drizzle-orm/bun-sqlite"
 import { Database } from "bun:sqlite";
 
@@ -32,9 +33,7 @@ const config:Config = {
             use:'bun',
             websocket:true,
             API:true,
-            driver:"unstorage",
-            UnstorageOptions:fsDriver({base:"./data"}),
-            drizzle:drizzle(sqlite),
+            driver:driver:unstorage_driver(fsDriver({base:"./data"})),
         },
     }
 }
