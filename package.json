@@ -18,5 +18,8 @@
     "@types/bun": "^1.2.2",
     "drizzle-kit": "^0.30.4",
     "unenv": "^1.10.0"
+  },
+  "patchedDependencies": {
+    "unstorage@1.14.4": "patches/unstorage@1.14.4.patch"
   }
 }

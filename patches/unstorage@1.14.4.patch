@@ -1,0 +1,11 @@
+diff --git a/drivers/deno-kv.mjs b/drivers/deno-kv.mjs
+index 01e8602b5065e26c0714b43047e363fd681ecc5c..636e4005b73eaa9469a13c5628628f490f81a67d 100644
+--- a/drivers/deno-kv.mjs
++++ b/drivers/deno-kv.mjs
+@@ -1,5 +1,4 @@
+-import { normalizeKey } from "../utils";
+-import { defineDriver, createError } from "./utils/index.mjs";
++import { defineDriver, createError,normalizeKey } from "./utils/index.mjs";
+ const DRIVER_NAME = "deno-kv";
+ export default defineDriver(
+   (opts = {}) => {
