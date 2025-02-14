@@ -3,6 +3,18 @@
 ファイル名|機能  
 ---|---  
 plugin     |プラグイン管理  
+config     |設定を管理する  
+data-util     |Tripなどデータ関連
+kakiko-api     |書き込み用JSAPI
+KAS     |命名の由来は覚えてないけど書き込み用のやつ
+pase     |いろいろパースするやつ
+storage     |ストレージ関連の型定義など
+sys.d.ts     |大事な型定義
+unHono     |様々なランタイムでHonoのランタイム依存を動かすやつ
+
+ファイル名|機能  
+---|---  
+plugin     |プラグイン管理  
 thread     |スレッド情報管理  
 search     |検索  
 archive    |過去ログ管理  
