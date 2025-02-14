@@ -4,7 +4,7 @@
  */
 //## import
 import {encode} from "iconv-cp932";
-import crypt from 'unix-crypt-td-js'
+import {crypt} from '@taisan11/unix-crypto-td-esm'
 //## 内部関数
 async function hashByteArray(byteArray:Uint8Array) {
   // SHA-1でハッシュを生成

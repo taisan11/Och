@@ -4,12 +4,12 @@
     "": {
       "dependencies": {
         "@hono/valibot-validator": "^0.5.2",
+        "@taisan11/unix-crypto-td-esm": "npm:@jsr/taisan11__unix-crypto-td-esm",
         "drizzle-orm": "^0.39.3",
         "hono": "^4.7.1",
         "iconv-cp932": "^1.2.2",
         "nanoid": "^5.0.9",
         "std-env": "^3.8.0",
-        "unix-crypt-td-js": "^1.1.4",
         "unstorage": "^1.14.4",
         "valibot": "^1.0.0-rc.0",
       },
@@ -131,6 +131,8 @@
     "@parcel/watcher-win32-ia32": ["@parcel/watcher-win32-ia32@2.5.1", "", { "os": "win32", "cpu": "ia32" }, "sha512-c2KkcVN+NJmuA7CGlaGD1qJh1cLfDnQsHjE89E60vUEMlqduHGCdCLJCID5geFVM0dOtA3ZiIO8BoEQmzQVfpQ=="],
 
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.5.1", "", { "os": "win32", "cpu": "x64" }, "sha512-9lHBdJITeNR++EvSQVUcaZoWupyHfXe1jZvGZ06O/5MflPcuPLtEphScIBL+AiCWBO46tDSHzWyD0uDmmZqsgA=="],
+
+    "@taisan11/unix-crypto-td-esm": ["@jsr/taisan11__unix-crypto-td-esm@1.0.1", "https://npm.jsr.io/~/11/@jsr/taisan11__unix-crypto-td-esm/1.0.1.tgz", {}, "sha512-MbFaHBQTZTGztYHNjEqorHBpAKM4idA80svFvNtCzabjjMzg5awF1GlewYgVlbq4YoV4ZpW9ynY9l3cjzsN5gg=="],
 
     "@types/bun": ["@types/bun@1.2.2", "", { "dependencies": { "bun-types": "1.2.2" } }, "sha512-tr74gdku+AEDN5ergNiBnplr7hpDp3V1h7fqI2GcR/rsUaM39jpSeKH0TFibRvU0KwniRx5POgaYnaXbk0hU+w=="],
 
@@ -311,8 +313,6 @@
     "undici-types": ["undici-types@5.26.5", "", {}, "sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA=="],
 
     "unenv": ["unenv@1.10.0", "", { "dependencies": { "consola": "^3.2.3", "defu": "^6.1.4", "mime": "^3.0.0", "node-fetch-native": "^1.6.4", "pathe": "^1.1.2" } }, "sha512-wY5bskBQFL9n3Eca5XnhH6KbUo/tfvkwm9OpcdCvLaeA7piBNbavbOKJySEwQ1V0RH6HvNlSAFRTpvTqgKRQXQ=="],
-
-    "unix-crypt-td-js": ["unix-crypt-td-js@1.1.4", "", {}, "sha512-8rMeVYWSIyccIJscb9NdCfZKSRBKYTeVnwmiRYT2ulE3qd1RaDQ0xQDP+rI3ccIWbhu/zuo5cgN8z73belNZgw=="],
 
     "unplugin": ["unplugin@2.2.0", "", { "dependencies": { "acorn": "^8.14.0", "webpack-virtual-modules": "^0.6.2" } }, "sha512-m1ekpSwuOT5hxkJeZGRxO7gXbXT3gF26NjQ7GdVHoLoF8/nopLcd/QfPigpCy7i51oFHiRJg/CyHhj4vs2+KGw=="],
 

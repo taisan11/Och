@@ -1,8 +1,3 @@
-declare module 'unix-crypt-td-js' {
-    const any: any;
-    export = any;
-}
-
 declare global {
     namespace NodeJS {
         interface ProcessEnv {

@@ -4,12 +4,12 @@
   },
   "dependencies": {
     "@hono/valibot-validator": "^0.5.2",
+    "@taisan11/unix-crypto-td-esm": "npm:@jsr/taisan11__unix-crypto-td-esm",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.1",
     "iconv-cp932": "^1.2.2",
     "nanoid": "^5.0.9",
     "std-env": "^3.8.0",
-    "unix-crypt-td-js": "^1.1.4",
     "unstorage": "^1.14.4",
     "valibot": "^1.0.0-rc.0"
   },
