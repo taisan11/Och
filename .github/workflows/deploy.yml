@@ -25,9 +25,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Deno
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@v2
         with:
-          deno-version: v1.x
+          deno-version: v2.x
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -35,7 +35,7 @@ jobs:
           node-version: lts/*
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
 
       - name: Install step
         run: "bun i"
@@ -43,7 +43,7 @@ jobs:
       - name: create data folder
         run: "mkdir ./data"
       - name: create config
-        run: 'echo -e "import deno_kv_adapder from \"../src/module/storage/unstorage_deno_kv_driver.ts\";\nimport { unstorage_driver } from \"../src/module/storage/unstrage-base\";\nimport { Config } from \"../src/module/config\";\n\nconst config:Config = {\n    caps:{\n        admin:{\n            name:\"Admin\",\n            pw:\"Admin\",\n            fullname:\"Administrator\",\n            description:\"Administrator\",\n        }\n    },\n    preference:{\n        site:{\n            name:\"Och\",\n            use:\"bun\",\n            websocket:true,\n            API:true,\n            driver:unstorage_driver(deno_kv_adapder({})),\n        },\n    }\n}\n\nexport default config" > ./data/system.config.ts'
+        run: 'echo -e "import DenoKV from \"unstorage/drivers/deno-kv\";\nimport { unstorage_driver } from \"../src/module/storage/unstrage-base\";\nimport { Config } from \"../src/module/config\";\n\nconst config:Config = {\n    caps:{\n        admin:{\n            name:\"Admin\",\n            pw:\"Admin\",\n            fullname:\"Administrator\",\n            description:\"Administrator\",\n        }\n    },\n    preference:{\n        site:{\n            name:\"Och\",\n            use:\"bun\",\n            websocket:true,\n            API:true,\n            driver:unstorage_driver(DenoKV({})),\n        },\n    }\n}\n\nexport default config" > ./data/system.config.ts'
         
       - name: Build step
         run: "npx jiti ./script/build.deno.ts"
