@@ -6,11 +6,9 @@
 じゃあConfig型は`import { Config } from "../src/module/config";`でインポートできます。
 Deno Deployに上げるためのConfigファイルは以下のような感じになります。
 ```ts
-import deno_kv_adapder from "../src/module/storage/deno_kv_adapder";
+import deno_kv_adapter from "unstorage/drivers/deno-kv"
 import { Config } from "../src/module/config";
 import { unstorage_driver } from "../src/module/storage/unstrage-base";
-
-const sqlite = new Database("sqlite.db");
 
 const config:Config = {
     caps:{
@@ -28,7 +26,8 @@ const config:Config = {
             websocket:true,
             API:true,
             // Deno KVアダプターにデータを保存します。
-            driver:unstorage_driver(deno_kv_adapder({})),
+            driver:unstorage_driver(deno_kv_adapter({})),
+            //Pluginは任意
             plugins:[och_test_plugin()]
         },
     }

@@ -53,5 +53,5 @@ jobs:
         with:
           project: "och"
           # rootからのパスだったわ
-          entrypoint: "./server.deno.js"
+          entrypoint: "./server.js"
           root: "./dist"
