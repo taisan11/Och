@@ -8,10 +8,10 @@
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.1",
     "iconv-cp932": "^1.2.2",
-    "nanoid": "^5.0.9",
+    "nanoid": "^5.1.0",
     "std-env": "^3.8.0",
     "unstorage": "^1.14.4",
-    "valibot": "^1.0.0-rc.0"
+    "valibot": "^1.0.0-rc.1"
   },
   "devDependencies": {
     "@types/bun": "^1.2.2",
