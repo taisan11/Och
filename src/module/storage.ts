@@ -41,6 +41,7 @@ export type postReturn = {
     redirect:string
 }
 export type driver = {
+    addIta?: (BBSKEY: string) => Promise<void>;
     addSubject: (BBSKEY:string,postnum: number, title: string,id: string) => Promise<void>;
     DeleteOldSubject: (BBSKEY: string) => Promise<void>;
     getSubjecttxt: (BBSKEY: string) => Promise<string>;
@@ -55,10 +56,13 @@ export type driver = {
 const driver = config().then((config) => {return config.preference.site.driver});
 
 // export async function addSubject(BBSKEY:string,date: string, title: string,id: string): Promise<void>{
-//     if (driver === "unstorage") {
-//         return await addSubject_file(BBSKEY,date, title,id)
-//     }
+//     return driver.then((driver) => {return driver.addSubject(BBSKEY)})
 // }
+
+//ToDo:
+export async function addIta(BBSKEY:string): Promise<void>{
+    return driver.then((driver) => {return driver.addIta!(BBSKEY)})
+}
 
 export async function DeleteOldSubject(BBSKEY:string,): Promise<void>{
     return driver.then((driver) => {return driver.DeleteOldSubject(BBSKEY)})

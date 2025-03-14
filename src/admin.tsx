@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import {env} from "hono/adapter"
 import { jsxRenderer } from "hono/jsx-renderer";
-import { init } from "./module/storage";
+import { addIta, init } from "./module/storage";
 
 declare module "hono" {
   interface ContextRenderer {
@@ -59,6 +59,30 @@ app.post(`/init`, async (c) => {
     return c.render(
         <h1>パスワードが違います</h1>,
         { title: "初期化失敗" },
+    );
+})
+
+app.get("/create", async (c) => {
+    return c.render(
+        <>
+            <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
+            <h1>掲示板作成君(仮)</h1>
+            <form method="post">
+                <label htmlFor="name">BBSKEY:</label>
+                <input type="text" id="name" name="name" />
+                <button type="submit">作成</button>
+            </form>
+        </>,
+        { title: "掲示板がない" },
+    );
+})
+
+app.post("/create", async (c) => {
+    const body = await c.req.parseBody()
+    await addIta(body.name.toString())
+    return c.render(
+        <h1>作成しました</h1>,
+        { title: "作成完了" },
     );
 })
 

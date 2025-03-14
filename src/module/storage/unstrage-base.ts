@@ -11,6 +11,13 @@ export function unstorage_driver(UnstorageOptions:Driver):driver{
         const SUBJECT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
         await storage.setItem(`${BBSKEY}/SUBJECT.TXT`, `${id}.dat<>${title} (${postnum})\n${SUBJECT}`);
     }
+
+    async function addIta_file(BBSKEY:string):Promise<void> {
+        const storage = createStorage(drives);
+        await storage.setItem(`${BBSKEY}/SUBJECT.TXT`, '1.dat<>初期スレ (1)');
+        await storage.setItem(`/${BBSKEY}/dat/1.dat`, 'カワイイ名無しさん<><>2022/09/08(木) 17:40:07.67 ID:000000000<>こんにちは!!<>初期スレ');
+    }
+
     async function postNumEdit(BBSKEY:string,id: string):Promise<void> {
         const storage = createStorage(drives);
         const SUBJECT = await storage.getItem(`${BBSKEY}/SUBJECT.TXT`);
@@ -94,6 +101,7 @@ export function unstorage_driver(UnstorageOptions:Driver):driver{
 
     return {
         addSubject: (BBSKEY:string,postnum: number, title: string,id: string) => addSubject_file(BBSKEY,postnum, title,id),
+        addIta: (BBSKEY: string) => addIta_file(BBSKEY),
         DeleteOldSubject: (BBSKEY: string) => DeleteOldSubject_file(BBSKEY),
         getSubjecttxt: (BBSKEY: string) => getSubjecttxt_file(BBSKEY),
         getSubject: (BBSKEY: string) => getSubject_file(BBSKEY),
