@@ -70,6 +70,7 @@ app.get("/create", async (c) => {
             <form method="post">
                 <label htmlFor="name">BBSKEY:</label>
                 <input type="text" id="name" name="name" />
+                <input type="password" id="psw" name="psw" placeholder="パスワード"/>
                 <button type="submit">作成</button>
             </form>
         </>,
@@ -78,12 +79,19 @@ app.get("/create", async (c) => {
 })
 
 app.post("/create", async (c) => {
-    const body = await c.req.parseBody()
-    await addIta(body.name.toString())
+  const { psw } = env(c);
+  const body = await c.req.parseBody()
+  if (body.psw !== psw) {
     return c.render(
-        <h1>作成しました</h1>,
-        { title: "作成完了" },
+      <h1>パスワードが違います</h1>,
+      { title: "作成失敗" },
     );
+  }
+  await addIta(body.name.toString())
+  return c.render(
+    <h1>作成しました</h1>,
+    { title: "作成完了" },
+  );
 })
 
 export default app
