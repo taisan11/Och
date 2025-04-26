@@ -4,7 +4,7 @@ import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakikoAPI } from "./module/kakiko-api";
 import { getConnInfo } from './module/unHono'
 import { env } from "hono/adapter";
-import {encode} from "iconv-cp932"
+import {encode} from "iconv-lite"
 
 declare module "hono" {
   interface ContextRenderer {
@@ -17,7 +17,7 @@ const app = new Hono()
 app.use(async (c,next)=>{
   await next()
   const moto = await c.res.text()
-  const encoded = encode(moto)
+  const encoded = encode(moto,"shift_jis")
   c.res = new Response(encoded, c.res)
 })
 
