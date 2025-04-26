@@ -8,7 +8,6 @@
     "drizzle-orm": "^0.43.1",
     "hono": "^4.7.7",
     "iconv-cp932": "^1.2.2",
-    "nanoid": "^5.1.5",
     "std-env": "^3.9.0",
     "unstorage": "^1.15.0",
     "valibot": "^1.0.0"
@@ -21,5 +20,8 @@
     "unenv": "^1.10.0",
     "unplugin-isolated-decl": "^0.13.10",
     "unplugin-unused": "^0.4.4"
+  },
+  "patchedDependencies": {
+    "unstorage@1.15.0": "patches/unstorage@1.14.4.patch"
   }
 }
