@@ -16,10 +16,10 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{
         const date = new Date();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
         // 文字数制限など
-        if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
-        if (!MESSAGE || MESSAGE.length > 300) { return { 'sc': false, 'ThID':"error1" } }
-        if (mail.length > 70) { return { 'sc': false, 'ThID': "error2" } }
-        if (!BBSKEY) { return { 'sc': false, 'ThID': "error3" } }
+        // if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
+        // if (!MESSAGE || MESSAGE.length > 300) { return { 'sc': false, 'ThID':"error1" } }
+        // if (mail.length > 70) { return { 'sc': false, 'ThID': "error2" } }
+        // if (!BBSKEY) { return { 'sc': false, 'ThID': "error3" } }
         if (!ThTitle) { return { 'sc': false, 'ThID': "error5" } }
         const ID = await id(IP,BBSKEY);
         // 加工
@@ -35,10 +35,10 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{
         const date = new Date();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
         // 制限
-        if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
-        if (!MESSAGE || MESSAGE.length > 300) { return { 'sc': false, 'ThID':"error1" } }
-        if (mail.length > 70) { return { 'sc': false, 'ThID': "error2" } }
-        if (!BBSKEY) { return { 'sc': false, 'ThID': "error3" } }
+        // if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
+        // if (!MESSAGE || MESSAGE.length > 300) { return { 'sc': false, 'ThID':"error1" } }
+        // if (mail.length > 70) { return { 'sc': false, 'ThID': "error2" } }
+        // if (!BBSKEY) { return { 'sc': false, 'ThID': "error3" } }
         if (!ThID) { return {'sc':false,'ThID':"error4"} }
         const ID = await id(IP,BBSKEY);
         // 変換

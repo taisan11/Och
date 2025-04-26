@@ -5,24 +5,21 @@
   "dependencies": {
     "@hono/valibot-validator": "^0.5.2",
     "@taisan11/unix-crypto-td-esm": "npm:@jsr/taisan11__unix-crypto-td-esm",
-    "drizzle-orm": "^0.39.3",
-    "hono": "^4.7.1",
+    "drizzle-orm": "^0.43.1",
+    "hono": "^4.7.7",
     "iconv-cp932": "^1.2.2",
-    "nanoid": "^5.1.0",
-    "std-env": "^3.8.0",
-    "unstorage": "^1.14.4",
-    "valibot": "^1.0.0-rc.1"
+    "nanoid": "^5.1.5",
+    "std-env": "^3.9.0",
+    "unstorage": "^1.15.0",
+    "valibot": "^1.0.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.2",
-    "drizzle-kit": "^0.30.4",
+    "@types/bun": "^1.2.10",
+    "drizzle-kit": "^0.31.0",
     "listhen": "^1.9.0",
     "pathe": "^2.0.3",
     "unenv": "^1.10.0",
-    "unplugin-isolated-decl": "^0.11.0",
-    "unplugin-unused": "^0.4.1"
-  },
-  "patchedDependencies": {
-    "unstorage@1.14.4": "patches/unstorage@1.14.4.patch"
+    "unplugin-isolated-decl": "^0.13.10",
+    "unplugin-unused": "^0.4.4"
   }
 }

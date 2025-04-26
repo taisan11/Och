@@ -4,6 +4,8 @@ import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakikoAPI } from "./module/kakiko-api";
 import { getConnInfo } from './module/unHono'
 import { env } from "hono/adapter";
+import { vValidator } from "@hono/valibot-validator";
+import { newPostBody, newThreadBody } from "./types";
 
 declare module "hono" {
   interface ContextRenderer {
@@ -112,12 +114,12 @@ app.get(`/:BBSKEY`, async (c) => {
 //   いつか実装したいです
 ////////////////////////
 // 書き込み
-app.post(`/:BBSKEY/:THID`, async (c) => {
+app.post(`/:BBSKEY/:THID`, vValidator("form",newPostBody,(r,c)=>{}),async (c) => {
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
-  const body = await c.req.parseBody()
-  const name = String(body.name);//名前
-  const mail = String(body.mail);//メアドor色々
-  const MESSAGE = String(body.MESSAGE);//内容
+  const body = c.req.valid("form")
+  const name = body.name||"";//名前
+  const mail = body.mail||"";//メアドor色々
+  const MESSAGE = body.MESSAGE;//内容
   const BBSKEY = c.req.param("BBSKEY");//BBSKEY
   const ThID = c.req.param("THID");//スレID
   const psw = env(c).psw as string
@@ -134,14 +136,14 @@ app.post(`/:BBSKEY/:THID`, async (c) => {
   return c.redirect(kextuka.ThID);
 });
 // Newスレッド
-app.post(`/:BBSKEY`, async (c) => {
+app.post(`/:BBSKEY`, vValidator("form",newThreadBody,(r,c)=>{}),async (c) => {
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
-  const body = await c.req.parseBody()
-  const ThTitle = String(body.ThTitle)
-  const name = String(body.name);//名前
-  const mail = String(body.mail);//メアドor色々
-  const MESSAGE = String(body.MESSAGE);//内容
-  const BBSKEY = c.req.param("BBSKEY");//BBSKEY
+  const body = c.req.valid("form")
+  const ThTitle = body.ThTitle
+  const name = body.name||""
+  const mail = body.mail||"";
+  const MESSAGE = body.MESSAGE||"";
+  const BBSKEY = c.req.param("BBSKEY");
   const psw = env(c).psw as string
   const kextuka = await kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,IP,psw},"newth")
   if (kextuka.sc === false) {
