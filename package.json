@@ -14,7 +14,7 @@
     "valibot": "^1.0.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.10",
+    "@types/bun": "^1.2.11",
     "drizzle-kit": "^0.31.0",
     "listhen": "^1.9.0",
     "pathe": "^2.0.3",
