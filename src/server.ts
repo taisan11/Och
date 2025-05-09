@@ -16,7 +16,7 @@ app.use(trimTrailingSlash())
 app.use(logger())
 // app.use(compress())
 app.use(cors())
-// app.use(csrf())
+app.use(csrf())
 app.use(etag())
 app.use(secureHeaders())
 
