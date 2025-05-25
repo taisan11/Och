@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { trimTrailingSlash } from 'hono/trailing-slash'
 import { logger } from 'hono/logger'
 import { cors } from 'hono/cors'
+import { csrf } from 'hono/csrf'
 import { etag } from 'hono/etag'
 import { secureHeaders } from 'hono/secure-headers'
 import BBS from './UI'
@@ -21,7 +22,8 @@ app.use(etag())
 app.use(secureHeaders())
 
 app.route("/admin", admin);
-app.route("/old", OldUI);
+// WIP
+// app.route("/old", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
 
