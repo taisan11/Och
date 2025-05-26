@@ -46,7 +46,7 @@ jobs:
         run: 'echo -e "import DenoKV from \"unstorage/drivers/deno-kv\";\nimport { unstorage_driver } from \"../src/module/storage/unstrage-base\";\nimport { Config } from \"../src/module/config\";\n\nconst config:Config = {\n    caps:{\n        admin:{\n            name:\"Admin\",\n            pw:\"Admin\",\n            fullname:\"Administrator\",\n            description:\"Administrator\",\n        }\n    },\n    preference:{\n        site:{\n            name:\"Och\",\n            use:\"bun\",\n            websocket:true,\n            API:true,\n            driver:unstorage_driver(DenoKV({})),\n        },\n    }\n}\n\nexport default config" > ./data/system.config.ts'
         
       - name: Build step
-        run: "npx jiti ./script/build.deno.ts"
+        run: "bun run ./script/build.deno.ts"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
