@@ -2,7 +2,7 @@ import { createRequire } from 'module';
 import { build, Plugin } from 'esbuild';
 import { nodeless, deno, env } from 'unenv';
 // import esbui from "unplugin-isolated-decl/esbuild"
-import unsu from "unplugin-unused/esbuild"
+// import unsu from "unplugin-unused/esbuild"
 
 export const DenoPlugin: Plugin = {
     name: 'unenv-Deno',
@@ -40,7 +40,7 @@ build({
     platform: 'node',
     target: 'esnext',
     format: 'esm',
-    plugins: [DenoPlugin,unsu()],
+    plugins: [DenoPlugin],
     external: [
         './node_modules/unstorage/drivers/fs-lite.cjs',
         './node_modules/unstorage/drivers/fs-lite.mjs',
