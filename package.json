@@ -21,8 +21,5 @@
     "unenv": "^1.10.0",
     "unplugin-isolated-decl": "^0.14.3",
     "unplugin-unused": "^0.5.1"
-  },
-  "patchedDependencies": {
-    "unstorage@1.16.0": "patches/unstorage@1.14.4.patch"
   }
 }
