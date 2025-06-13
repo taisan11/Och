@@ -15,6 +15,27 @@ declare module "hono" {
 
 const app = new Hono()
 
+app.notFound((c)=>{
+  return c.render(
+    <>
+      <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
+      <p>ページが見つかりません</p>
+    </>,
+    { title: "ページが見つかりません" },
+  );
+})
+app.onError((err, c) => {
+  console.error("Error occurred:", err);
+  return c.render(
+    <>
+      <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
+      <p>エラーが発生しました</p>
+      <code>{err.message}</code>
+    </>,
+    { title: "エラー" },
+  );
+})
+
 app.get(
   "*",
   jsxRenderer(({ children, title }) => {

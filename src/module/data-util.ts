@@ -5,6 +5,7 @@
 //## import
 import {encode} from "iconv-cp932";
 import {crypt} from '@taisan11/unix-crypto-td-esm'
+import {HTTPException} from "hono/http-exception"
 //## 内部関数
 async function hashByteArray(byteArray:Uint8Array) {
   // SHA-1でハッシュを生成
@@ -29,13 +30,6 @@ async function hashByteArray(byteArray:Uint8Array) {
 export const createTripByKey = (key: string) => {
   const encodedKeyString = encode(key).toString();
   const rawKeyPettern = /^#[0-9A-Fa-f]{16}[.\/0-9A-Za-z]{0,2}$/;
-
-  /**
-   * @param text 文章
-   * @returns 入力不可文字を変換した文章
-   */
-  const maskSpecialSymbols = (text: string) => text.replace(/★/g, '☆').replace(/◆/g, '◇');
-
   /**
    * @param key 一つ目の#を覗いた鍵となる部分。
    * @returns 12桁のトリップ
