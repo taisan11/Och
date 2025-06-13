@@ -114,7 +114,7 @@ app.get(`/:BBSKEY`, async (c) => {
 //   いつか実装したいです
 ////////////////////////
 // 書き込み
-app.post(`/:BBSKEY/:THID`, vValidator("form",newPostBody,(r,c)=>{}),async (c) => {
+app.post(`/:BBSKEY/:THID`, vValidator("form",newPostBody),async (c) => {
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
   const body = c.req.valid("form")
   const name = body.name||"";//名前
@@ -136,7 +136,7 @@ app.post(`/:BBSKEY/:THID`, vValidator("form",newPostBody,(r,c)=>{}),async (c) =>
   return c.redirect(kextuka.ThID);
 });
 // Newスレッド
-app.post(`/:BBSKEY`, vValidator("form",newThreadBody,(r,c)=>{}),async (c) => {
+app.post(`/:BBSKEY`,vValidator("form",newThreadBody),async (c) => {
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
   const body = c.req.valid("form")
   const ThTitle = body.ThTitle
