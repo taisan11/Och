@@ -4,7 +4,7 @@ import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakikoAPI } from "./module/kakiko-api";
 import { getConnInfo } from './module/unHono'
 import { env } from "hono/adapter";
-import {encode} from "iconv-lite"
+import {UTF8ToSJIS} from "./module/encoding/String2SJIS"
 
 declare module "hono" {
   interface ContextRenderer {
@@ -14,11 +14,14 @@ declare module "hono" {
 
 const app = new Hono()
 
+const encoder = new TextEncoder();
+
 app.use(async (c,next)=>{
   await next()
   const moto = await c.res.text()
-  const encoded = encode(moto,"shift_jis")
-  c.res = new Response(encoded, c.res)
+  // const encoded = encode(moto,"shift_jis")
+  const encoded = UTF8ToSJIS(encoder.encode(moto));
+  c.res = new Response(new Uint8Array(encoded), c.res)
 })
 
 app.get(

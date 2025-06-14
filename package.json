@@ -8,7 +8,6 @@
     "drizzle-orm": "^0.44.2",
     "hono": "^4.7.11",
     "iconv-cp932": "^1.2.2",
-    "iconv-lite": "^0.6.3",
     "std-env": "^3.9.0",
     "unstorage": "^1.16.0",
     "valibot": "^1.1.0"

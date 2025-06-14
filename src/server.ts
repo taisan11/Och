@@ -23,7 +23,7 @@ app.use(secureHeaders())
 
 app.route("/admin", admin);
 // WIP
-// app.route("/old", OldUI);
+app.route("/old", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
 
