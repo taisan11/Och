@@ -6,6 +6,7 @@
     "@hono/valibot-validator": "^0.5.2",
     "@taisan11/unix-crypto-td-esm": "npm:@jsr/taisan11__unix-crypto-td-esm",
     "drizzle-orm": "^0.44.2",
+    "encoding-japanese": "^2.2.0",
     "hono": "^4.7.11",
     "iconv-cp932": "^1.2.2",
     "std-env": "^3.9.0",
@@ -14,6 +15,7 @@
   },
   "devDependencies": {
     "@types/bun": "^1.2.16",
+    "@types/encoding-japanese": "^2.2.1",
     "drizzle-kit": "^0.31.1",
     "listhen": "^1.9.0",
     "pathe": "^2.0.3",

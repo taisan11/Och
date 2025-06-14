@@ -4,7 +4,7 @@ import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakikoAPI } from "./module/kakiko-api";
 import { getConnInfo } from './module/unHono'
 import { env } from "hono/adapter";
-import {UTF8ToSJIS,SJISToUTF8} from "./module/encoding/String2SJIS"
+import {convert} from "encoding-japanese"
 
 declare module "hono" {
   interface ContextRenderer {
@@ -27,8 +27,9 @@ app.use("/test/bbs.cgi",async (c,next)=>{
   await next()
   const moto = await c.res.text()
   // const encoded = encode(moto,"shift_jis")
-  const encoded = UTF8ToSJIS(encoder.encode(moto));
-  c.res = new Response(new Uint8Array(encoded), c.res)
+  // const encoded = UTF8ToSJIS(encoder.encode(moto));
+  const encoded = convert(moto, { to: "SJIS", type: "string" });
+  c.res = new Response(encoded, c.res)
 })
 
 app.get(
@@ -51,24 +52,22 @@ app.get(
 );
 
 app.post("/test/bbs.cgi", async (c) => {
-  const rawBody = await c.req.arrayBuffer();
-  const body = SJISToUTF8(new Uint8Array(rawBody));
-  const params = new URLSearchParams(String.fromCharCode(...body));
-  const BBSKEY = params.get("bbs")
-  const ThID = params.get("key")
-  // const time = params.get("time")
-  const submit = params.get("submit")//書き込む
-  const ThTitle = params.get("subject");
-  const FROMraw = decodeURI(params.get("FROM")!)//名前
-  const mailraw = decodeURI(params.get("mail")!)//メール
-  const MESSAGEraw = decodeURI(params.get("MESSAGE")!)//本文
-  console.log("MESSAGEraw",MESSAGEraw)
+  const  body = await c.req.parseBody();
+  // const body = SJISToUTF8(new Uint8Array(rawBody));
+  const BBSKEY = body["bbs"] as string
+  const ThID = body["key"] as string
+  // const time = body["time"] as string
+  const submit = body["submit"] as string//書き込む
+  const ThTitle = body["subject"] as string;
+  const FROMraw = decodeURI(body["FROM"] as string)//名前
+  const mailraw = decodeURI(body["mail"] as string)//メール
+  const MESSAGEraw = decodeURI(body["MESSAGE"] as string)//本文
   if (!MESSAGEraw||!submit||!BBSKEY){return c.render("書き込み内容がありません", { title: "ＥＲＲＯＲ" })}
   const psw = env(c).psw as string
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
-  const FROM = String.fromCharCode(...SJISToUTF8(new TextEncoder().encode(FROMraw)))
-  const mail = String.fromCharCode(...SJISToUTF8(new TextEncoder().encode(mailraw)))
-  const MESSAGE = String.fromCharCode(...SJISToUTF8(new TextEncoder().encode(MESSAGEraw)))
+  const FROM = convert(FROMraw, { to: "SJIS", type: "string" })//名前
+  const mail = convert(mailraw, { to: "SJIS", type: "string" })//メール
+  const MESSAGE = convert(MESSAGEraw, { to: "SJIS", type: "string" })//本文
   //スレ建て
   if (ThTitle) {
     const kextuka = await kakikoAPI({ThTitle,name:FROM,mail,MESSAGE,BBSKEY,IP,psw},"newth")
@@ -115,8 +114,8 @@ app.get("/:BBSKEY/subject.txt", async (c) => {
     return c.text("スレッドがありません", 404);
   }
   // Shift_JISに変換して返す
-  const encoded = UTF8ToSJIS(new TextEncoder().encode(subject));
-  return c.body(new Uint8Array(encoded), { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
+  const encoded = convert(subject, { to: "SJIS", type: "string" });
+  return c.body(encoded, { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
 });
 
 app.get("/:BBSKEY/dat/:ThID{\\b\\d+\\.dat\\b}", async (c) => {
@@ -127,8 +126,8 @@ app.get("/:BBSKEY/dat/:ThID{\\b\\d+\\.dat\\b}", async (c) => {
     return c.text("スレッドがありません", 404);
   }
   // Shift_JISに変換して返す
-  const encoded = UTF8ToSJIS(new TextEncoder().encode(thread));
-  return c.body(new Uint8Array(encoded), { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
+  const encoded = convert(thread, { to: "SJIS", type: "string" });
+  return c.body(encoded, { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
 });
 
 export default app;
