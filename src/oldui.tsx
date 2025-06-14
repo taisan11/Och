@@ -59,12 +59,15 @@ app.post("/test/bbs.cgi", async (c) => {
   // const time = params.get("time")
   const submit = params.get("submit")//書き込む
   const ThTitle = params.get("subject");
-  const FROM = decodeURI(params.get("FROM")!)//名前
-  const mail = decodeURI(params.get("mail")!)//メール
-  const MESSAGE = decodeURI(params.get("MESSAGE")!)//本文
-  if (!MESSAGE||!submit||!BBSKEY){return c.render("書き込み内容がありません", { title: "ＥＲＲＯＲ" })}
+  const FROMraw = decodeURI(params.get("FROM")!)//名前
+  const mailraw = decodeURI(params.get("mail")!)//メール
+  const MESSAGEraw = decodeURI(params.get("MESSAGE")!)//本文
+  if (!MESSAGEraw||!submit||!BBSKEY){return c.render("書き込み内容がありません", { title: "ＥＲＲＯＲ" })}
   const psw = env(c).psw as string
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
+  const FROM = String.fromCharCode(...SJISToUTF8(new TextEncoder().encode(FROMraw)))
+  const mail = String.fromCharCode(...SJISToUTF8(new TextEncoder().encode(mailraw)))
+  const MESSAGE = String.fromCharCode(...SJISToUTF8(new TextEncoder().encode(MESSAGEraw)))
   //スレ建て
   if (ThTitle) {
     const kextuka = await kakikoAPI({ThTitle,name:FROM,mail,MESSAGE,BBSKEY,IP,psw},"newth")
