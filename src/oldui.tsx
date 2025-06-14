@@ -61,7 +61,7 @@ app.post("/test/bbs.cgi", async (c) => {
   const ThTitle = params.get("subject");
   const FROMraw = decodeURI(params.get("FROM")!)//名前
   const mailraw = decodeURI(params.get("mail")!)//メール
-  const MESSAGEraw = params.get("MESSAGE")!//本文
+  const MESSAGEraw = decodeURI(params.get("MESSAGE")!)//本文
   console.log("MESSAGEraw",MESSAGEraw)
   if (!MESSAGEraw||!submit||!BBSKEY){return c.render("書き込み内容がありません", { title: "ＥＲＲＯＲ" })}
   const psw = env(c).psw as string
