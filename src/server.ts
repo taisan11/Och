@@ -23,8 +23,8 @@ app.use(secureHeaders())
 
 app.route("/admin", admin);
 app.route("/api",API)
+app.route("/sb", OldUI);
 app.route("/", BBS);
-app.route("/", OldUI);
 
 
 // app.get("/bbsmenu.json", async (c) => {

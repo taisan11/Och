@@ -16,12 +16,12 @@ const app = new Hono()
 
 const encoder = new TextEncoder();
 
-app.use(async (c, next) => {
-  if (c.req.header("User-Agent")!=="Monazilla/1.00") {
-    return c.text("専ブラ以外は帰れd=====(￣▽￣*)b")
-  }
-  await next();
-})
+// app.use(async (c, next) => {
+//   if (c.req.header("User-Agent")!=="Monazilla/1.00") {
+//     return c.text("専ブラ以外は帰れd=====(￣▽￣*)b")
+//   }
+//   await next();
+// })
 
 app.use(async (c,next)=>{
   await next()
@@ -50,7 +50,7 @@ app.get(
   }),
 );
 
-app.get("/test/bbs.cgi", async (c) => {
+app.post("/test/bbs.cgi", async (c) => {
   const rawBody = await c.req.arrayBuffer();
   const body = SJISToUTF8(new Uint8Array(rawBody));
   const params = new URLSearchParams(String.fromCharCode(...body));
@@ -115,7 +115,7 @@ app.get("/:BBSKEY/subject.txt", async (c) => {
 
 app.get("/:BBSKEY/dat/:ThID{\\b\\d+\\.dat\\b}", async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
-  const ThID = c.req.param("ThID");
+  const ThID = c.req.param("ThID").replace(/\.dat$/, "");
   const thread = await getdat(BBSKEY, ThID);
   if (!thread) {
     return c.text("スレッドがありません", 404);
