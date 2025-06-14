@@ -1,8 +1,19 @@
 // only Bun!!
 import { DenoPlugin } from "./build/deno"
-import { nodelessPlugin } from "./build/nodeless"
 import { CloudflareWokerPlugin } from "./build/cloudflare"
 import {statSync,existsSync} from 'fs';
+
+const importsLog: Bun.BunPlugin = {
+    name: 'imports-log',
+    setup(build) {
+        build.onLoad({ filter: /\.js$/ }, async (args) => {
+            const contents = await Bun.file(args.path).text();
+            const imports = contents.match(/import\s+.*?\s+from\s+['"](.*?)['"]/g) || [];
+            console.log(`File: ${args.path}`);
+            return { contents, loader: args.loader };
+        });
+    },
+}
 
 const type = Bun.argv[2]
 async function build() {
@@ -38,8 +49,7 @@ async function build() {
             outdir: 'dist',
             minify: true,
             target:'bun',
-            plugins: [nodelessPlugin],
-            
+            // plugins: [importsLog],
         },
     )
     console.log(result)
