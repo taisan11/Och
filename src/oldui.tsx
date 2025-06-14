@@ -23,7 +23,7 @@ const encoder = new TextEncoder();
 //   await next();
 // })
 
-app.use("/test",async (c,next)=>{
+app.use("/test/bbs.cgi",async (c,next)=>{
   await next()
   const moto = await c.res.text()
   // const encoded = encode(moto,"shift_jis")
