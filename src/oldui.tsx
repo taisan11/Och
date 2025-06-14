@@ -23,7 +23,7 @@ const encoder = new TextEncoder();
 //   await next();
 // })
 
-app.use(async (c,next)=>{
+app.use("/test",async (c,next)=>{
   await next()
   const moto = await c.res.text()
   // const encoded = encode(moto,"shift_jis")
@@ -110,7 +110,9 @@ app.get("/:BBSKEY/subject.txt", async (c) => {
   if (!subject) {
     return c.text("スレッドがありません", 404);
   }
-  return c.text(subject, { headers: { "Content-Type": "text/plain; charset=Shift_JIS" } });
+  // Shift_JISに変換して返す
+  const encoded = UTF8ToSJIS(new TextEncoder().encode(subject));
+  return c.body(new Uint8Array(encoded), { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
 });
 
 app.get("/:BBSKEY/dat/:ThID{\\b\\d+\\.dat\\b}", async (c) => {
@@ -120,7 +122,9 @@ app.get("/:BBSKEY/dat/:ThID{\\b\\d+\\.dat\\b}", async (c) => {
   if (!thread) {
     return c.text("スレッドがありません", 404);
   }
-  return c.text(thread)
+  // Shift_JISに変換して返す
+  const encoded = UTF8ToSJIS(new TextEncoder().encode(thread));
+  return c.body(new Uint8Array(encoded), { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
 });
 
 export default app;
