@@ -4,7 +4,7 @@ import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
 import { kakikoAPI } from "./module/kakiko-api";
 import { getConnInfo } from './module/unHono'
 import { env } from "hono/adapter";
-import {UTF8ToSJIS} from "./module/encoding/String2SJIS"
+import {UTF8ToSJIS,SJISToUTF8} from "./module/encoding/String2SJIS"
 
 declare module "hono" {
   interface ContextRenderer {
@@ -15,6 +15,13 @@ declare module "hono" {
 const app = new Hono()
 
 const encoder = new TextEncoder();
+
+app.use(async (c, next) => {
+  if (c.req.header("User-Agent")!=="Monazilla/1.00") {
+    return c.text("専ブラ以外は帰れd=====(￣▽￣*)b")
+  }
+  await next();
+})
 
 app.use(async (c,next)=>{
   await next()
@@ -43,170 +50,77 @@ app.get(
   }),
 );
 
-app.get(`/:BBSKEY`, async (c) => {
-  const URL = c.req.url;
+app.get("/test/bbs.cgi", async (c) => {
+  const rawBody = await c.req.arrayBuffer();
+  const body = SJISToUTF8(new Uint8Array(rawBody));
+  const params = new URLSearchParams(String.fromCharCode(...body));
+  const BBSKEY = params.get("bbs")
+  const ThID = params.get("key")
+  // const time = params.get("time")
+  const submit = params.get("submit")//書き込む
+  const ThTitle = params.get("subject");
+  const FROM = decodeURI(params.get("FROM")!)//名前
+  const mail = decodeURI(params.get("mail")!)//メール
+  const MESSAGE = decodeURI(params.get("MESSAGE")!)//本文
+  if (!MESSAGE||!submit||!BBSKEY){return c.render("書き込み内容がありません", { title: "ＥＲＲＯＲ" })}
+  const psw = env(c).psw as string
+  const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
+  //スレ建て
+  if (ThTitle) {
+    const kextuka = await kakikoAPI({ThTitle,name:FROM,mail,MESSAGE,BBSKEY,IP,psw},"newth")
+    if (!kextuka?.sc) {
+      return c.render(<>えらだよ</>, { title: "ＥＲＲＯＲ" })
+    } else {
+      return c.text(`
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>書きこみました。</title>
+    <meta charset="Shift_JIS">
+  </head>
+  <body>
+    書きこみが終りました。
+  </body>
+</html>`, { status: 200, headers: { "Content-Type": "text/html; charset=Shift_JIS" }})
+    }
+  } else if (ThID) {
+    //書き込み
+    const kextuka = await kakikoAPI({name:FROM,mail,MESSAGE,BBSKEY,IP,psw,ThID},"kakiko")
+    if (!kextuka?.sc) {
+      return c.render(<>えらだよ</>, { title: "ＥＲＲＯＲ" })
+    } else {
+      return c.text(`
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>書きこみました。</title>
+    <meta charset="Shift_JIS">
+  </head>
+  <body>
+    書きこみが終りました。
+  </body>
+</html>`, { status: 200, headers: { "Content-Type": "text/html; charset=Shift_JIS" }})
+    }
+  }
+})
+
+app.get("/:BBSKEY/subject.txt", async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
-  const SUBJECTJSON = await getSubject(BBSKEY);
-  if (!SUBJECTJSON?.has) {
-    return c.render(
-      <>
-        <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
-        <p>掲示板がありません</p>
-      </>,
-      { title: "掲示板がない" },
-    );
+  const subject = await getSubjecttxt(BBSKEY);
+  if (!subject) {
+    return c.text("スレッドがありません", 404);
   }
-  if (!SUBJECTJSON.data) {
-    return c.render(
-      <>
-        <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
-        <p>スレッドがありません</p>
-        <p>作成してみてはいかがでしょうか?</p>
-        <p>スレ作成</p>
-        <form method="post" action={URL}>
-          <input type="hidden" name="bbs" value="testing" />
-          <label htmlFor="thTi">スレタイ:</label>
-          <input type="text" id="thTi" name="thTi" />
-          <button type="submit">新規スレッド作成</button>
-          <br />
-          <label htmlFor="name">名前</label>
-          <input type="text" id="name" name="name" />
-          <label htmlFor="mail">メール(省略可)</label>
-          <input type="text" id="mail" name="mail" />
-          <br />
-          <textarea rows={5} cols={70} name="MESSAGE" />
-        </form>
-        <br />
-        <br />
-        <p>READ.CGI for BBS.TSX by Och BBS β</p>
-      </>,
-      { title: "スレッドがない" },
-    );
-  }
-  return c.render(
-    <>
-      <h1>READ.CGI</h1>
-      {
-        Object.entries(SUBJECTJSON.data).map(([unixtime, [threadName, responseCount]]) => {
-          const date = new Date(parseInt(unixtime) * 1000);
-          const formattedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-          return (
-            <><a href={`./${BBSKEY}/${unixtime}`}>{`${threadName}-${responseCount}-${formattedDate}`}</a><br/></>
-          );
-        })
-      }
-      <p>スレ作成</p>
-      <form method="post" action={URL}>
-        <input type="hidden" name="bbs" value="testing" />
-        <label htmlFor="ThTitle">スレタイ:</label>
-        <input type="text" id="ThTitle" name="ThTitle" />
-        <button type="submit">新規スレッド作成</button>
-        <br />
-        <label htmlFor="name">名前</label>
-        <input type="text" id="name" name="name" />
-        <label htmlFor="mail">メール(省略可)</label>
-        <input type="text" id="mail" name="mail" />
-        <br />
-        <textarea rows={5} cols={70} name="MESSAGE" />
-      </form>
-      <br />
-      <br />
-      <p>READ.CGI for BBS.TSX by Och BBS β</p>
-    </>,
-    { title: "READ.CGI" },
-  );
+  return c.text(subject, { headers: { "Content-Type": "text/plain; charset=Shift_JIS" } });
 });
 
-////////////////////////
-//   ##現在の仕様のコーナー
-//   現在はですね、IPを方法がないので放置です
-//   いつか実装したいです
-////////////////////////
-// 書き込み
-app.post(`/:BBSKEY/:THID`, async (c) => {
-  const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
-  const body = await c.req.parseBody()
-  const name = String(body.name);//名前
-  const mail = String(body.mail);//メアドor色々
-  const MESSAGE = String(body.MESSAGE);//内容
-  const BBSKEY = c.req.param("BBSKEY");//BBSKEY
-  const ThID = c.req.param("THID");//スレID
-  const psw = env(c).psw as string
-  const kextuka = await kakikoAPI({ThID,name,mail,MESSAGE,BBSKEY,IP,psw},"kakiko")
-  return c.redirect(kextuka.ThID);
-});
-// Newスレッド
-app.post(`/:BBSKEY`, async (c) => {
-  const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
-  const body = await c.req.parseBody()
-  const ThTitle = String(body.ThTitle)
-  const name = String(body.name);//名前
-  const mail = String(body.mail);//メアドor色々
-  const MESSAGE = String(body.MESSAGE);//内容
-  const BBSKEY = c.req.param("BBSKEY");//BBSKEY
-  const psw = env(c).psw as string
-  const kextuka = await kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,IP,psw},"newth")
-  return c.redirect(kextuka.ThID);
-});
-
-app.get(`/:BBSKEY/:THID`, async (c) => {
+app.get("/:BBSKEY/dat/:ThID{\\b\\d+\\.dat\\b}", async (c) => {
   const BBSKEY = c.req.param("BBSKEY");
-  const THID = c.req.param("THID");
-  const THD = await getThread(BBSKEY,THID)
-  if (!THD.has) {
-    return c.render(
-      <>
-        <h1>READ.CGI for BBS.TSX by Och</h1>
-        <p>スレッドがありません</p>
-      </>,
-      { title: "スレッドがない" },
-    );
+  const ThID = c.req.param("ThID");
+  const thread = await getdat(BBSKEY, ThID);
+  if (!thread) {
+    return c.text("スレッドがありません", 404);
   }
-  const EXAS = `../${BBSKEY}`;
-  const URL = c.req.url;
-  return c.render(
-    <>
-      <div style="margin:0px;">
-        <div style="margin-top:1em;">
-          <span style="float:left;">
-            <a href={EXAS}>■掲示板に戻る■</a>眠たいね
-          </span>
-          <span style="float:right;"></span>&nbsp;
-        </div>
-      </div>
-      <hr style="background-color:#888;color:#888;border-width:0;height:1px;position:relative;top:-.4em;" />
-      <h1 style="color:#CC0000;font-size:larger;font-weight:normal;margin:-.5em 0 0;">
-        {THD.data.title}
-      </h1>
-      <dl class="thred">
-        {
-        THD.data.post.map((post) => (
-          <>
-            <dt id={post.postid}>
-              {post.postid} ：
-              <font color="seagreen">
-                {post.name}
-              </font>
-              ：{post.date}
-            </dt>
-            <dd dangerouslySetInnerHTML={{ __html: post.message }} />
-          </>
-        ))}
-      </dl>
-      <form method="post" action={URL}>
-        <button type="submit">書き込む</button>
-        <label htmlfor="name">名前:</label>
-        <input type="text" id="name" name="name" />
-        <label htmlfor="mail">メール(省略可):</label>
-        <input type="text" id="mail" name="mail" /><br />
-        <textarea rows={5} cols={70} name="MESSAGE"></textarea>
-      </form>
-      <br />
-      <br />
-      <p>READ.CGI for BBS.TSX by Och BBS β</p>
-    </>,
-    { title: "READ.CGI" },
-  );
+  return c.text(thread)
 });
 
 export default app;

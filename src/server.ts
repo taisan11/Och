@@ -22,10 +22,9 @@ app.use(etag())
 app.use(secureHeaders())
 
 app.route("/admin", admin);
-// WIP
-app.route("/old", OldUI);
 app.route("/api",API)
 app.route("/", BBS);
+app.route("/", OldUI);
 
 
 // app.get("/bbsmenu.json", async (c) => {

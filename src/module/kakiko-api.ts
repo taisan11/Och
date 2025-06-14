@@ -11,7 +11,7 @@ import { exic } from "./plugin";
  * @param mode 新しいスレッドを立てるか、レスを書き込むか
  * @returns {sc:'ok'|false,redirect:string} 成功したか、リダイレクト先
  */
-export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{ThTitle?:string,name:string,mail:string,MESSAGE:string,BBSKEY:string,ThID?:string,IP:string,psw:string},mode: 'newth' | 'kakiko'): Promise<{ sc: boolean, ThID: string }> {
+export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{ThTitle?:string,name?:string,mail?:string,MESSAGE:string,BBSKEY:string,ThID?:string,IP:string,psw:string},mode: 'newth' | 'kakiko'): Promise<{ sc: boolean, ThID: string }> {
     if (mode === 'newth') {
         const date = new Date();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
@@ -23,7 +23,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{
         if (!ThTitle) { return { 'sc': false, 'ThID': "error5" } }
         const ID = await id(IP,BBSKEY);
         // 加工
-        const KASS = await KAS(MESSAGE, name, mail, Number(UnixTime),psw);
+        const KASS = await KAS(MESSAGE, name!, mail!, Number(UnixTime),psw);
         const a = await exic(1,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
         // 保存
         await NewThread(BBSKEY,{ name: a.data.name||KASS.name, mail: a.data.mail||KASS.mail, message: a.data.message||KASS.mes, date: KASS.time+' ID:'+ID, title: ThTitle, id: UnixTime });
@@ -42,7 +42,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{
         if (!ThID) { return {'sc':false,'ThID':"error4"} }
         const ID = await id(IP,BBSKEY);
         // 変換
-        const KASS = await KAS(MESSAGE,name,mail,Number(UnixTime),psw);
+        const KASS = await KAS(MESSAGE,name!,mail!,Number(UnixTime),psw);
         const a = await exic(2,{name:KASS.name,mail:KASS.mail,message:KASS.mes});
         // 保存
         await postThread(BBSKEY,{ name: a.data.name||KASS.name, mail: a.data.mail||KASS.mail, message: a.data.message||KASS.mes, date: KASS.time+' ID:'+ID, id: ThID });
