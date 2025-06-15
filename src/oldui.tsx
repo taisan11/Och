@@ -32,8 +32,6 @@ function decodeUrlEncodedToBytes(input: string): Uint8Array {
 
 const app = new Hono()
 
-const encoder = new TextEncoder();
-
 // app.use(async (c, next) => {
 //   if (c.req.header("User-Agent")!=="Monazilla/1.00") {
 //     return c.text("専ブラ以外は帰れd=====(￣▽￣*)b")
