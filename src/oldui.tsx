@@ -47,7 +47,8 @@ app.use("/test/bbs.cgi",async (c,next)=>{
   // const encoded = encode(moto,"shift_jis")
   // const encoded = UTF8ToSJIS(encoder.encode(moto));
   const encoded = convert(moto, { to: "SJIS", type: "array" });
-  c.res = new Response(new Uint8Array(encoded), c.res)
+  c.res = new Response(String.fromCharCode(...encoded), c.res)
+  return
 })
 
 app.get(
