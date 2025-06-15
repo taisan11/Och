@@ -3,6 +3,10 @@ import { KAS } from "./KAS";
 import { id } from "./data-util";
 import { exic } from "./plugin";
 
+function JDATE() {
+    return new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));//日本時間
+}
+
 /**
  * kakikoAPI
  * @description 情報を加工し、保存する
@@ -13,7 +17,7 @@ import { exic } from "./plugin";
  */
 export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{ThTitle?:string,name?:string,mail?:string,MESSAGE:string,BBSKEY:string,ThID?:string,IP:string,psw:string},mode: 'newth' | 'kakiko'): Promise<{ sc: boolean, ThID: string }> {
     if (mode === 'newth') {
-        const date = new Date();//時間
+        const date = JDATE();//日本時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
         // 文字数制限など
         // if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
@@ -32,7 +36,7 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{
     }
     if (mode === 'kakiko') {
         // 内容物の取得
-        const date = new Date();//時間
+        const date = JDATE();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
         // 制限
         // if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }

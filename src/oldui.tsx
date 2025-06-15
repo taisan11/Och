@@ -88,8 +88,8 @@ app.post("/test/bbs.cgi", async (c) => {
   const ThID = paramsMap.get("key") as string;
   const submit = paramsMap.get("submit") as string; // 書き込む
   const ThTitle = paramsMap.get("subject") as string;
-  const FROM = paramsMap.get("FROM") as string; // 名前
-  const mail = paramsMap.get("mail") as string; // メール
+  const FROM = convert(decodeUrlEncodedToBytes(paramsMap.get("FROM") as string),{to:"UNICODE",type:"string"}) // 名前
+  const mail = convert(decodeUrlEncodedToBytes(paramsMap.get("mail") as string),{to:"UNICODE",type:"string"}) // メール
   const MESSAGE = convert(decodeUrlEncodedToBytes(paramsMap.get("MESSAGE") as string),{to:"UNICODE",type:"string"}) // 本文
   
   if (!MESSAGE || !submit || !BBSKEY) {
