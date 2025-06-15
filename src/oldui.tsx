@@ -52,22 +52,34 @@ app.get(
 );
 
 app.post("/test/bbs.cgi", async (c) => {
-  const  body = await c.req.parseBody();
-  // const body = SJISToUTF8(new Uint8Array(rawBody));
-  const BBSKEY = body["bbs"] as string
-  const ThID = body["key"] as string
-  // const time = body["time"] as string
-  const submit = body["submit"] as string//書き込む
-  const ThTitle = body["subject"] as string;
-  const FROMraw = decodeURI(body["FROM"] as string)//名前
-  const mailraw = decodeURI(body["mail"] as string)//メール
-  const MESSAGEraw = decodeURI(body["MESSAGE"] as string)//本文
-  if (!MESSAGEraw||!submit||!BBSKEY){return c.render("書き込み内容がありません", { title: "ＥＲＲＯＲ" })}
-  const psw = env(c).psw as string
-  const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
-  const FROM = convert(FROMraw, { to: "SJIS", type: "array" })//名前
-  const mail = convert(mailraw, { to: "SJIS", type: "array" })//メール
-  const MESSAGE = convert(MESSAGEraw, { to: "SJIS", type: "array" })//本文
+  const rawBody = await c.req.arrayBuffer();
+  // Shift_JISデコードして文字列にする
+  const decodedBody = convert(new Uint8Array(rawBody), { from: "SJIS", to: "UNICODE", type: "string" });
+  
+  // &で区切り、=で分割して連想配列にする
+  const paramsMap = new Map();
+  for (const pair of decodedBody.split("&")) {
+    const [key, value] = pair.split("=");
+    if (key && value !== undefined) {
+      paramsMap.set(key, decodeURIComponent(value));
+    }
+  }
+
+  // パラメータを取得
+  const BBSKEY = paramsMap.get("bbs") as string;
+  const ThID = paramsMap.get("key") as string;
+  const submit = paramsMap.get("submit") as string; // 書き込む
+  const ThTitle = paramsMap.get("subject") as string;
+  const FROM = paramsMap.get("FROM") as string; // 名前
+  const mail = paramsMap.get("mail") as string; // メール
+  const MESSAGE = paramsMap.get("MESSAGE") as string; // 本文
+  
+  if (!MESSAGE || !submit || !BBSKEY) {
+    return c.render(<>書き込み内容がありません</>, { title: "ＥＲＲＯＲ" });
+  }
+  
+  const psw = env(c).psw as string;
+  const IP = c.req.header('CF-Connecting-IP') || (await getConnInfo(c))?.remote.address || '0.0.0.0';
   //スレ建て
   if (ThTitle) {
     const kextuka = await kakikoAPI({ThTitle,name:FROM,mail,MESSAGE,BBSKEY,IP,psw},"newth")
