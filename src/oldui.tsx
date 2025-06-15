@@ -12,6 +12,24 @@ declare module "hono" {
   }
 }
 
+function decodeUrlEncodedToBytes(input: string): Uint8Array {
+  const bytes: number[] = [];
+
+  for (let i = 0; i < input.length; ) {
+    if (input[i] === '%') {
+      const hex = input.slice(i + 1, i + 3);
+      bytes.push(parseInt(hex, 16));
+      i += 3;
+    } else {
+      // 非エンコード文字（安全文字）にも対応（例：a, 1, _）
+      bytes.push(input.charCodeAt(i));
+      i += 1;
+    }
+  }
+
+  return new Uint8Array(bytes);
+}
+
 const app = new Hono()
 
 const encoder = new TextEncoder();
@@ -72,7 +90,7 @@ app.post("/test/bbs.cgi", async (c) => {
   const ThTitle = paramsMap.get("subject") as string;
   const FROM = paramsMap.get("FROM") as string; // 名前
   const mail = paramsMap.get("mail") as string; // メール
-  const MESSAGE = decodeURIComponent(paramsMap.get("MESSAGE") as string); // 本文
+  const MESSAGE = convert(decodeUrlEncodedToBytes(paramsMap.get("MESSAGE") as string),{to:"UNICODE",type:"string"}) // 本文
   
   if (!MESSAGE || !submit || !BBSKEY) {
     return c.render(<>書き込み内容がありません</>, { title: "ＥＲＲＯＲ" });
