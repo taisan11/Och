@@ -61,7 +61,12 @@ app.post("/test/bbs.cgi", async (c) => {
   for (const pair of decodedBody.split("&")) {
     const [key, value] = pair.split("=");
     if (key && value !== undefined) {
-      paramsMap.set(key, decodeURIComponent(value));
+      try {
+        paramsMap.set(key, decodeURIComponent(value));
+      } catch (e) {
+        // URI malformed error handling - use original value
+        paramsMap.set(key, value);
+      }
     }
   }
 
