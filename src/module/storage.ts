@@ -32,15 +32,15 @@ export type getThreadReturn = {
         }[];
     }
 };
-export type getSubjectReturn = {
+export interface getSubjectReturn {
     has: boolean;
     data: { [key: string]: [string, string] };
 };
-export type postReturn = {
+export interface postReturn {
     sc:boolean,
     redirect:string
 }
-export type driver = {
+export interface driver {
     addIta?: (BBSKEY: string) => Promise<void>;
     addSubject: (BBSKEY:string,postnum: number, title: string,id: string) => Promise<void>;
     DeleteOldSubject: (BBSKEY: string) => Promise<void>;
