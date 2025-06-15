@@ -61,12 +61,7 @@ app.post("/test/bbs.cgi", async (c) => {
   for (const pair of decodedBody.split("&")) {
     const [key, value] = pair.split("=");
     if (key && value !== undefined) {
-      try {
-        paramsMap.set(key, decodeURIComponent(value));
-      } catch (e) {
-        // URI malformed error handling - use original value
-        paramsMap.set(key, value);
-      }
+      paramsMap.set(key, value);
     }
   }
 
@@ -77,7 +72,7 @@ app.post("/test/bbs.cgi", async (c) => {
   const ThTitle = paramsMap.get("subject") as string;
   const FROM = paramsMap.get("FROM") as string; // 名前
   const mail = paramsMap.get("mail") as string; // メール
-  const MESSAGE = paramsMap.get("MESSAGE") as string; // 本文
+  const MESSAGE = decodeURIComponent(paramsMap.get("MESSAGE") as string); // 本文
   
   if (!MESSAGE || !submit || !BBSKEY) {
     return c.render(<>書き込み内容がありません</>, { title: "ＥＲＲＯＲ" });
