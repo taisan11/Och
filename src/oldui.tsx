@@ -28,8 +28,8 @@ app.use("/test/bbs.cgi",async (c,next)=>{
   const moto = await c.res.text()
   // const encoded = encode(moto,"shift_jis")
   // const encoded = UTF8ToSJIS(encoder.encode(moto));
-  const encoded = convert(moto, { to: "SJIS", type: "string" });
-  c.res = new Response(encoded, c.res)
+  const encoded = convert(moto, { to: "SJIS", type: "array" });
+  c.res = new Response(new Uint8Array(encoded), c.res)
 })
 
 app.get(
@@ -65,9 +65,9 @@ app.post("/test/bbs.cgi", async (c) => {
   if (!MESSAGEraw||!submit||!BBSKEY){return c.render("書き込み内容がありません", { title: "ＥＲＲＯＲ" })}
   const psw = env(c).psw as string
   const IP = c.req.header('CF-Connecting-IP')||(await getConnInfo(c))?.remote.address||'0.0.0.0'
-  const FROM = convert(FROMraw, { to: "SJIS", type: "string" })//名前
-  const mail = convert(mailraw, { to: "SJIS", type: "string" })//メール
-  const MESSAGE = convert(MESSAGEraw, { to: "SJIS", type: "string" })//本文
+  const FROM = convert(FROMraw, { to: "SJIS", type: "array" })//名前
+  const mail = convert(mailraw, { to: "SJIS", type: "array" })//メール
+  const MESSAGE = convert(MESSAGEraw, { to: "SJIS", type: "array" })//本文
   //スレ建て
   if (ThTitle) {
     const kextuka = await kakikoAPI({ThTitle,name:FROM,mail,MESSAGE,BBSKEY,IP,psw},"newth")
@@ -114,8 +114,8 @@ app.get("/:BBSKEY/subject.txt", async (c) => {
     return c.text("スレッドがありません", 404);
   }
   // Shift_JISに変換して返す
-  const encoded = convert(subject, { to: "SJIS", type: "string" });
-  return c.body(encoded, { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
+  const encoded = convert(subject, { to: "SJIS", type: "array" });
+  return c.body(new Uint8Array(encoded), { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
 });
 
 app.get("/:BBSKEY/dat/:ThID{\\b\\d+\\.dat\\b}", async (c) => {
@@ -126,8 +126,8 @@ app.get("/:BBSKEY/dat/:ThID{\\b\\d+\\.dat\\b}", async (c) => {
     return c.text("スレッドがありません", 404);
   }
   // Shift_JISに変換して返す
-  const encoded = convert(thread, { to: "SJIS", type: "string" });
-  return c.body(encoded, { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
+  const encoded = convert(thread, { to: "SJIS", type: "array" });
+  return c.body(new Uint8Array(encoded), { headers: { "Content-Type": "text/plain; charset=Shift_JIS" }})
 });
 
 export default app;
