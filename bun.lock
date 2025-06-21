@@ -3,25 +3,25 @@
   "workspaces": {
     "": {
       "dependencies": {
-        "@hono/valibot-validator": "^0.5.2",
+        "@hono/valibot-validator": "latest",
         "@taisan11/unix-crypto-td-esm": "npm:@jsr/taisan11__unix-crypto-td-esm",
-        "drizzle-orm": "^0.44.2",
-        "encoding-japanese": "^2.2.0",
-        "hono": "^4.7.11",
-        "iconv-cp932": "^1.2.2",
-        "std-env": "^3.9.0",
-        "unstorage": "^1.16.0",
-        "valibot": "^1.1.0",
+        "drizzle-orm": "latest",
+        "encoding-japanese": "latest",
+        "hono": "latest",
+        "iconv-cp932": "latest",
+        "std-env": "latest",
+        "unstorage": "latest",
+        "valibot": "latest",
       },
       "devDependencies": {
-        "@types/bun": "^1.2.16",
-        "@types/encoding-japanese": "^2.2.1",
-        "drizzle-kit": "^0.31.1",
-        "listhen": "^1.9.0",
-        "pathe": "^2.0.3",
-        "unenv": "^1.10.0",
-        "unplugin-isolated-decl": "^0.14.3",
-        "unplugin-unused": "^0.5.1",
+        "@types/bun": "latest",
+        "@types/encoding-japanese": "latest",
+        "drizzle-kit": "latest",
+        "listhen": "latest",
+        "pathe": "latest",
+        "unenv": "latest",
+        "unplugin-isolated-decl": "latest",
+        "unplugin-unused": "latest",
       },
     },
   },
@@ -250,7 +250,7 @@
 
     "h3": ["h3@1.13.0", "", { "dependencies": { "cookie-es": "^1.2.2", "crossws": ">=0.2.0 <0.4.0", "defu": "^6.1.4", "destr": "^2.0.3", "iron-webcrypto": "^1.2.1", "ohash": "^1.1.4", "radix3": "^1.1.2", "ufo": "^1.5.4", "uncrypto": "^0.1.3", "unenv": "^1.10.0" } }, "sha512-vFEAu/yf8UMUcB4s43OaDaigcqpQd14yanmOsn+NcRX3/guSKncyE2rOYhq8RIchgJrPSs/QiIddnTTR1ddiAg=="],
 
-    "hono": ["hono@4.7.11", "", {}, "sha512-rv0JMwC0KALbbmwJDEnxvQCeJh+xbS3KEWW5PC9cMJ08Ur9xgatI0HmtgYZfOdOSOeYsp5LO2cOhdI8cLEbDEQ=="],
+    "hono": ["hono@4.8.2", "", {}, "sha512-hM+1RIn9PK1I6SiTNS6/y7O1mvg88awYLFEuEtoiMtRyT3SD2iu9pSFgbBXT3b1Ua4IwzvSTLvwO0SEhDxCi4w=="],
 
     "http-shutdown": ["http-shutdown@1.2.2", "", {}, "sha512-S9wWkJ/VSY9/k4qcjG318bqJNruzE4HySUhFYknwmu6LBP97KLLfwNf+n4V1BHurvFNkSKLFnK/RsuUnRTf9Vw=="],
 
