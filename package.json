@@ -5,22 +5,22 @@
   "dependencies": {
     "@hono/valibot-validator": "^0.5.3",
     "@taisan11/unix-crypto-td-esm": "npm:@jsr/taisan11__unix-crypto-td-esm",
-    "drizzle-orm": "^0.44.2",
+    "drizzle-orm": "^0.44.4",
     "encoding-japanese": "^2.2.0",
-    "hono": "^4.8.4",
+    "hono": "^4.8.12",
     "iconv-cp932": "^1.2.2",
     "std-env": "^3.9.0",
-    "unstorage": "^1.16.0",
+    "unstorage": "^1.16.1",
     "valibot": "^1.1.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.18",
+    "@types/bun": "^1.2.19",
     "@types/encoding-japanese": "^2.2.1",
     "drizzle-kit": "^0.31.4",
     "listhen": "^1.9.0",
     "pathe": "^2.0.3",
     "unenv": "^1.10.0",
-    "unplugin-isolated-decl": "^0.14.5",
+    "unplugin-isolated-decl": "^0.14.7",
     "unplugin-unused": "^0.5.1"
   }
 }
