@@ -7,7 +7,7 @@
     "@taisan11/unix-crypto-td-esm": "npm:@jsr/taisan11__unix-crypto-td-esm",
     "drizzle-orm": "^0.44.4",
     "encoding-japanese": "^2.2.0",
-    "hono": "^4.9.1",
+    "hono": "^4.9.2",
     "iconv-cp932": "^1.2.2",
     "std-env": "^3.9.0",
     "unstorage": "^1.16.1",
@@ -19,8 +19,6 @@
     "drizzle-kit": "^0.31.4",
     "listhen": "^1.9.0",
     "pathe": "^2.0.3",
-    "unenv": "^1.10.0",
-    "unplugin-isolated-decl": "^0.15.0",
-    "unplugin-unused": "^0.5.1"
+    "unenv": "^1.10.0"
   }
 }

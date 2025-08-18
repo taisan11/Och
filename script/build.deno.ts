@@ -1,8 +1,6 @@
 import { createRequire } from 'module';
 import { build, Plugin } from 'esbuild';
 import { nodeless, deno, env } from 'unenv';
-// import esbui from "unplugin-isolated-decl/esbuild"
-// import unsu from "unplugin-unused/esbuild"
 
 export const DenoPlugin: Plugin = {
     name: 'unenv-Deno',
