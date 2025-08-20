@@ -9,13 +9,11 @@ import BBS from './UI'
 import API from './api'
 import OldUI from './oldui'
 import admin from './admin'
-// import bbsmenuJson from './module/bbsmenu'
 
 const app = new Hono()
 
 app.use(trimTrailingSlash())
 app.use(logger())
-// app.use(compress())
 app.use(cors())
 app.use(csrf({
   origin: (origin) => {
@@ -33,8 +31,4 @@ app.route("/api",API)
 app.route("/", OldUI);
 app.route("/", BBS);
 
-
-// app.get("/bbsmenu.json", async (c) => {
-//     return c.json(bbsmenuJson());
-// })
 export default app

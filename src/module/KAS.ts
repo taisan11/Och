@@ -37,6 +37,12 @@ export async function KAS(mes:string,name:string,mail:string,time:number,pw?:str
     }
 }
 
+/**
+ * HTML escape function to prevent XSS attacks
+ * @param input Input string that may contain malicious HTML
+ * @returns Escaped HTML string safe for rendering
+ * @security Prevents XSS by escaping all HTML special characters
+ */
 function MES(input: string | null): string {
   if (!input) return '';
 
@@ -53,6 +59,10 @@ function MES(input: string | null): string {
 
 /**
  * Secure constant-time string comparison to prevent timing attacks
+ * @param a First string to compare
+ * @param b Second string to compare
+ * @returns true if strings are equal, false otherwise
+ * @security Uses constant-time comparison to prevent timing-based side-channel attacks
  */
 function secureCompare(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
@@ -64,6 +74,14 @@ function secureCompare(a: string, b: string): boolean {
   return result === 0;
 }
 
+/**
+ * Name processing function with trip generation support
+ * @param input User-provided name input 
+ * @param mail User email/command
+ * @param pw Admin password for authentication
+ * @returns Processed name and mail
+ * @security Uses secure password comparison and validates trip codes
+ */
 async function NES(input: string, mail: string,pw?:string|null): Promise<{ name: string, mail: string }> {
     // Use secure comparison for password check
     if (pw && mail && secureCompare(mail, pw)) {
@@ -85,7 +103,6 @@ async function NES(input: string, mail: string,pw?:string|null): Promise<{ name:
     let trip = '';
     if (length > 0) {
         trip = `◆`+await createTripByKey(match![1]);
-        // trip = `◆` + `現在一時的にトリップは使用できません`
     }
     return { "name": `${convertedInput.replace(/#.*/, '')}${trip}`, "mail": mail }
 }

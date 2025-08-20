@@ -118,11 +118,19 @@ export async function id(ip: string,itaID: string): Promise<string> {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const formattedDate = `${year}${month}${day}`;
-  // const host = await ipHost(ip);
+  
   const hash = await SHA512(ip + itaID + formattedDate);
   return hash.slice(0, 9);
 }
 //## サブ関数
+/**
+ * SHA-512 hash function with salt and pepper support
+ * @param message Main message to hash
+ * @param salt Optional salt value
+ * @param Pepper Optional pepper value  
+ * @returns Hexadecimal hash string
+ * @security Uses Web Crypto API for secure hashing
+ */
 async function SHA512(message: string, salt?: string, Pepper?: string): Promise<string> {
   const fullMessage = message + (salt || '') + (Pepper || '');
   const msgUint8 = new TextEncoder().encode(fullMessage); // (utf-8 の) Uint8Array にエンコードする
@@ -133,7 +141,15 @@ async function SHA512(message: string, salt?: string, Pepper?: string): Promise<
     .join(""); // バイト列を 16 進文字列に変換する
   return hashHex;
 }
-// 匿名IP判定
+/**
+ * Anonymous IP detection based on hosting patterns
+ * @param isFwifi Whether connection is from public WiFi
+ * @param country Country code
+ * @param remoho Reverse hostname
+ * @param ipAddr IP address
+ * @returns true if IP appears to be anonymous/VPN
+ * @security Helps identify potentially malicious traffic sources
+ */
 function isAnonymous(isFwifi: boolean, country: string, remoho: string, ipAddr: string): boolean {
   let isAnon = false;
 
@@ -148,7 +164,14 @@ function isAnonymous(isFwifi: boolean, country: string, remoho: string, ipAddr: 
 
   return isAnon;
 }
-//公衆Wifi判定
+/**
+ * Public WiFi detection for Japanese networks
+ * @param country Country code
+ * @param ipAddr IP address
+ * @param remoho Reverse hostname
+ * @returns WiFi provider nickname or empty string
+ * @security Identifies public WiFi for special handling
+ */
 function isPublicWifi(country: string, ipAddr: string, remoho: string): string {
   let isFwifi = '';
 
@@ -165,6 +188,12 @@ function isPublicWifi(country: string, ipAddr: string, remoho: string): string {
   return isFwifi;
 }
 
+/**
+ * Reverse DNS lookup with error handling and timeout
+ * @param ip IP address to resolve
+ * @returns Hostname or IP address as fallback
+ * @security Implements timeout and error handling to prevent DoS
+ */
 async function ipHost(ip: string): Promise<string> {
   try {
     const reip = ip.split('.').reverse().join('.') + '.in-addr.arpa';
