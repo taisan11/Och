@@ -6,6 +6,7 @@
 import {encode} from "iconv-cp932";
 import {crypt} from '@taisan11/unix-crypto-td-esm'
 import {HTTPException} from "hono/http-exception"
+import { SECURITY_PATTERNS, FWIFI_NICKNAMES, SALT_CHAR_MAP } from "./constants";
 //## 内部関数
 async function hashByteArray(byteArray:Uint8Array) {
   // SHA-1でハッシュを生成
@@ -29,7 +30,7 @@ async function hashByteArray(byteArray:Uint8Array) {
  */
 export const createTripByKey = (key: string) => {
   const encodedKeyString = encode(key).toString();
-  const rawKeyPettern = /^#[0-9A-Fa-f]{16}[.\/0-9A-Za-z]{0,2}$/;
+  
   /**
    * @param key 一つ目の#を覗いた鍵となる部分。
    * @returns 12桁のトリップ
@@ -50,34 +51,20 @@ export const createTripByKey = (key: string) => {
     const encodedKeyString = encode(key).toString();
 
     const salt = `${encodedKeyString}${saltSuffixString}`
-      // 1 文字目から 2 文字を取得する
-      .substr(1, 2)
+      // 1 文字目から 2 文字を取得する (replace deprecated substr)
+      .substring(1, 3)
       // . から z までの文字以外を . に置換する
-      .replace(/[^\.-z]/g, '.')
+      .replace(SECURITY_PATTERNS.SALT_INVALID, '.')
       // 配列にする
       .split('')
       // salt として使えない記号をアルファベットに置換する
       .map((string) => {
-        if (string === ':') return 'A';
-        if (string === ';') return 'B';
-        if (string === '<') return 'C';
-        if (string === '=') return 'D';
-        if (string === '>') return 'E';
-        if (string === '?') return 'F';
-        if (string === '@') return 'G';
-        if (string === '[') return 'a';
-        if (string === '\\') return 'b';
-        if (string === ']') return 'c';
-        if (string === '^') return 'd';
-        if (string === '_') return 'e';
-        if (string === '`') return 'f';
-
-        return string;
+        return SALT_CHAR_MAP[string as keyof typeof SALT_CHAR_MAP] || string;
       })
       // 文字列にする
       .join('');
 
-    return (crypt(encodedKeyString, salt) as string).substr(-10, 10);
+    return (crypt(encodedKeyString, salt) as string).substring(crypt(encodedKeyString, salt).length - 10);
   };
 
   /**
@@ -88,8 +75,8 @@ export const createTripByKey = (key: string) => {
     const saltSuffixString = '..';
 
     const rawKey = key
-      // 2 文字目以降の全ての文字列を取得
-      .substr(1)
+      // 2 文字目以降の全ての文字列を取得 (replace deprecated substr)
+      .substring(1)
       // 2 文字ごとに配列に分割する
       .match(/.{2}/g)!
       // ASCII コードを ASCII 文字に変換する
@@ -101,9 +88,9 @@ export const createTripByKey = (key: string) => {
       // 文字列にする
       .join('');
 
-    const salt = `${key}${saltSuffixString}`.substr(17, 2);
+    const salt = `${key}${saltSuffixString}`.substring(17, 19);
 
-    return (crypt(rawKey, salt) as string).substr(-10, 10);
+    return (crypt(rawKey, salt) as string).substring(crypt(rawKey, salt).length - 10);
   };
 
   // 10 桁トリップ
@@ -112,7 +99,7 @@ export const createTripByKey = (key: string) => {
   // 生キートリップ
   if (encodedKeyString.startsWith('#') || encodedKeyString.startsWith('$')) {
     // 拡張用のため ??? を返す
-    if (!rawKeyPettern.test(encodedKeyString)) return '???';
+    if (!SECURITY_PATTERNS.RAW_KEY.test(encodedKeyString)) return '???';
     return createRawKeyTrip(key);
   }
 
@@ -136,9 +123,9 @@ export async function id(ip: string,itaID: string): Promise<string> {
   return hash.slice(0, 9);
 }
 //## サブ関数
-async function SHA512(message:string,salt?:string,Pepper?:string):Promise<string> {
-  message = message+salt+Pepper;
-  const msgUint8 = new TextEncoder().encode(message); // (utf-8 の) Uint8Array にエンコードする
+async function SHA512(message: string, salt?: string, Pepper?: string): Promise<string> {
+  const fullMessage = message + (salt || '') + (Pepper || '');
+  const msgUint8 = new TextEncoder().encode(fullMessage); // (utf-8 の) Uint8Array にエンコードする
   const hashBuffer = await crypto.subtle.digest("SHA-512", msgUint8); // メッセージをハッシュする
   const hashArray = Array.from(new Uint8Array(hashBuffer)); // バッファーをバイト列に変換する
   const hashHex = hashArray
@@ -151,14 +138,7 @@ function isAnonymous(isFwifi: boolean, country: string, remoho: string, ipAddr: 
   let isAnon = false;
 
   if (!isFwifi && country === 'JP' && remoho !== ipAddr) {
-      const anonRemohoPatterns = [
-          /^.*\.(vpngate\.v4\.open\.ad\.jp|opengw\.net)$/,
-          /(vpn|tor|proxy|onion)/,
-          /^.*\.(ablenetvps\.ne\.jp|amazonaws\.com|arena\.ne\.jp|akamaitechnologies\.com|cdn77\.com|cnode\.io|datapacket\.com|digita-vm\.com|googleusercontent\.com|hmk-temp\.com|kagoya\.net|linodeusercontent\.com|sakura\.ne\.jp|vultrusercontent\.com|xtom\.com)$/,
-          /^.*\.(tsc-soft\.com|53ja\.net)$/
-      ];
-
-      for (const pattern of anonRemohoPatterns) {
+      for (const pattern of SECURITY_PATTERNS.ANON_REMOHO) {
           if (pattern.test(remoho)) {
               isAnon = true;
               break;
@@ -173,21 +153,10 @@ function isPublicWifi(country: string, ipAddr: string, remoho: string): string {
   let isFwifi = '';
 
   if (country === 'JP' && remoho !== ipAddr) {
-    const fwifiRemoho = [
-      '.*\\.m-zone\\.jp',
-      '\\d+\\.wi-fi\\.kddi\\.com',
-      '.*\\.wi-fi\\.wi2\\.ne\\.jp',
-      '.*\\.ec-userreverse\\.dion\\.ne\\.jp',
-      '210\\.227\\.19\\.[67]\\d',
-      '222-229-49-202.saitama.fdn.vectant.ne.jp'
-    ];
-    const fwifiNicknames = ['mz', 'auw', 'wi2', 'dion', 'lson', 'vectant'];
-
-    for (let i = 0; i < fwifiRemoho.length; i++) {
-      const name = fwifiRemoho[i];
-      const regex = new RegExp(`^${name}$`);
-      if (regex.test(remoho)) {
-        isFwifi = fwifiNicknames[i];
+    for (let i = 0; i < SECURITY_PATTERNS.FWIFI_REMOHO.length; i++) {
+      const pattern = SECURITY_PATTERNS.FWIFI_REMOHO[i];
+      if (pattern.test(remoho)) {
+        isFwifi = FWIFI_NICKNAMES[i];
         break;
       }
     }
@@ -196,13 +165,24 @@ function isPublicWifi(country: string, ipAddr: string, remoho: string): string {
   return isFwifi;
 }
 
-async function ipHost(ip:string) {
-  const reip = ip.split('.').reverse().join('.') + '.in-addr.arpa';
-  const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${reip}&type=PTR`, {
-    headers: {
-      'Accept': 'application/dns-json'
+async function ipHost(ip: string): Promise<string> {
+  try {
+    const reip = ip.split('.').reverse().join('.') + '.in-addr.arpa';
+    const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${reip}&type=PTR`, {
+      headers: {
+        'Accept': 'application/dns-json'
+      },
+      signal: AbortSignal.timeout(5000) // 5 second timeout
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
-  });
-  const data = await response.json();
-  return data.Authority[0].data;
+    
+    const data = await response.json();
+    return data.Authority?.[0]?.data || ip; // fallback to IP if no hostname found
+  } catch (error) {
+    console.warn(`Failed to resolve hostname for IP ${ip}:`, error);
+    return ip; // fallback to IP address
+  }
 }

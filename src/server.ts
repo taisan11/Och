@@ -17,7 +17,14 @@ app.use(trimTrailingSlash())
 app.use(logger())
 // app.use(compress())
 app.use(cors())
-// app.use(csrf({origin:(o)=>false}))
+app.use(csrf({
+  origin: (origin) => {
+    // Allow requests from same origin and localhost for development
+    if (!origin) return true; // Same-origin requests
+    const url = new URL(origin);
+    return url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+  }
+}))
 app.use(etag())
 app.use(secureHeaders())
 

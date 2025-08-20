@@ -2,6 +2,7 @@ import { postThread,NewThread } from "./storage";
 import { KAS } from "./KAS";
 import { id } from "./data-util";
 import { exic } from "./plugin";
+import { INPUT_LIMITS, ERROR_CODES } from "./constants";
 
 function JDATE() {
     return new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));//日本時間
@@ -16,15 +17,32 @@ function JDATE() {
  * @returns {sc:'ok'|false,redirect:string} 成功したか、リダイレクト先
  */
 export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{ThTitle?:string,name?:string,mail?:string,MESSAGE:string,BBSKEY:string,ThID?:string,IP:string,psw:string},mode: 'newth' | 'kakiko'): Promise<{ sc: boolean, ThID: string }> {
+    // Input validation
+    if (!BBSKEY) { 
+        return { 'sc': false, 'ThID': ERROR_CODES.BBSKEY_MISSING }; 
+    }
+    if (!MESSAGE || MESSAGE.length > INPUT_LIMITS.MESSAGE_MAX_LENGTH) { 
+        return { 'sc': false, 'ThID': ERROR_CODES.MESSAGE_INVALID }; 
+    }
+    if (name && name.length > INPUT_LIMITS.NAME_MAX_LENGTH) { 
+        return { 'sc': false, 'ThID': ERROR_CODES.NAME_TOO_LONG }; 
+    }
+    if (mail && mail.length > INPUT_LIMITS.MAIL_MAX_LENGTH) { 
+        return { 'sc': false, 'ThID': ERROR_CODES.MAIL_TOO_LONG }; 
+    }
+
     if (mode === 'newth') {
         const date = JDATE();//日本時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
-        // 文字数制限など
-        // if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
-        // if (!MESSAGE || MESSAGE.length > 300) { return { 'sc': false, 'ThID':"error1" } }
-        // if (mail.length > 70) { return { 'sc': false, 'ThID': "error2" } }
-        // if (!BBSKEY) { return { 'sc': false, 'ThID': "error3" } }
-        if (!ThTitle) { return { 'sc': false, 'ThID': "error5" } }
+        
+        // Additional validation for new thread
+        if (!ThTitle) { 
+            return { 'sc': false, 'ThID': ERROR_CODES.TITLE_MISSING }; 
+        }
+        if (ThTitle.length > INPUT_LIMITS.TITLE_MAX_LENGTH) { 
+            return { 'sc': false, 'ThID': ERROR_CODES.TITLE_TOO_LONG }; 
+        }
+        
         const ID = await id(IP,BBSKEY);
         // 加工
         const KASS = await KAS(MESSAGE, name!, mail!, Number(UnixTime),psw);
@@ -38,12 +56,12 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{
         // 内容物の取得
         const date = JDATE();//時間
         const UnixTime = String(date.getTime()).substring(0, 10)//UnixTime
-        // 制限
-        // if (name.length > 30) { return { 'sc': false, 'ThID': `error0` } }
-        // if (!MESSAGE || MESSAGE.length > 300) { return { 'sc': false, 'ThID':"error1" } }
-        // if (mail.length > 70) { return { 'sc': false, 'ThID': "error2" } }
-        // if (!BBSKEY) { return { 'sc': false, 'ThID': "error3" } }
-        if (!ThID) { return {'sc':false,'ThID':"error4"} }
+        
+        // Additional validation for kakiko
+        if (!ThID) { 
+            return {'sc':false,'ThID': ERROR_CODES.THREAD_ID_MISSING}; 
+        }
+        
         const ID = await id(IP,BBSKEY);
         // 変換
         const KASS = await KAS(MESSAGE,name!,mail!,Number(UnixTime),psw);
@@ -54,5 +72,5 @@ export async function kakikoAPI({ThTitle,name,mail,MESSAGE,BBSKEY,ThID,IP,psw}:{
         return {'sc':true,'ThID':`/${BBSKEY}/${ThID}`};
       
     }
-    return {sc:false,ThID:'error999999999'}
+    return {sc:false,ThID: ERROR_CODES.UNKNOWN_ERROR}
 }
