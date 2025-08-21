@@ -6,12 +6,6 @@ import { getConnInfo } from './module/unHono'
 import { env } from "hono/adapter";
 import {convert} from "encoding-japanese"
 
-declare module "hono" {
-  interface ContextRenderer {
-    (content: string | Promise<string>, props: { title?: string }): Response;
-  }
-}
-
 function decodeUrlEncodedToBytes(input: string): Uint8Array {
   const bytes: number[] = [];
 
@@ -51,16 +45,12 @@ app.use("/test/bbs.cgi",async (c,next)=>{
 
 app.get(
   "*",
-  jsxRenderer(({ children, title }) => {
+  jsxRenderer(({ children }) => {
     return (
       <html lang="ja">
         <head>
           <meta charset="shift_jis" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          />
-          <title>{title}</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </head>
         <body>{children}</body>
       </html>
@@ -92,7 +82,7 @@ app.post("/test/bbs.cgi", async (c) => {
   const MESSAGE = convert(decodeUrlEncodedToBytes(paramsMap.get("MESSAGE") as string),{to:"UNICODE",type:"string"}) // 本文
   
   if (!MESSAGE || !submit || !BBSKEY) {
-    return c.render(<>書き込み内容がありません</>, { title: "ＥＲＲＯＲ" });
+    return c.render(<><title>ＥＲＲＯＲ</title>書き込み内容がありません</>);
   }
   
   const psw = env(c).psw as string;
@@ -101,7 +91,7 @@ app.post("/test/bbs.cgi", async (c) => {
   if (ThTitle) {
     const kextuka = await kakikoAPI({ThTitle,name:FROM,mail,MESSAGE,BBSKEY,IP,psw},"newth")
     if (!kextuka?.sc) {
-      return c.render(<>えらだよ</>, { title: "ＥＲＲＯＲ" })
+      return c.render(<><title>ＥＲＲＯＲ</title>えらだよ</>)
     } else {
       return c.text(`
 <!DOCTYPE html>
@@ -119,7 +109,7 @@ app.post("/test/bbs.cgi", async (c) => {
     //書き込み
     const kextuka = await kakikoAPI({name:FROM,mail,MESSAGE,BBSKEY,IP,psw,ThID},"kakiko")
     if (!kextuka?.sc) {
-      return c.render(<>えらだよ</>, { title: "ＥＲＲＯＲ" })
+      return c.render(<><title>ＥＲＲＯＲ</title>えらだよ</>)
     } else {
       return c.text(`
 <!DOCTYPE html>

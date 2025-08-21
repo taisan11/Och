@@ -3,26 +3,16 @@ import {env} from "hono/adapter"
 import { jsxRenderer } from "hono/jsx-renderer";
 import { addIta, init } from "./module/storage";
 
-declare module "hono" {
-  interface ContextRenderer {
-    (content: string | Promise<string>, props: { title?: string }): Response;
-  }
-}
-
 const app = new Hono()
 
 app.get(
   "*",
-  jsxRenderer(({ children, title }) => {
+  jsxRenderer(({ children }) => {
     return (
       <html lang="ja">
         <head>
           <meta charset="utf-8" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          />
-          <title>{title}</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         </head>
         <body>{children}</body>
       </html>
@@ -34,6 +24,7 @@ app.get(`/init`, async (c) => {
     const {psw} = env(c);
     return c.render(
         <>
+            <title>掲示板初期化君(仮)</title>
             <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
             <h1>掲示板初期化君(仮)</h1>
             <form method="post">
@@ -41,8 +32,7 @@ app.get(`/init`, async (c) => {
                 <input type="password" id="psw" name="psw" />
                 <button type="submit">初期化</button>
             </form>
-        </>,
-        { title: "掲示板がない" },
+        </>
     );
 })
 
@@ -52,19 +42,24 @@ app.post(`/init`, async (c) => {
     if (body.psw === psw) {
         await init()
         return c.render(
-            <h1>初期化しました</h1>,
-            { title: "初期化完了" },
+          <>
+            <title>初期化完了</title>
+            <h1>初期化しました</h1>
+          </>
         );
     }
     return c.render(
-        <h1>パスワードが違います</h1>,
-        { title: "初期化失敗" },
+        <>
+            <title>初期化失敗</title>
+            <h1>パスワードが違います</h1>
+        </>
     );
 })
 
 app.get("/create", async (c) => {
     return c.render(
         <>
+            <title>掲示板作成君(仮)</title>
             <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
             <h1>掲示板作成君(仮)</h1>
             <form method="post">
@@ -73,8 +68,7 @@ app.get("/create", async (c) => {
                 <input type="password" id="psw" name="psw" placeholder="パスワード"/>
                 <button type="submit">作成</button>
             </form>
-        </>,
-        { title: "掲示板がない" },
+        </>
     );
 })
 
@@ -83,14 +77,18 @@ app.post("/create", async (c) => {
   const body = await c.req.parseBody()
   if (body.psw !== psw) {
     return c.render(
-      <h1>パスワードが違います</h1>,
-      { title: "作成失敗" },
+      <>
+        <title>作成失敗</title>
+        <h1>パスワードが違います</h1>
+      </>
     );
   }
   await addIta(body.name.toString())
   return c.render(
-    <h1>作成しました</h1>,
-    { title: "作成完了" },
+    <>
+      <title>掲示板作成完了</title>
+      <h1>作成しました</h1>
+    </>
   );
 })
 

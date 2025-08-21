@@ -7,53 +7,45 @@ import { env } from "hono/adapter";
 import { vValidator } from "@hono/valibot-validator";
 import { newPostBody, newThreadBody } from "./types";
 
-declare module "hono" {
-  interface ContextRenderer {
-    (content: string | Promise<string>, props: { title?: string }): Response;
-  }
-}
-
 const app = new Hono()
 
 app.notFound((c)=>{
   return c.render(
     <>
+      <title>ページが見つかりません</title>
       <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
       <p>ページが見つかりません</p>
-    </>,
-    { title: "ページが見つかりません" },
+    </>
   );
 })
 app.onError((err, c) => {
   console.error("Error occurred:", err);
   return c.render(
     <>
+      <title>エラー</title>
       <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
       <p>エラーが発生しました</p>
       <code>{err.message}</code>
-    </>,
-    { title: "エラー" },
+    </>
   );
 })
 
 app.get(
-  "*",
-  jsxRenderer(({ children, title }) => {
+  '*',
+  jsxRenderer(({ children }) => {
     return (
       <html lang="ja">
         <head>
-          <meta charset="utf-8" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          />
-          <title>{title}</title>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </head>
-        <body>{children}</body>
+        <body>
+          <div>{children}</div>
+        </body>
       </html>
-    );
-  }),
-);
+    )
+  })
+)
 
 app.get(`/:BBSKEY`, async (c) => {
   const URL = c.req.url;
@@ -62,15 +54,16 @@ app.get(`/:BBSKEY`, async (c) => {
   if (!SUBJECTJSON?.has) {
     return c.render(
       <>
+        <title>掲示板がない</title>
         <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
         <p>掲示板がありません</p>
-      </>,
-      { title: "掲示板がない" },
+      </>
     );
   }
   if (!SUBJECTJSON.data) {
     return c.render(
       <>
+        <title>スレッドがない</title>
         <h1>READ.CGI for BBS.TSX by Och BBS β</h1>
         <p>スレッドがありません</p>
         <p>作成してみてはいかがでしょうか?</p>
@@ -91,12 +84,12 @@ app.get(`/:BBSKEY`, async (c) => {
         <br />
         <br />
         <p>READ.CGI for BBS.TSX by Och BBS β</p>
-      </>,
-      { title: "スレッドがない" },
+      </>
     );
   }
   return c.render(
     <>
+      <title>READ.CGI</title>
       <h1>READ.CGI</h1>
       {
         Object.entries(SUBJECTJSON.data).map(([unixtime, [threadName, responseCount]]) => {
@@ -124,8 +117,7 @@ app.get(`/:BBSKEY`, async (c) => {
       <br />
       <br />
       <p>READ.CGI for BBS.TSX by Och BBS β</p>
-    </>,
-    { title: "READ.CGI" },
+    </>
   );
 });
 
@@ -148,10 +140,10 @@ app.post(`/:BBSKEY/:THID`, vValidator("form",newPostBody),async (c) => {
   if (kextuka.sc === false) {
     return c.render(
       <>
+        <title>エラー</title>
         <h1>READ.CGI for BBS.TSX by Och</h1>
         <p>エラーが発生しました</p>
-      </>,
-      { title: "エラー" },
+      </>
     );
   }
   return c.redirect(kextuka.ThID);
@@ -170,10 +162,10 @@ app.post(`/:BBSKEY`,vValidator("form",newThreadBody),async (c) => {
   if (kextuka.sc === false) {
     return c.render(
       <>
+        <title>エラー</title>
         <h1>READ.CGI for BBS.TSX by Och</h1>
         <p>エラーが発生しました</p>
-      </>,
-      { title: "エラー" },
+      </>
     );
   }
   return c.redirect(kextuka.ThID);
@@ -186,16 +178,17 @@ app.get(`/:BBSKEY/:THID`, async (c) => {
   if (!THD.has) {
     return c.render(
       <>
+        <title>スレッドがない</title>
         <h1>READ.CGI for BBS.TSX by Och</h1>
         <p>スレッドがありません</p>
-      </>,
-      { title: "スレッドがない" },
+      </>
     );
   }
   const EXAS = `../${BBSKEY}`;
   const URL = c.req.url;
   return c.render(
     <>
+      <title>READ.CGI</title>
       <div style="margin:0px;">
         <div style="margin-top:1em;">
           <span style="float:left;">
@@ -234,8 +227,7 @@ app.get(`/:BBSKEY/:THID`, async (c) => {
       <br />
       <br />
       <p>READ.CGI for BBS.TSX by Och BBS β</p>
-    </>,
-    { title: "READ.CGI" },
+    </>
   );
 });
 
