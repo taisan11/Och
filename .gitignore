@@ -5,4 +5,16 @@ dist
 sqlite.db
 drizzle/*
 .env
+.env.local
+.env.production
+.env.test
 cache
+tmp
+temp
+logs
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+*~
+.vscode/settings.json
