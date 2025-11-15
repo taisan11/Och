@@ -1,14 +1,14 @@
 import { createTripByKey } from "./data-util";
 
-function formatUnixTime(unixTime: number): string {
-  // UNIXタイムをミリ秒に変換
-  const date = new Date(unixTime * 1000);
+const hoihoi = new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short',timeZone: 'Asia/Tokyo'});
+const hoihoihoi = new Intl.DateTimeFormat('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit',timeZone: 'Asia/Tokyo'});
 
+function formatTime(date: Date): string {
   // 年月日と曜日を取得
-  const ymd = date.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' });
+  const ymd = hoihoi.format(date);
 
   // 時分秒を取得
-  const hms = date.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const hms = hoihoihoi.format(date);
 
   // ミリ秒を取得
   const ms = ('00' + date.getMilliseconds()).slice(-2);
@@ -22,12 +22,12 @@ function formatUnixTime(unixTime: number): string {
  * @param name 名前
  * @param mail メアド(コマンド)
  * @param time 時間
- * @returns {mes:string,name:string,mail:string,time:number}
+ * @returns {mes:string,name:string,mail:string,time:Date}
  */
-export async function KAS(mes:string,name:string,mail:string,time:number,pw?:string|null):Promise<{mes:string,name:string,mail:string,time:string}>{
+export async function KAS(mes:string,name:string,mail:string,time:Date,pw?:string|null):Promise<{mes:string,name:string,mail:string,time:string}>{
     const kkk = MES(mes)
     const lll = await NES(name,mail,pw)
-    const ttt = formatUnixTime(time)
+    const ttt = formatTime(time)
     return {
       mes:kkk,
       name:lll.name,

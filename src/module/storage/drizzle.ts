@@ -1,13 +1,8 @@
-import { createStorage } from "unstorage";
-import { config } from "../config";
-import { subjectpaser,datpaser } from "../pase";
 import { NewThreadParams,PostThreadParams, driver, getSubjectReturn, getThreadReturn, postReturn } from "../storage";
 import * as schema from "./schema/sqlite"
-import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 import { and, eq,desc } from "drizzle-orm";
 
-//例えばdrizzle()をある関数の引数として受け入れたいときどのような型を指定すればいいでしょうか?
 export function drizzle_db_driver(db:BaseSQLiteDatabase<'sync', void, Record<string, never>>):driver{
     async function addSubject_drizzle(BBSKEY:string,postnum: number, title: string,id: string):Promise<void> {
         await db.insert(schema.threds).values({id:id,BBSKEY,postnum:postnum,title:title,createAt:new Date()});
@@ -47,8 +42,15 @@ export function drizzle_db_driver(db:BaseSQLiteDatabase<'sync', void, Record<str
         return {'data':{title:aaa[0].title,post:post.map((v)=>({postid:String(v.ResNum),name:v.name,mail:v.mail ?? '',date:v.date,message:v.message}))},has:true};
     }
     async function getdat_drizzle(BBSKEY:string,idextension: string):Promise<string> {
-        // Do nothing(WIP)
-        return ""
+        const post = await db.select().from(schema.posts).where(and(eq(schema.posts.ThID,idextension),eq(schema.posts.BBSKEY,BBSKEY))).orderBy(schema.posts.ResNum).execute();
+        if(post.length == 0) return '';
+        const th = await db.select().from(schema.threds).where(and(eq(schema.threds.id,idextension),eq(schema.threds.BBSKEY,BBSKEY))).execute();
+        const title = th[0]?.title ?? '';
+        return post.map((v, i) =>
+            i == 0
+                ? `${v.name}<>${v.mail ?? ''}<>${v.date}<>${v.message}<>${title}`
+                : `${v.name}<>${v.mail ?? ''}<>${v.date}<>${v.message}`
+        ).join('\n');
     }
     
     /**

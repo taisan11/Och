@@ -9,6 +9,7 @@ import {HTTPException} from "hono/http-exception"
 //## 内部関数
 async function hashByteArray(byteArray:Uint8Array) {
   // SHA-1でハッシュを生成
+  //@ts-expect-error
   const hashBuffer = await crypto.subtle.digest('SHA-1', byteArray);
 
   // ArrayBufferをUint8Arrayに変換
@@ -136,6 +137,16 @@ export async function id(ip: string,itaID: string): Promise<string> {
   return hash.slice(0, 9);
 }
 //## サブ関数
+export async function SHA256(message:string,salt?:string,Pepper?:string):Promise<string> {
+  message = message+salt+Pepper;
+  const msgUint8 = new TextEncoder().encode(message); // (utf-8 の) Uint8Array にエンコードする
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8); // メッセージをハッシュする
+  const hashArray = Array.from(new Uint8Array(hashBuffer)); // バッファーをバイト列に変換する
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join(""); // バイト列を 16 進文字列に変換する
+  return hashHex;
+}
 async function SHA512(message:string,salt?:string,Pepper?:string):Promise<string> {
   message = message+salt+Pepper;
   const msgUint8 = new TextEncoder().encode(message); // (utf-8 の) Uint8Array にエンコードする
