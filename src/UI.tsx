@@ -231,4 +231,65 @@ app.get(`/:BBSKEY/:THID`, async (c) => {
   );
 });
 
+app.get("/:BBSKEY/:THID/:ResNum",async (c)=>{
+  const BBSKEY = c.req.param("BBSKEY");
+  const THID = c.req.param("THID");
+  const ResNum = c.req.param("ResNum");
+  const THD = await getThread(BBSKEY,THID)
+  if (!THD.has) {
+    return c.render(
+      <>
+        <title>スレッドがない</title>
+        <h1>READ.CGI for BBS.TSX by Och</h1>
+        <p>スレッドがありません</p>
+      </>
+    );
+  }
+  const EXAS = `../${BBSKEY}`;
+  const URL = c.req.url;
+  return c.render(
+    <>
+      <title>READ.CGI</title>
+      <div style="margin:0px;">
+        <div style="margin-top:1em;">
+          <span style="float:left;">
+            <a href={EXAS}>■全体を見る■</a>眠たいね
+          </span>
+          <span style="float:right;"></span>&nbsp;
+        </div>
+      </div>
+      <hr style="background-color:#888;color:#888;border-width:0;height:1px;position:relative;top:-.4em;" />
+      <h1 style="color:#CC0000;font-size:larger;font-weight:normal;margin:-.5em 0 0;">
+        {THD.data.title}
+      </h1>
+      <dl class="thred">
+        {
+        THD.data.post.map((post) => (
+          <>
+            <dt id={post.postid}>
+              {post.postid} ：
+              <font color="seagreen">
+                {post.name}
+              </font>
+              ：{post.date}
+            </dt>
+            <dd dangerouslySetInnerHTML={{ __html: post.message }} />
+          </>
+        ))}
+      </dl>
+      <form method="post" action={URL}>
+        <button type="submit">書き込む</button>
+        <label htmlfor="name">名前:</label>
+        <input type="text" id="name" name="name" />
+        <label htmlfor="mail">メール(省略可):</label>
+        <input type="text" id="mail" name="mail" /><br />
+        <textarea rows={5} cols={70} name="MESSAGE"></textarea>
+      </form>
+      <br />
+      <br />
+      <p>READ.CGI for BBS.TSX by Och BBS β</p>
+    </>
+  );
+})
+
 export default app;
