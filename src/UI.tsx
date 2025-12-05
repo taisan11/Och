@@ -1,10 +1,10 @@
-import { Hono } from "hono";
-import { jsxRenderer } from "hono/jsx-renderer";
-import { getSubject, getSubjecttxt, getThread, getdat } from "./module/storage";
-import { kakikoAPI } from "./module/kakiko-api";
-import { getConnInfo } from './module/unHono'
-import { env } from "hono/adapter";
 import { vValidator } from "@hono/valibot-validator";
+import { Hono } from "hono";
+import { env } from "hono/adapter";
+import { jsxRenderer } from "hono/jsx-renderer";
+import { kakikoAPI } from "./module/kakiko-api";
+import { getSubject, getThread, getThreadRange } from "./module/storage";
+import { getConnInfo } from "./module/unHono";
 import { newPostBody, newThreadBody } from "./types";
 
 const app = new Hono()
@@ -89,7 +89,7 @@ app.get(`/:BBSKEY`, async (c) => {
   }
   return c.render(
     <>
-      <title>READ.CGI</title>
+      <title>READ.TSX | Och</title>
       <h1>READ.CGI</h1>
       {
         Object.entries(SUBJECTJSON.data).map(([unixtime, [threadName, responseCount]]) => {
@@ -184,15 +184,14 @@ app.get(`/:BBSKEY/:THID`, async (c) => {
       </>
     );
   }
-  const EXAS = `../${BBSKEY}`;
   const URL = c.req.url;
   return c.render(
     <>
-      <title>READ.CGI</title>
+      <title>{THD.data.title} | Och</title>
       <div style="margin:0px;">
         <div style="margin-top:1em;">
           <span style="float:left;">
-            <a href={EXAS}>■掲示板に戻る■</a>眠たいね
+            <a href={`../${BBSKEY}`}>■掲示板に戻る■</a>眠たいね
           </span>
           <span style="float:right;"></span>&nbsp;
         </div>
@@ -235,7 +234,7 @@ app.get("/:BBSKEY/:THID/:ResNum",async (c)=>{
   const BBSKEY = c.req.param("BBSKEY");
   const THID = c.req.param("THID");
   const ResNum = c.req.param("ResNum");
-  const THD = await getThread(BBSKEY,THID)
+  const THD = await getThreadRange(BBSKEY,THID,ResNum)
   if (!THD.has) {
     return c.render(
       <>
@@ -245,15 +244,14 @@ app.get("/:BBSKEY/:THID/:ResNum",async (c)=>{
       </>
     );
   }
-  const EXAS = `../${BBSKEY}`;
   const URL = c.req.url;
   return c.render(
     <>
-      <title>READ.CGI</title>
+      <title>{THD.data.title} | Och</title>
       <div style="margin:0px;">
         <div style="margin-top:1em;">
           <span style="float:left;">
-            <a href={EXAS}>■全体を見る■</a>眠たいね
+            <a href={`../../${BBSKEY}`}>■全体を見る■</a>眠たいね
           </span>
           <span style="float:right;"></span>&nbsp;
         </div>

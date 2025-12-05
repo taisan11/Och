@@ -1,7 +1,7 @@
 import { NewThreadParams,PostThreadParams, driver, getSubjectReturn, getThreadReturn, postReturn } from "../storage";
 import * as schema from "./schema/sqlite"
 import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
-import { and, eq,desc } from "drizzle-orm";
+import { and, eq,desc,gte,lte,between } from "drizzle-orm";
 
 export function drizzle_db_driver(db:BaseSQLiteDatabase<'sync', void, Record<string, never>>):driver{
     async function addSubject_drizzle(BBSKEY:string,postnum: number, title: string,id: string):Promise<void> {
@@ -41,6 +41,62 @@ export function drizzle_db_driver(db:BaseSQLiteDatabase<'sync', void, Record<str
         const post = await db.select().from(schema.posts).where(and(eq(schema.posts.ThID,id),eq(schema.posts.BBSKEY,BBSKEY))).orderBy(schema.posts.createAt).execute();
         return {'data':{title:aaa[0].title,post:post.map((v)=>({postid:String(v.ResNum),name:v.name,mail:v.mail ?? '',date:v.date,message:v.message}))},has:true};
     }
+    
+    /**
+     * ResNum記法でスレッドの範囲指定取得
+     * @param resNum - "ln" (最後のn個) または "n-n" (範囲指定) 形式
+     */
+    async function getThreadRange_drizzle(BBSKEY:string,id: string, resNum: string):Promise<getThreadReturn> {
+        const aaa = await db.select().from(schema.threds).where(and(eq(schema.threds.id,id),eq(schema.threds.BBSKEY,BBSKEY))).execute();
+        if (!aaa.length) {
+            return {'data':{title:'',post:[]},has:false};
+        }
+        
+        // 全レス取得してソート
+        const allPosts = await db.select().from(schema.posts)
+            .where(and(eq(schema.posts.ThID,id),eq(schema.posts.BBSKEY,BBSKEY)))
+            .orderBy(schema.posts.ResNum).execute();
+        
+        let filteredPosts = allPosts;
+        
+        // ResNum記法のパース
+        if (resNum.startsWith('l')) {
+            // ln形式: 最後のn個
+            const n = parseInt(resNum.substring(1));
+            if (!isNaN(n) && n > 0) {
+                filteredPosts = allPosts.slice(-n);
+            }
+        } else if (resNum.includes('-')) {
+            // n-n形式: 範囲指定
+            const [startStr, endStr] = resNum.split('-');
+            const start = parseInt(startStr);
+            const end = parseInt(endStr);
+            if (!isNaN(start) && !isNaN(end) && start > 0 && end >= start) {
+                filteredPosts = allPosts.filter(v => v.ResNum >= start && v.ResNum <= end);
+            }
+        } else {
+            // 数字単体: 特定のレス番号1つ
+            const resNumber = parseInt(resNum);
+            if (!isNaN(resNumber) && resNumber > 0) {
+                filteredPosts = allPosts.filter(v => v.ResNum === resNumber);
+            }
+        }
+        
+        return {
+            'data':{
+                title:aaa[0].title,
+                post:filteredPosts.map((v)=>({
+                    postid:String(v.ResNum),
+                    name:v.name,
+                    mail:v.mail ?? '',
+                    date:v.date,
+                    message:v.message
+                }))
+            },
+            has:true
+        };
+    }
+    
     async function getdat_drizzle(BBSKEY:string,idextension: string):Promise<string> {
         const post = await db.select().from(schema.posts).where(and(eq(schema.posts.ThID,idextension),eq(schema.posts.BBSKEY,BBSKEY))).orderBy(schema.posts.ResNum).execute();
         if(post.length == 0) return '';
@@ -74,6 +130,7 @@ export function drizzle_db_driver(db:BaseSQLiteDatabase<'sync', void, Record<str
         NewThread: (BBSKEY: string, { name, mail, message, date, title, id }: NewThreadParams) => NewThread_drizzle(BBSKEY,{ name, mail, message, date, title, id }),
         postThread: (BBSKEY: string, { name, mail, message, date, id }: PostThreadParams) => postThread_drizzle(BBSKEY,{ name, mail, message, date, id }),
         getThread: (BBSKEY: string, id: string) => getThread_drizzle(BBSKEY,id),
+        getThreadRange: (BBSKEY: string, id: string, resNum: string) => getThreadRange_drizzle(BBSKEY,id,resNum),
         getdat: (BBSKEY: string, idextension: string) => getdat_drizzle(BBSKEY,idextension),
         init: () => init_drizzle(),
     }

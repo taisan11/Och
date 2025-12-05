@@ -49,6 +49,7 @@ export interface driver {
     NewThread: (BBSKEY: string, { name, mail, message, date, title, id }: NewThreadParams) => Promise<postReturn>;
     postThread: (BBSKEY: string, { name, mail, message, date, id }: PostThreadParams) => Promise<postReturn>;
     getThread: (BBSKEY: string, id: string) => Promise<getThreadReturn>;
+    getThreadRange: (BBSKEY: string, id: string, resNum: string) => Promise<getThreadReturn>;
     getdat: (BBSKEY: string, idextension: string) => Promise<string>;
     init: () => Promise<string>;
 }
@@ -82,6 +83,9 @@ export async function postThread(BBSKEY:string,{ name, mail, message, date, id }
 
 export async function getThread(BBSKEY:string,id: string):Promise<getThreadReturn> {
     return driver.then((driver) => {return driver.getThread(BBSKEY,id)})
+}
+export async function getThreadRange(BBSKEY:string,id: string, resNum: string):Promise<getThreadReturn> {
+    return driver.then((driver) => {return driver.getThreadRange(BBSKEY,id,resNum)})
 }
 export async function getdat(BBSKEY:string,idextension: string):Promise<string> {
     return driver.then((driver) => {return driver.getdat(BBSKEY,idextension)})

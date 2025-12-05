@@ -80,6 +80,54 @@ export function unstorage_driver(UnstorageOptions:Driver):driver{
         const hasdat=  await storage.hasItem(`${BBSKEY}/dat/${id}.dat`);
         return {'data':datpaser(String(dat)),has:hasdat};
     }
+    
+    /**
+     * ResNum記法でスレッドの範囲指定取得
+     * @param resNum - "ln" (最後のn個) または "n-n" (範囲指定) 形式
+     */
+    async function getThreadRange_file(BBSKEY:string,id: string, resNum: string):Promise<getThreadReturn> {
+        const storage = createStorage(drives);
+        const dat = await storage.getItem(`${BBSKEY}/dat/${id}.dat`);
+        const hasdat = await storage.hasItem(`${BBSKEY}/dat/${id}.dat`);
+        
+        if (!hasdat) {
+            return {'data':{title:'',post:[]},has:false};
+        }
+        
+        const threadData = datpaser(String(dat));
+        let filteredPosts = threadData.post;
+        
+        // ResNum記法のパース
+        if (resNum.startsWith('l')) {
+            // ln形式: 最後のn個
+            const n = parseInt(resNum.substring(1));
+            if (!isNaN(n) && n > 0) {
+                filteredPosts = threadData.post.slice(-n);
+            }
+        } else if (resNum.includes('-')) {
+            // n-n形式: 範囲指定
+            const [startStr, endStr] = resNum.split('-');
+            const start = parseInt(startStr);
+            const end = parseInt(endStr);
+            if (!isNaN(start) && !isNaN(end) && start > 0 && end >= start) {
+                filteredPosts = threadData.post.filter((_, index) => {
+                    const resNumber = index + 1;
+                    return resNumber >= start && resNumber <= end;
+                });
+            }
+        } else {
+            // 数字単体: 特定のレス番号1つ
+            const resNumber = parseInt(resNum);
+            if (!isNaN(resNumber) && resNumber > 0) {
+                filteredPosts = threadData.post.filter((_, index) => {
+                    return index + 1 === resNumber;
+                });
+            }
+        }
+        
+        return {'data':{title:threadData.title,post:filteredPosts},has:hasdat};
+    }
+    
     async function getdat_file(BBSKEY:string,idextension: string):Promise<string> {
         const storage = createStorage(drives);
         const dat = await storage.getItem(`${BBSKEY}/dat/${idextension}.dat`);
@@ -108,6 +156,7 @@ export function unstorage_driver(UnstorageOptions:Driver):driver{
         NewThread: (BBSKEY: string, { name, mail, message, date, title, id }: NewThreadParams) => NewThread_file(BBSKEY,{ name, mail, message, date, title, id }),
         postThread: (BBSKEY: string, { name, mail, message, date, id }: PostThreadParams) => postThread_file(BBSKEY,{ name, mail, message, date, id }),
         getThread: (BBSKEY: string, id: string) => getThread_file(BBSKEY,id),
+        getThreadRange: (BBSKEY: string, id: string, resNum: string) => getThreadRange_file(BBSKEY,id,resNum),
         getdat: (BBSKEY: string, idextension: string) => getdat_file(BBSKEY,idextension),
         init: () => init_file(),
     }
